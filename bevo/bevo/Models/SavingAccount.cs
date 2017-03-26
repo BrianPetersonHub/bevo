@@ -16,5 +16,6 @@ namespace bevo.Models
 
         //SavingAccount can have many Persons
         public virtual List<Person> Persons { get; set; }
+        public virtual List<Transaction> Transactions { get; set; }
     }
 }

@@ -17,5 +17,6 @@ namespace bevo.Models
 
         //IRAccount can have many Persons
         public virtual List<Person> Persons { get; set; }
+        public virtual List<Transaction> Transactions { get; set; }
     }
 }

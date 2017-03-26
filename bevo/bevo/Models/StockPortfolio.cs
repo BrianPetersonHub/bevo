@@ -20,5 +20,6 @@ namespace bevo.Models
 
         //Stock portfolio can have one StockDetail
         public virtual StockDetail StockDetail { get; set; }
+        public virtual List<Transaction> Transactions { get; set; }
     }
 }

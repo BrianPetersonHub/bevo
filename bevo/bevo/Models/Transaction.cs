@@ -25,6 +25,12 @@ namespace bevo.Models
 
         public bool Dispute { get; set; }
 
+        // Navigational
+        public virtual List<CheckingAccount> CheckingAccounts { get; set; }
+        public virtual List<SavingAccount> SavingAccounts { get; set; }
+        public virtual List<IRAccount> IRAccounts { get; set; }
+        public virtual List<StockPortfolio> StockPortfolios { get; set; }
+
 
     }
 }
