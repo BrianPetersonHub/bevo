@@ -12,6 +12,6 @@ namespace bevo.Models
     //controller's AccountID property. 
     public static class Global
     {
-        public Int32 AccountID { get; set; } = 1000000000;
+        public static Int32 AccountID { get; set; } = 1000000000;
     }
 }
