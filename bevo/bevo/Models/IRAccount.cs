@@ -11,7 +11,7 @@ namespace bevo.Models
         public Int32 AccountID { get; set; }
 
         [Required(ErrorMessage = "Account Name is required.")]
-        [DisplayName(Name = "Account Name")]
+        [Display(Name = "Account Name")]
         public String AccountName { get; set; }
         public Decimal Balance { get; set; }
 

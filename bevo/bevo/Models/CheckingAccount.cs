@@ -10,7 +10,7 @@ namespace bevo.Models
     {
         public Int32 AccountID { get; set; }
 
-        [DisplayName(Name = "Account Name")]
+        [Display(Name = "Account Name")]
         public String AccountName { get; set; }
         public Decimal Balance { get; set; }
 
