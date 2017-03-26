@@ -4,14 +4,16 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 
-namespace bevo.Models
+namespace team1_longhornBank.Models
 {
-    public class SavingAccount
+    public class StockDetail
     {
+        [Key]
         public Int32 AccountID { get; set; }
 
-        [DisplayName(Name = "Account Name")]
-        public String AccountName { get; set; }
-        public Decimal Balance { get; set; }
+        [Key]
+        public String StockName { get; set; }
+
+        public Int32 Quantity { get; set; }
     }
 }
