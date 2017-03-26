@@ -11,5 +11,8 @@ namespace bevo.Models
         public Int32 StockID { get; set; }
         public String StockName { get; set; }
         public Decimal PurchasePrice { get; set; }
+
+        //Stock can have one stock detail
+        public virtual StockDetail StockDetail { get; set; }
     }
 }

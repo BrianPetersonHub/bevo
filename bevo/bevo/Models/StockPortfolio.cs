@@ -14,5 +14,11 @@ namespace bevo.Models
         [DisplayName(Name = "Account Name")]
         public String AccountName { get; set; }
         public Decimal Balance { get; set; }
+
+        //Stock portfolio can have many Persons
+        public virtual List<Person> Persons { get; set; }
+
+        //Stock portfolio can have one StockDetail
+        public virtual StockDetail StockDetail { get; set; }
     }
 }
