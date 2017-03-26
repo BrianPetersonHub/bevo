@@ -8,12 +8,7 @@ namespace team1_longhornBank.Models
 {
     public class StockDetail
     {
-        [Key]
-        public Int32 AccountID { get; set; }
-
-        [Key]
-        public String StockName { get; set; }
-
+        public Int32 StockDetailID { get; set; }
         public Int32 Quantity { get; set; }
     }
 }

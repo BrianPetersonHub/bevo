@@ -8,10 +8,8 @@ namespace team1_longhornBank.Models
 {
     public class Stock
     {
-        [Key]
+        public Int32 StockID { get; set; }
         public String StockName { get; set; }
-
         public Decimal PurchasePrice { get; set; }
-
     }
 }

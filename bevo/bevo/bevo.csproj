@@ -97,12 +97,16 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\CheckingAccount.cs" />
     <Compile Include="Models\Dispute.cs" />
+    <Compile Include="Models\Global.cs" />
+    <Compile Include="Models\IRAccount.cs" />
     <Compile Include="Models\Payee.cs" />
     <Compile Include="Models\Person.cs" />
+    <Compile Include="Models\SavingAccount.cs" />
     <Compile Include="Models\Stock.cs" />
     <Compile Include="Models\StockDetail.cs" />
+    <Compile Include="Models\StockPortfolio.cs" />
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
