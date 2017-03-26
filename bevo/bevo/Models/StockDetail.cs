@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 
-namespace team1_longhornBank.Models
+namespace bevo.Models
 {
     public class StockDetail
     {

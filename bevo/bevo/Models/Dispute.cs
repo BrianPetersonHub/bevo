@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace team1_longhornBank.Models
+namespace bevo.Models
 {
     public enum DisputeStatus
     {
