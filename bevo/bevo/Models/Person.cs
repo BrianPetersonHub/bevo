@@ -80,5 +80,6 @@ namespace bevo.Models
         public virtual List<SavingAccount> SavingAccounts { get; set; }
         public virtual IRAccount IRAccount { get; set; }
         public virtual StockPortfolio StockPortfolio { get; set; }
+        public virtual List<Payee> Payees { get; set; }
     }
 }
