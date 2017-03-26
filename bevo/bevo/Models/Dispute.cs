@@ -20,6 +20,6 @@ namespace bevo.Models
 
         public String Message { get; set; }
 
-        public Decimal DipustedAmount { get; set; }
+        public Decimal DisputedAmount { get; set; }
     }
 }
