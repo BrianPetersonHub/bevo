@@ -8,8 +8,8 @@ namespace bevo.Models
 {
     public class StockPortfolio
     {
-        public Int32 StockPortfolio { get; set; }
-        public Int32 AccountID { get; set; }
+        public Int32 StockPortfolioID { get; set; }
+        public Int32 AccountNum { get; set; }
 
         [Required(ErrorMessage = "Account Name is required.")]
         [Display(Name = "Account Name")]

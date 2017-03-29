@@ -8,8 +8,8 @@ namespace bevo.Models
 {
     public class IRAccount
     {
-        public Int32 IRAccount { get; set; }
-        public Int32 AccountID { get; set; }
+        public Int32 IRAccountID { get; set; }
+        public Int32 AccountNum { get; set; }
 
         [Required(ErrorMessage = "Account Name is required.")]
         [Display(Name = "Account Name")]
