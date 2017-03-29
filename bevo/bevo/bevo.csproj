@@ -127,7 +127,6 @@
     </Compile>
     <Compile Include="Models\CheckingAccount.cs" />
     <Compile Include="Models\Dispute.cs" />
-    <Compile Include="Models\Global.cs" />
     <Compile Include="Models\IRAccount.cs" />
     <Compile Include="Models\Payee.cs" />
     <Compile Include="Models\Person.cs" />
