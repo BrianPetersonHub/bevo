@@ -8,6 +8,7 @@ namespace bevo.Models
 {
     public class CheckingAccount
     {
+        public Int32 CheckingAccount { get; set; }
         public Int32 AccountID { get; set; }
 
         [Display(Name = "Account Name")]
