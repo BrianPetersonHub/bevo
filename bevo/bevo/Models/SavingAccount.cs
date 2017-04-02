@@ -16,7 +16,7 @@ namespace bevo.Models
         public Decimal Balance { get; set; }
 
         //SavingAccount can have many Persons
-        public virtual List<Person> Persons { get; set; }
+        public virtual Person Person { get; set; }
         public virtual List<Transaction> Transactions { get; set; }
     }
 }
