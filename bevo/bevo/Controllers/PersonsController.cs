@@ -41,5 +41,10 @@ namespace bevo.Controllers
         {
             return View();
         }
+
+        public ActionResult CustomerHome()
+        {
+            return View();
+        }
     }
 }
