@@ -6,18 +6,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace bevo.Models
 {
-    public enum PersonType
-    {
-        Manager,
-        Employee,
-        Customer
-    }
 
     public class Person
     {
         public Int32 PersonID { get; set; }
-
-        public PersonType PersonType { get; set; }
 
         public bool Enabled { get; set; }
 
