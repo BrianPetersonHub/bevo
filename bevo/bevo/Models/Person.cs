@@ -26,7 +26,7 @@ namespace bevo.Models
         public String FirstName { get; set; }
 
         [Display(Order = 2, Name = "Middle Initial")]
-        public Char MiddleInitial { get; set; }
+        public Char? MiddleInitial { get; set; }
 
         [Required(ErrorMessage = "Last Name is a Required field.")]
         [Display(Order = 3, Name = "Last Name")]
