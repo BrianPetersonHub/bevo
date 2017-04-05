@@ -144,6 +144,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IRAccountController.cs" />
     <Compile Include="Controllers\SavingAccountsController.cs" />
     <Compile Include="Controllers\CheckingAccountsController.cs" />
     <Compile Include="Controllers\PersonsController.cs" />
@@ -192,6 +193,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\CheckingAccounts\" />
+    <Folder Include="Views\IRAccount\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
