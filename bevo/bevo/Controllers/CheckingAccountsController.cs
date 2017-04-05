@@ -33,7 +33,7 @@ namespace bevo.Controllers
             return View(checkingAccount);
         }
 
-        public Int32 CountAccounts()
+        public Int32 GetAcctNum()
         {
             Int32 intCount = 1000000000;
             intCount += db.CheckingAccounts.Count();
