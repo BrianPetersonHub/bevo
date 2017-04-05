@@ -180,9 +180,17 @@
     <Content Include="SeedData\Person.csv" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Persons\ChooseAccount.cshtml" />
-    <Content Include="Views\Persons\CustomerHome.cshtml" />
+    <Content Include="Views\Persons\Customer\ChooseAccount.cshtml" />
+    <Content Include="Views\Persons\Customer\Home.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Persons\Employee\Home.cshtml" />
+    <Content Include="Views\Persons\Employee\Edit.cshtml" />
+    <Content Include="Views\Persons\Customer\Edit.cshtml" />
+    <Content Include="Views\Persons\Manager\Home.cshtml" />
+    <Content Include="Views\Dispute\Detail.cshtml" />
+    <Content Include="Views\Transaction\Detail.cshtml" />
+    <Content Include="Views\Transaction\Search.cshtml" />
+    <Content Include="Views\Persons\Employee\Detail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
