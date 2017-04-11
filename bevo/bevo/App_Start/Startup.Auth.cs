@@ -18,7 +18,7 @@ namespace bevo
             app.CreatePerOwinContext<AppUserManager>(AppUserManager.Create);
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
             
-            //TODO: Make sure there is some code here to create a role manager for each user
+            //DONE: Make sure there is some code here to create a role manager for each user
             app.CreatePerOwinContext<AppRoleManager>(AppRoleManager.Create);
 
             // Enable the application to use a cookie to store information for the signed in user

@@ -28,7 +28,7 @@ namespace bevo.Models
         }
 
         //IRAccount can have many Persons
-        public virtual Person Person { get; set; }
+        public virtual AppUser AppUser { get; set; }
         public virtual List<Transaction> Transactions { get; set; }
 
         //method to get next account number

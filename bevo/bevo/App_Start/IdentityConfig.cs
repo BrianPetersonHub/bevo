@@ -19,24 +19,24 @@ namespace bevo
         }
 
 
-        //TODO:  Change any settings related to your user password rules, etc.
+        //DONE:  Change any settings related to your user password rules, etc.
         public static AppUserManager Create(IdentityFactoryOptions<AppUserManager> options, IOwinContext context) 
         {
             var manager = new AppUserManager(new UserStore<AppUser>(context.Get<AppDbContext>()));
             // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<AppUser>(manager)
             {
-                //TODO: If you want to use email as the username, you need to make sure usernames can have @ 
+                //DONE: If you want to use email as the username, you need to make sure usernames can have @ 
                 //and that each person has a unique email
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
             };
 
-            // TODO: Configure validation logic for passwords
+            // DONE: Configure validation logic for passwords
             manager.PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 6,
-                RequireNonLetterOrDigit = true,
+                RequireNonLetterOrDigit = false,
                 RequireDigit = true,
                 RequireLowercase = true,
                 RequireUppercase = true,

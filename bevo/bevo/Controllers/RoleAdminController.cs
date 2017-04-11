@@ -8,7 +8,6 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 
-//TODO: Change this reference to your project name
 using bevo.Models;
 
 namespace bevo.Controllers

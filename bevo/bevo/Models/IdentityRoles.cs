@@ -9,8 +9,6 @@ using Microsoft.Owin;
 using System.Web.Mvc;
 
 
-
-//TODO: Add this whole class
 namespace bevo.Models
 {
     public class AppRole: IdentityRole

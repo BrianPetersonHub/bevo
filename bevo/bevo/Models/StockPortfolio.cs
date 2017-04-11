@@ -21,7 +21,7 @@ namespace bevo.Models
         public Decimal Balance { get; set; }
 
         //Stock portfolio can have many Persons
-        public virtual Person Person { get; set; }
+        public virtual AppUser AppUser { get; set; }
 
         //Stock portfolio can have one StockDetail
         public virtual StockDetail StockDetail { get; set; }

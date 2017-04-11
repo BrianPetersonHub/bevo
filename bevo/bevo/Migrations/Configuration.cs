@@ -57,8 +57,8 @@ namespace bevo.Migrations
                     {
                         var checkingAccount = csvReader.GetRecord<CheckingAccount>();
                         var personEmail = csvReader.GetField<string>("PersonEmail");
-                        checkingAccount.Person = context.Persons.Local.Single(c => c.Email == personEmail);
-                        context.CheckingAccounts.AddOrUpdate(p => p.Person, checkingAccount);
+                        checkingAccount.AppUser = context.Persons.Local.Single(c => c.Email == personEmail);
+                        context.CheckingAccounts.AddOrUpdate(p => p.AppUser, checkingAccount);
                     }
                 }
             }
@@ -74,8 +74,8 @@ namespace bevo.Migrations
                     {
                         var iRAccount = csvReader.GetRecord<IRAccount>();
                         var personEmail = csvReader.GetField<string>("PersonEmail");
-                        iRAccount.Person = context.Persons.Local.Single(c => c.Email == personEmail);
-                        context.IRAccounts.AddOrUpdate(p => p.Person, iRAccount);
+                        iRAccount.AppUser = context.Persons.Local.Single(c => c.Email == personEmail);
+                        context.IRAccounts.AddOrUpdate(p => p.AppUser, iRAccount);
                     }
                 }
             }
