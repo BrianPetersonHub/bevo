@@ -10,30 +10,33 @@ namespace bevo.Models
     public class CheckingAccount
     {
         public Int32 CheckingAccountID { get; set; }
-
-        //create AccountNum property
-        //1 constructor with AcctNum parameter
         public Int32 AccountNum { get; set; }
-        public CheckingAccount(Int32 intAccounttNum)
-        {
-            AccountNum = intAccounttNum;
-        }
-
-        //create AccountName property
-        //1st constructor with no parameter: makes AccountName = "Longhorn Checking"
         //TODO: think about what problems could arise when making a accountToChange object in constructor. Katie mentioned this in class on Tuesday 4/4/17
         [Display(Name = "Account Name")]
         public String AccountName { get; set; }
+        public Decimal Balance { get; set; }
         public CheckingAccount()
         {
+            AccountNum = GetAcctNum();
             AccountName = "Longhorn Checking";
+            Balance = 0;
         }
-
-        public Decimal Balance { get; set; }
 
         //CheckingAccount can have many Persons
         public virtual Person Person { get; set; }
         public virtual List<Transaction> Transactions { get; set; }
 
+
+        //method to get next account number
+        private AppDbContext db = new AppDbContext();
+        public Int32 GetAcctNum()
+        {
+            Int32 intCount = 1000000000;
+            intCount += db.CheckingAccounts.Count();
+            intCount += db.SavingAccounts.Count();
+            intCount += db.IRAccounts.Count();
+            intCount += db.StockPortfolio.Count();
+            return intCount;
+        }
     }
 }

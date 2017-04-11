@@ -8,39 +8,29 @@ using bevo.DAL;
 
 namespace bevo.Controllers
 {
-    public class SavingAccountsController : Controller
+    public class SavingsAccountController : Controller
     {
         private AppDbContext db = new AppDbContext();
-        public SavingAccountsController()
-        {
-            SavingAccount SavingAccount = new SavingAccount();
-            SavingAccount.AccountNum = CountAccounts() + 1;
-            SavingAccount.AccountName = "Longhorn Savings";
-            SavingAccount.Balance = 0;
-        }
 
-        public SavingAccountsController(String accountName)
-        {
-            SavingAccount SavingAccount = new SavingAccount();
-            SavingAccount.AccountNum = CountAccounts() + 1;
-            SavingAccount.AccountName = accountName;
-            SavingAccount.Balance = 0;
-        }
-
-        public Int32 CountAccounts()
-        {
-            Int32 intCount = 1000000000;
-            intCount += db.CheckingAccounts.Count();
-            intCount += db.SavingAccounts.Count();
-            intCount += db.IRAccounts.Count();
-            intCount += db.StockPortfolio.Count();
-            return intCount;
-        }
-
-        // GET: SavingAccounts
-        public ActionResult Index()
+        //GET: SavingsAccount/Create
+        public ActionResult Create()
         {
             return View();
+        }
+
+        //POST: SavingAccount/Create
+        //TODO: look at if the way the correct acctnum is added is correct
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "SavingAccountID,AccountNum,AccountName,Balance")] SavingAccount savingAccount)
+        {
+            if (ModelState.IsValid)
+            {
+                db.SavingAccounts.Add(savingAccount);
+                db.SaveChanges();
+                return RedirectToAction("CustomerHome", "PersonsController");
+            }
+            return View(savingAccount);
         }
     }
 }
