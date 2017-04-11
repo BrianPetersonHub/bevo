@@ -10,14 +10,16 @@ namespace bevo.Migrations
     using System.Text;
     using Models;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<bevo.DAL.AppDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<bevo.Models.AppDbContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(bevo.DAL.AppDbContext context)
+
+        //TODO: Edit seed method to work with identity
+        protected override void Seed(bevo.Models.AppDbContext context)
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
             string resourceName = "bevo.SeedData.Person.csv";
@@ -107,7 +109,7 @@ namespace bevo.Migrations
                         var stockPortfolio = csvReader.GetRecord<StockPortfolio>();
                         var personEmail = csvReader.GetField<string>("PersonEmail");
                         stockPortfolio.Person = context.Persons.Local.Single(c => c.Email == personEmail);
-                        context.StockPortfolio.AddOrUpdate(p => p.Person, stockPortfolio);
+                        context.StockPortfolios.AddOrUpdate(p => p.Person, stockPortfolio);
                     }
                 }
             }

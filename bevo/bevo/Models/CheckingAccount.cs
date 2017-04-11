@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using bevo.Controllers;
-using bevo.DAL;
 namespace bevo.Models
 {
     public class CheckingAccount
@@ -35,7 +34,7 @@ namespace bevo.Models
             intCount += db.CheckingAccounts.Count();
             intCount += db.SavingAccounts.Count();
             intCount += db.IRAccounts.Count();
-            intCount += db.StockPortfolio.Count();
+            intCount += db.StockPortfolios.Count();
             return intCount;
         }
     }
