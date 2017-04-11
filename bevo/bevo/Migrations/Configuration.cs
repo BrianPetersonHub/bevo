@@ -19,6 +19,7 @@ namespace bevo.Migrations
 
 
         //TODO: Edit seed method to work with identity
+        /*
         protected override void Seed(bevo.Models.AppDbContext context)
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
@@ -91,8 +92,8 @@ namespace bevo.Migrations
                     {
                         var savingAccount = csvReader.GetRecord<SavingAccount>();
                         var personEmail = csvReader.GetField<string>("PersonEmail");
-                        savingAccount.Person = context.Persons.Local.Single(c => c.Email == personEmail);
-                        context.SavingAccounts.AddOrUpdate(p => p.Person, savingAccount);
+                        savingAccount.AppUser = context.Users.Local.Single(c => c.Email == personEmail);
+                        context.SavingAccounts.AddOrUpdate(p => p.AppUser, savingAccount);
                     }
                 }
             }
@@ -108,14 +109,14 @@ namespace bevo.Migrations
                     {
                         var stockPortfolio = csvReader.GetRecord<StockPortfolio>();
                         var personEmail = csvReader.GetField<string>("PersonEmail");
-                        stockPortfolio.Person = context.Persons.Local.Single(c => c.Email == personEmail);
-                        context.StockPortfolios.AddOrUpdate(p => p.Person, stockPortfolio);
+                        stockPortfolio.AppUser = context.Users.Local.Single(c => c.Email == personEmail);
+                        context.StockPortfolios.AddOrUpdate(p => p.AppUser, stockPortfolio);
                     }
                 }
             }
 
 
-
         }
+        */
     }
 }
