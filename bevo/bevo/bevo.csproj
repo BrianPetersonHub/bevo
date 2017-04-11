@@ -201,17 +201,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-<<<<<<< HEAD
     <Folder Include="Views\IRAccounts\" />
     <Folder Include="Views\Payees\" />
     <Folder Include="Views\SavingAccounts\" />
     <Folder Include="Views\StockDetails\" />
     <Folder Include="Views\StockPortfolios\" />
     <Folder Include="Views\Stocks\" />
-=======
     <Folder Include="Views\CheckingAccounts\" />
     <Folder Include="Views\IRAccount\" />
->>>>>>> e7c45c0e751fbf4b8822931ca7e983ccc5511a11
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
