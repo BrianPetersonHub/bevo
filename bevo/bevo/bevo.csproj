@@ -186,10 +186,11 @@
     <Content Include="Views\Persons\Employee\Edit.cshtml" />
     <Content Include="Views\Persons\Customer\Edit.cshtml" />
     <Content Include="Views\Persons\Manager\Home.cshtml" />
-    <Content Include="Views\Dispute\Detail.cshtml" />
-    <Content Include="Views\Transaction\Detail.cshtml" />
-    <Content Include="Views\Transaction\Search.cshtml" />
+    <Content Include="Views\Disputes\Detail.cshtml" />
+    <Content Include="Views\Transactions\Detail.cshtml" />
+    <Content Include="Views\Transactions\Search.cshtml" />
     <Content Include="Views\Persons\Employee\Detail.cshtml" />
+    <Content Include="Views\CheckingAccounts\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -199,8 +200,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\CheckingAccount\" />
-    <Folder Include="Views\IRAccount\" />
+    <Folder Include="Views\IRAccounts\" />
+    <Folder Include="Views\Payees\" />
+    <Folder Include="Views\SavingAccounts\" />
+    <Folder Include="Views\StockDetails\" />
+    <Folder Include="Views\StockPortfolios\" />
+    <Folder Include="Views\Stocks\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
