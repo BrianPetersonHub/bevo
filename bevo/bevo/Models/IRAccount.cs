@@ -21,10 +21,10 @@ namespace bevo.Models
         public String AccountName { get; set; }
         public Decimal Balance { get; set; }
 
-        public IRAccount()
+        public IRAccount(String AcctName)
         {
             AccountNum = GetAcctNum();
-            AccountName = "";
+            AccountName = AcctName;
             Balance = 0;
         }
 

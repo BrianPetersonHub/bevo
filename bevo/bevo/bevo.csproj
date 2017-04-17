@@ -148,6 +148,7 @@
     <Compile Include="Controllers\SavingAccountsController.cs" />
     <Compile Include="Controllers\CheckingAccountsController.cs" />
     <Compile Include="Controllers\PersonsController.cs" />
+    <Compile Include="Controllers\StockPortfolioController.cs" />
     <Compile Include="DAL\AppDBContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -202,6 +203,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Views\CheckingAccounts\" />
     <Folder Include="Views\IRAccount\" />
+    <Folder Include="Views\StockPortfolio\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
