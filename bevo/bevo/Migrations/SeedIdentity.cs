@@ -6,7 +6,7 @@ using System.Web;
 using bevo.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.VisualBasic;
-
+using Microsoft.AspNet.Identity;
 
 namespace bevo.Migrations
 {
@@ -38,10 +38,16 @@ namespace bevo.Migrations
                 UserName = strEmail,
                 Email = strEmail,
                 FirstName = "Admin",
+                MiddleInitial = "Q",
                 LastName = "Example",
-                PhoneNumber = "(512)555Â1234",
-                Major = Major.MIS,
-                OKToText = true
+                PhoneNumber = "5125551234",
+                State = "TX",
+                Street = "123 Admin Street",
+                City = "Austin",
+                ZipCode = "12345",
+                Birthday = "1/1/1901"
+                //Major = Major.MIS,
+                //OKToText = true
             };
 
             //see if user is already there 
@@ -71,7 +77,7 @@ namespace bevo.Migrations
             //create a role manager 
             AppRoleManager roleManager = new AppRoleManager(new RoleStore<AppRole>(db));
 
-            String roleName = seedPerson[12];
+            String roleName = seedPerson[11];
 
             //check if role exists 
             if (roleManager.RoleExists(roleName) == false) //role doesn't exist
@@ -81,25 +87,28 @@ namespace bevo.Migrations
 
             AppUser user = new AppUser()
             {
-                UserName = seedPerson[1],
-                Email = seedPerson[1],
-                FirstName = seedPerson[2],
-                MiddleInitial = seedPerson[3],
-                LastName = seedPerson[4],
-                Street = seedPerson[6],
-                City = seedPerson[7],
-                State = seedPerson[8],
-                ZipCode = seedPerson[9],
-                Birthday = seedPerson[11],
-                PhoneNumber = seedPerson[10],
+                UserName = seedPerson[0].ToString(),
+                Email = seedPerson[0].ToString(),
+                FirstName = seedPerson[1].ToString(),
+                MiddleInitial = seedPerson[2].ToString(),
+                LastName = seedPerson[3].ToString(),
+                Street = seedPerson[5].ToString(),
+                City = seedPerson[6].ToString(),
+                State = seedPerson[7].ToString(),
+                ZipCode = seedPerson[8].ToString(),
+                Birthday = seedPerson[10].ToString(),
+                PhoneNumber = seedPerson[9].ToString()
             };
 
+            string strUserName = seedPerson[0].ToString();
+
             //see if user is already there 
-            AppUser userToAdd = userManager.FindByName(strEmail);
+            AppUser userToAdd = userManager.FindByName(strUserName);
             if (userToAdd == null) //this user doesn't exist yet
             {
-                userManager.Create(user, seedPerson[5]);
-                userToAdd = userManager.FindByName(seedPerson[1]);
+                string Password = seedPerson[4].ToString();
+                userManager.Create(user, Password);
+                userToAdd = userManager.FindByName(strUserName);
 
                 //add user to the role 
                 if (userManager.IsInRole(userToAdd.Id, roleName) == false) //the user isn't in the role
@@ -113,11 +122,25 @@ namespace bevo.Migrations
 
         public static void ReadPersonCSV()
         {
-            string allLines = File.ReadAllLines(@"C:\Users\James Abbott\Desktop\MIS 333 Seed Data\Person.csv");
+            //call manager seeding to seed in the one manager who is in charge of all this nonsense 
+            SeedManager(db);
+
+            //look through the csv and add in users for each other people in there 
+            string[] allLines = File.ReadAllLines(@"C:\Users\James Abbott\Desktop\MIS 333 Seed Data\Person.csv");
             foreach (String line in allLines)
             {
-                record = line.Split(",");
+                String[] record = line.Split(',');
                 SeedPerson(db, record);
+            }
+        }
+
+        public static void AddDebugger()
+        {
+            if (System.Diagnostics.Debugger.IsAttached == false)
+            {
+
+                System.Diagnostics.Debugger.Launch();
+
             }
         }
     }

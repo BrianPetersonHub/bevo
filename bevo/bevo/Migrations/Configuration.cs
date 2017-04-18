@@ -19,7 +19,8 @@ namespace bevo.Migrations
 
         protected override void Seed(bevo.Models.AppDbContext db)
         {
-
+            SeedIdentity.AddDebugger();
+            SeedIdentity.ReadPersonCSV();
         }
 
 

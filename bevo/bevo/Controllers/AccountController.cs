@@ -115,7 +115,7 @@ namespace bevo.Controllers
                 { UserName = model.Email,
                   Email = model.Email,
                   FirstName = model.FirstName,
-                  MiddleInitial = model.MiddleInitial,
+                  MiddleInitial = model.MiddleInitial.ToString(),
                   LastName = model.LastName,
                   Street = model.Street,
                   City = model.City,
