@@ -5,7 +5,7 @@ using System.Web;
 using System.Net.Mail;
 using System.Net;
 
-namespace MessagingTemplate.Messaging
+namespace bevo.Messaging
 {
     // username: patricksmis375@gmail.com
     // password: ABC123def
@@ -37,6 +37,7 @@ namespace MessagingTemplate.Messaging
             mm.To.Add(new MailAddress(toEmailAddress));
             mm.Body = finalMessage;
             client.Send(mm);
+            //NOTE: Works but receiving gmail account needs to have security settings switched to "Less Secure"
         }
 
     }
