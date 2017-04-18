@@ -110,7 +110,7 @@ namespace bevo.Controllers
         {
             if (ModelState.IsValid)
             {
-                //TODO: Add fields to user here so they will be saved to do the database
+                //DONE: Add fields to user here so they will be saved to do the database
                 var user = new AppUser
                 { UserName = model.Email,
                   Email = model.Email,
