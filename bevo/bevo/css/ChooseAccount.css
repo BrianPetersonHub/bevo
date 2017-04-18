@@ -1,0 +1,15 @@
+﻿a {
+    color: mediumaquamarine;
+    text-decoration: none;
+}
+
+a:hover {
+    color: purple;
+}
+
+.item {
+    margin: auto;
+    text-align: center;
+    padding-top: 50px;
+}
+
