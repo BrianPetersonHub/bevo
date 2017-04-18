@@ -110,7 +110,7 @@ namespace bevo.Controllers
         {
             if (ModelState.IsValid)
             {
-                //TODO: Add fields to user here so they will be saved to do the database
+                //DONE: Add fields to user here so they will be saved to do the database
                 var user = new AppUser
                 { UserName = model.Email,
                   Email = model.Email,
@@ -126,7 +126,7 @@ namespace bevo.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
 
                 //TODO:  Once you get roles working, you may want to add users to roles upon creation
-                // await UserManager.AddToRoleAsync(user.Id, "User");
+                // await UserManager.AddToRoleAsync(user.Id, "Customer");
                 // --OR--
                 // await UserManager.AddToRoleAsync(user.Id, "Employee");
 
@@ -150,6 +150,35 @@ namespace bevo.Controllers
             return View(model);
         }
 
+        //GET: Choose Account Page
+        public ActionResult ChooseAccount()
+        {
+            return View("ChooseAccount");
+        }
+
+        // User Choose Account Type
+        public ActionResult ChooseChecking()
+        {
+            return RedirectToAction("Create", "CheckingAccountsController");
+        }
+
+        public ActionResult ChooseSaving()
+        {
+            //TODO: Make Create Action on SavingsAccountController
+            return RedirectToAction("Create", "SavingAccountsController");
+        }
+
+        public ActionResult ChooseIRA()
+        {
+            //TODO: Make Create Action on IRAccountsController
+            return RedirectToAction("Create", "IRAccountsController");
+        }
+
+        public ActionResult ChooseStockPortfolio()
+        {
+            //TODO: MAke create action on Stock Portfolio Controller
+            return RedirectToAction("Create", "StockPortfoliosController");
+        }
         //
         // GET: /Account/ForgotPassword
         [AllowAnonymous]

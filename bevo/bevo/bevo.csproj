@@ -158,6 +158,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="css\ChooseAccount.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -173,6 +174,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704021846454_FunctioningSeeding.resx">
       <DependentUpon>201704021846454_FunctioningSeeding.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704181721160_Identity.resx">
+      <DependentUpon>201704181721160_Identity.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SeedData\Payee.csv" />
     <EmbeddedResource Include="SeedData\CheckingAccount.csv" />
@@ -216,6 +220,10 @@
     <Compile Include="Migrations\201704021846454_FunctioningSeeding.Designer.cs">
       <DependentUpon>201704021846454_FunctioningSeeding.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704181721160_Identity.cs" />
+    <Compile Include="Migrations\201704181721160_Identity.Designer.cs">
+      <DependentUpon>201704181721160_Identity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedIdentity.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -226,7 +234,6 @@
     <Compile Include="Models\IRAccount.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Payee.cs" />
-    <Compile Include="Models\Person.cs" />
     <Compile Include="Models\RoleViewModels.cs" />
     <Compile Include="Models\SavingAccount.cs" />
     <Compile Include="Models\Stock.cs" />
@@ -265,6 +272,7 @@
     <Content Include="Views\RoleAdmin\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Account\ChooseAccount.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

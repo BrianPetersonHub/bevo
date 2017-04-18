@@ -11,8 +11,8 @@ namespace bevo.Models
     {
         //This data annotation is needed so EF knows which end of the 1:1 relationship is 
         //the parent side
-        [Key, ForeignKey("Person")]
-        public Int32 IRAccountID { get; set; }
+        [Key, ForeignKey("AppUser")]
+        public String IRAccountID { get; set; }
         public Int32 AccountNum { get; set; }
 
         [Required(ErrorMessage = "Account Name is required.")]
