@@ -210,13 +210,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IRAccountController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RoleAdminController.cs" />
     <Compile Include="Controllers\SavingAccountsController.cs" />
     <Compile Include="Controllers\CheckingAccountsController.cs" />
-    <Compile Include="Controllers\PersonsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -262,17 +262,10 @@
     <Content Include="SeedData\Person.csv" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Persons\Customer\ChooseAccount.cshtml" />
-    <Content Include="Views\Persons\Customer\Home.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Persons\Employee\Home.cshtml" />
-    <Content Include="Views\Persons\Employee\Edit.cshtml" />
-    <Content Include="Views\Persons\Customer\Edit.cshtml" />
-    <Content Include="Views\Persons\Manager\Home.cshtml" />
     <Content Include="Views\Disputes\Detail.cshtml" />
     <Content Include="Views\Transactions\Detail.cshtml" />
     <Content Include="Views\Transactions\Search.cshtml" />
-    <Content Include="Views\Persons\Employee\Detail.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
@@ -286,6 +279,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Account\ChooseAccount.cshtml" />
     <Content Include="Views\CheckingAccounts\Create.cshtml" />
+    <Content Include="Views\Customer\Home.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

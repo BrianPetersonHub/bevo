@@ -28,7 +28,8 @@ namespace bevo.Controllers
             {
                 db.CheckingAccounts.Add(checkingAccount);
                 db.SaveChanges();
-                return RedirectToAction("CustomerHome", "PersonsController");
+                //TODO: Make sure this is redirecting to the customercontroller
+                return RedirectToAction("Home", "Customer");
             }
             return View(checkingAccount);
         }
