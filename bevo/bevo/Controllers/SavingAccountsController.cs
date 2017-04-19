@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using bevo.Models;
-using bevo.DAL;
 
 namespace bevo.Controllers
 {

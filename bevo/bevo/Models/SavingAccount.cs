@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
-using bevo.DAL;
 
 namespace bevo.Models
 {
@@ -24,7 +23,7 @@ namespace bevo.Models
         }
 
         //SavingAccount can have many Persons
-        public virtual Person Person { get; set; }
+        public virtual AppUser AppUser { get; set; }
         public virtual List<Transaction> Transactions { get; set; }
 
         //method to get next account number
@@ -35,7 +34,7 @@ namespace bevo.Models
             intCount += db.CheckingAccounts.Count();
             intCount += db.SavingAccounts.Count();
             intCount += db.IRAccounts.Count();
-            intCount += db.StockPortfolio.Count();
+            intCount += db.StockPortfolios.Count();
             return intCount;
         }
     }

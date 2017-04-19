@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using bevo.DAL;
 using bevo.Models;
 namespace bevo.Controllers
 {
@@ -26,15 +25,15 @@ namespace bevo.Controllers
         //POST: Persons/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "PersonID,FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Email,PhoneNumber,BirthDay,Password")] Person person)
+        public ActionResult Create([Bind(Include = "Id,FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Email,PhoneNumber,Birthday,Password")] AppUser user)
         {
             if (ModelState.IsValid)
             {
-                db.Persons.Add(person);
+                db.Users.Add(user);
                 db.SaveChanges();
                 return RedirectToAction("ChooseAccount");
             }
-            return View(person);
+            return View(user);
         }
 
         public ActionResult ChooseAccount()

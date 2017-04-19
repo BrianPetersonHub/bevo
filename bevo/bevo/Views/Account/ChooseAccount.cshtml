@@ -1,0 +1,39 @@
+﻿<!--TODO: User Select Account Here
+    -- customer must choose account type before having other functionalities available
+    -- on account controller? 
+-->
+@{
+    ViewBag.Title = "Choose Bank Account Type";
+}
+
+
+<link rel="stylesheet" href="../css/ChooseAccount.css" />
+
+<h2>@ViewBag.Title</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="item">
+                @Html.ActionLink("Checkings Account", "Create", "CeckingAccount")
+            </div>
+        </div>
+        <div class="col">
+            <div class="item">
+                @Html.ActionLink("Savings Account", "ChooseSaving")
+            </div>
+        </div>
+        <div class="col">
+            <div class="item">
+                @Html.ActionLink("IRA", "ChooseIRA")
+            </div>
+        </div>
+        <div class="col">
+            <div class="item">
+                @Html.ActionLink("Stock Portfolio", "ChooseStockPortfolio")
+            </div>
+        </div>
+    </div>
+</div>
+
+

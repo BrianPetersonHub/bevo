@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using bevo.DAL;
 
 namespace bevo.Models
 {
@@ -12,8 +11,8 @@ namespace bevo.Models
     {
         //This data annotation is needed so EF knows which end of the 1:1 relationship is 
         //the parent side
-        [Key, ForeignKey("Person")]
-        public Int32 IRAccountID { get; set; }
+        [Key, ForeignKey("AppUser")]
+        public String IRAccountID { get; set; }
         public Int32 AccountNum { get; set; }
 
         [Required(ErrorMessage = "Account Name is required.")]
@@ -21,15 +20,15 @@ namespace bevo.Models
         public String AccountName { get; set; }
         public Decimal Balance { get; set; }
 
-        public IRAccount(String AcctName)
+        public IRAccount()
         {
             AccountNum = GetAcctNum();
-            AccountName = AcctName;
+            AccountName = "";
             Balance = 0;
         }
 
         //IRAccount can have many Persons
-        public virtual Person Person { get; set; }
+        public virtual AppUser AppUser { get; set; }
         public virtual List<Transaction> Transactions { get; set; }
 
         //method to get next account number
@@ -40,7 +39,7 @@ namespace bevo.Models
             intCount += db.CheckingAccounts.Count();
             intCount += db.SavingAccounts.Count();
             intCount += db.IRAccounts.Count();
-            intCount += db.StockPortfolio.Count();
+            intCount += db.StockPortfolios.Count();
             return intCount;
         }
     }

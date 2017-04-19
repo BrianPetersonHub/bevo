@@ -54,6 +54,6 @@ namespace bevo.Models
         public PayeeType PayeeType { get; set; }
 
         // Navigational
-        public virtual List<Person> Persons { get; set; }
+        public virtual List<AppUser> AppUsers { get; set; }
     }
 }
