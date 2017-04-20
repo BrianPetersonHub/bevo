@@ -3,10 +3,34 @@ namespace bevo.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class AddSeedingAndOneToOne : DbMigration
+    public partial class Initial : DbMigration
     {
         public override void Up()
         {
+            CreateTable(
+                "dbo.AspNetRoles",
+                c => new
+                    {
+                        Id = c.String(nullable: false, maxLength: 128),
+                        Name = c.String(nullable: false, maxLength: 256),
+                        Discriminator = c.String(nullable: false, maxLength: 128),
+                    })
+                .PrimaryKey(t => t.Id)
+                .Index(t => t.Name, unique: true, name: "RoleNameIndex");
+            
+            CreateTable(
+                "dbo.AspNetUserRoles",
+                c => new
+                    {
+                        UserId = c.String(nullable: false, maxLength: 128),
+                        RoleId = c.String(nullable: false, maxLength: 128),
+                    })
+                .PrimaryKey(t => new { t.UserId, t.RoleId })
+                .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
+                .ForeignKey("dbo.AspNetRoles", t => t.RoleId, cascadeDelete: true)
+                .Index(t => t.UserId)
+                .Index(t => t.RoleId);
+            
             CreateTable(
                 "dbo.CheckingAccounts",
                 c => new
@@ -15,43 +39,65 @@ namespace bevo.Migrations
                         AccountNum = c.Int(nullable: false),
                         AccountName = c.String(),
                         Balance = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        Person_PersonID = c.Int(),
+                        AppUser_Id = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => t.CheckingAccountID)
-                .ForeignKey("dbo.People", t => t.Person_PersonID)
-                .Index(t => t.Person_PersonID);
+                .ForeignKey("dbo.AspNetUsers", t => t.AppUser_Id)
+                .Index(t => t.AppUser_Id);
             
             CreateTable(
-                "dbo.People",
+                "dbo.AspNetUsers",
                 c => new
                     {
-                        PersonID = c.Int(nullable: false, identity: true),
-                        PersonType = c.Int(nullable: false),
+                        Id = c.String(nullable: false, maxLength: 128),
                         Enabled = c.Boolean(nullable: false),
                         FirstName = c.String(nullable: false),
+                        MiddleInitial = c.String(),
                         LastName = c.String(nullable: false),
                         Street = c.String(nullable: false),
                         City = c.String(nullable: false),
                         State = c.String(nullable: false),
                         ZipCode = c.String(nullable: false),
-                        Email = c.String(nullable: false),
-                        PhoneNumber = c.String(nullable: false),
                         Birthday = c.String(nullable: false),
-                        Password = c.String(nullable: false),
+                        Email = c.String(maxLength: 256),
+                        EmailConfirmed = c.Boolean(nullable: false),
+                        PasswordHash = c.String(),
+                        SecurityStamp = c.String(),
+                        PhoneNumber = c.String(),
+                        PhoneNumberConfirmed = c.Boolean(nullable: false),
+                        TwoFactorEnabled = c.Boolean(nullable: false),
+                        LockoutEndDateUtc = c.DateTime(),
+                        LockoutEnabled = c.Boolean(nullable: false),
+                        AccessFailedCount = c.Int(nullable: false),
+                        UserName = c.String(nullable: false, maxLength: 256),
                     })
-                .PrimaryKey(t => t.PersonID);
+                .PrimaryKey(t => t.Id)
+                .Index(t => t.UserName, unique: true, name: "UserNameIndex");
+            
+            CreateTable(
+                "dbo.AspNetUserClaims",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        UserId = c.String(nullable: false, maxLength: 128),
+                        ClaimType = c.String(),
+                        ClaimValue = c.String(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
+                .Index(t => t.UserId);
             
             CreateTable(
                 "dbo.IRAccounts",
                 c => new
                     {
-                        IRAccountID = c.Int(nullable: false),
+                        IRAccountID = c.String(nullable: false, maxLength: 128),
                         AccountNum = c.Int(nullable: false),
                         AccountName = c.String(nullable: false),
                         Balance = c.Decimal(nullable: false, precision: 18, scale: 2),
                     })
                 .PrimaryKey(t => t.IRAccountID)
-                .ForeignKey("dbo.People", t => t.IRAccountID)
+                .ForeignKey("dbo.AspNetUsers", t => t.IRAccountID)
                 .Index(t => t.IRAccountID);
             
             CreateTable(
@@ -74,24 +120,24 @@ namespace bevo.Migrations
                         AccountNum = c.Int(nullable: false),
                         AccountName = c.String(),
                         Balance = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        Person_PersonID = c.Int(),
+                        AppUser_Id = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => t.SavingAccountID)
-                .ForeignKey("dbo.People", t => t.Person_PersonID)
-                .Index(t => t.Person_PersonID);
+                .ForeignKey("dbo.AspNetUsers", t => t.AppUser_Id)
+                .Index(t => t.AppUser_Id);
             
             CreateTable(
                 "dbo.StockPortfolios",
                 c => new
                     {
-                        StockPortfolioID = c.Int(nullable: false),
+                        StockPortfolioID = c.String(nullable: false, maxLength: 128),
                         AccountNum = c.Int(nullable: false),
                         AccountName = c.String(nullable: false),
                         Balance = c.Decimal(nullable: false, precision: 18, scale: 2),
                         StockDetail_StockDetailID = c.Int(),
                     })
                 .PrimaryKey(t => t.StockPortfolioID)
-                .ForeignKey("dbo.People", t => t.StockPortfolioID)
+                .ForeignKey("dbo.AspNetUsers", t => t.StockPortfolioID)
                 .ForeignKey("dbo.StockDetails", t => t.StockDetail_StockDetailID)
                 .Index(t => t.StockPortfolioID)
                 .Index(t => t.StockDetail_StockDetailID);
@@ -117,6 +163,18 @@ namespace bevo.Migrations
                 .PrimaryKey(t => t.StockID)
                 .ForeignKey("dbo.StockDetails", t => t.StockDetail_StockDetailID)
                 .Index(t => t.StockDetail_StockDetailID);
+            
+            CreateTable(
+                "dbo.AspNetUserLogins",
+                c => new
+                    {
+                        LoginProvider = c.String(nullable: false, maxLength: 128),
+                        ProviderKey = c.String(nullable: false, maxLength: 128),
+                        UserId = c.String(nullable: false, maxLength: 128),
+                    })
+                .PrimaryKey(t => new { t.LoginProvider, t.ProviderKey, t.UserId })
+                .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
+                .Index(t => t.UserId);
             
             CreateTable(
                 "dbo.Payees",
@@ -162,7 +220,7 @@ namespace bevo.Migrations
                 c => new
                     {
                         Transaction_TransactionID = c.Int(nullable: false),
-                        IRAccount_IRAccountID = c.Int(nullable: false),
+                        IRAccount_IRAccountID = c.String(nullable: false, maxLength: 128),
                     })
                 .PrimaryKey(t => new { t.Transaction_TransactionID, t.IRAccount_IRAccountID })
                 .ForeignKey("dbo.Transactions", t => t.Transaction_TransactionID, cascadeDelete: true)
@@ -187,7 +245,7 @@ namespace bevo.Migrations
                 "dbo.StockPortfolioTransactions",
                 c => new
                     {
-                        StockPortfolio_StockPortfolioID = c.Int(nullable: false),
+                        StockPortfolio_StockPortfolioID = c.String(nullable: false, maxLength: 128),
                         Transaction_TransactionID = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => new { t.StockPortfolio_StockPortfolioID, t.Transaction_TransactionID })
@@ -197,40 +255,44 @@ namespace bevo.Migrations
                 .Index(t => t.Transaction_TransactionID);
             
             CreateTable(
-                "dbo.PayeePersons",
+                "dbo.PayeeAppUsers",
                 c => new
                     {
                         Payee_PayeeID = c.Int(nullable: false),
-                        Person_PersonID = c.Int(nullable: false),
+                        AppUser_Id = c.String(nullable: false, maxLength: 128),
                     })
-                .PrimaryKey(t => new { t.Payee_PayeeID, t.Person_PersonID })
+                .PrimaryKey(t => new { t.Payee_PayeeID, t.AppUser_Id })
                 .ForeignKey("dbo.Payees", t => t.Payee_PayeeID, cascadeDelete: true)
-                .ForeignKey("dbo.People", t => t.Person_PersonID, cascadeDelete: true)
+                .ForeignKey("dbo.AspNetUsers", t => t.AppUser_Id, cascadeDelete: true)
                 .Index(t => t.Payee_PayeeID)
-                .Index(t => t.Person_PersonID);
+                .Index(t => t.AppUser_Id);
             
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.PayeePersons", "Person_PersonID", "dbo.People");
-            DropForeignKey("dbo.PayeePersons", "Payee_PayeeID", "dbo.Payees");
+            DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
+            DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.PayeeAppUsers", "AppUser_Id", "dbo.AspNetUsers");
+            DropForeignKey("dbo.PayeeAppUsers", "Payee_PayeeID", "dbo.Payees");
+            DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.StockPortfolioTransactions", "Transaction_TransactionID", "dbo.Transactions");
             DropForeignKey("dbo.StockPortfolioTransactions", "StockPortfolio_StockPortfolioID", "dbo.StockPortfolios");
             DropForeignKey("dbo.Stocks", "StockDetail_StockDetailID", "dbo.StockDetails");
             DropForeignKey("dbo.StockPortfolios", "StockDetail_StockDetailID", "dbo.StockDetails");
-            DropForeignKey("dbo.StockPortfolios", "StockPortfolioID", "dbo.People");
+            DropForeignKey("dbo.StockPortfolios", "StockPortfolioID", "dbo.AspNetUsers");
             DropForeignKey("dbo.SavingAccountTransactions", "Transaction_TransactionID", "dbo.Transactions");
             DropForeignKey("dbo.SavingAccountTransactions", "SavingAccount_SavingAccountID", "dbo.SavingAccounts");
-            DropForeignKey("dbo.SavingAccounts", "Person_PersonID", "dbo.People");
+            DropForeignKey("dbo.SavingAccounts", "AppUser_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.TransactionIRAccounts", "IRAccount_IRAccountID", "dbo.IRAccounts");
             DropForeignKey("dbo.TransactionIRAccounts", "Transaction_TransactionID", "dbo.Transactions");
             DropForeignKey("dbo.TransactionCheckingAccounts", "CheckingAccount_CheckingAccountID", "dbo.CheckingAccounts");
             DropForeignKey("dbo.TransactionCheckingAccounts", "Transaction_TransactionID", "dbo.Transactions");
-            DropForeignKey("dbo.IRAccounts", "IRAccountID", "dbo.People");
-            DropForeignKey("dbo.CheckingAccounts", "Person_PersonID", "dbo.People");
-            DropIndex("dbo.PayeePersons", new[] { "Person_PersonID" });
-            DropIndex("dbo.PayeePersons", new[] { "Payee_PayeeID" });
+            DropForeignKey("dbo.IRAccounts", "IRAccountID", "dbo.AspNetUsers");
+            DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.CheckingAccounts", "AppUser_Id", "dbo.AspNetUsers");
+            DropIndex("dbo.PayeeAppUsers", new[] { "AppUser_Id" });
+            DropIndex("dbo.PayeeAppUsers", new[] { "Payee_PayeeID" });
             DropIndex("dbo.StockPortfolioTransactions", new[] { "Transaction_TransactionID" });
             DropIndex("dbo.StockPortfolioTransactions", new[] { "StockPortfolio_StockPortfolioID" });
             DropIndex("dbo.SavingAccountTransactions", new[] { "Transaction_TransactionID" });
@@ -239,27 +301,37 @@ namespace bevo.Migrations
             DropIndex("dbo.TransactionIRAccounts", new[] { "Transaction_TransactionID" });
             DropIndex("dbo.TransactionCheckingAccounts", new[] { "CheckingAccount_CheckingAccountID" });
             DropIndex("dbo.TransactionCheckingAccounts", new[] { "Transaction_TransactionID" });
+            DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.Stocks", new[] { "StockDetail_StockDetailID" });
             DropIndex("dbo.StockPortfolios", new[] { "StockDetail_StockDetailID" });
             DropIndex("dbo.StockPortfolios", new[] { "StockPortfolioID" });
-            DropIndex("dbo.SavingAccounts", new[] { "Person_PersonID" });
+            DropIndex("dbo.SavingAccounts", new[] { "AppUser_Id" });
             DropIndex("dbo.IRAccounts", new[] { "IRAccountID" });
-            DropIndex("dbo.CheckingAccounts", new[] { "Person_PersonID" });
-            DropTable("dbo.PayeePersons");
+            DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
+            DropIndex("dbo.AspNetUsers", "UserNameIndex");
+            DropIndex("dbo.CheckingAccounts", new[] { "AppUser_Id" });
+            DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
+            DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
+            DropIndex("dbo.AspNetRoles", "RoleNameIndex");
+            DropTable("dbo.PayeeAppUsers");
             DropTable("dbo.StockPortfolioTransactions");
             DropTable("dbo.SavingAccountTransactions");
             DropTable("dbo.TransactionIRAccounts");
             DropTable("dbo.TransactionCheckingAccounts");
             DropTable("dbo.Disputes");
             DropTable("dbo.Payees");
+            DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.Stocks");
             DropTable("dbo.StockDetails");
             DropTable("dbo.StockPortfolios");
             DropTable("dbo.SavingAccounts");
             DropTable("dbo.Transactions");
             DropTable("dbo.IRAccounts");
-            DropTable("dbo.People");
+            DropTable("dbo.AspNetUserClaims");
+            DropTable("dbo.AspNetUsers");
             DropTable("dbo.CheckingAccounts");
+            DropTable("dbo.AspNetUserRoles");
+            DropTable("dbo.AspNetRoles");
         }
     }
 }
