@@ -24,14 +24,14 @@ namespace bevo.Messaging
 
             //Add anything that you need to the body of the message
             // /n is a new line – this will add some white space after the main body of the message
-            String finalMessage = emailBody + "\n\n This is a disclaimer that will be on all    messages. ";
+            String finalMessage = emailBody + "\n\n This is a disclaimer that will be on all messages. ";
 
             //Create an email address object for the sender address
             MailAddress senderEmail = new MailAddress("patrickmis375@gmail.com", "Team 1");
 
 
             MailMessage mm = new MailMessage();
-            mm.Subject = "Team XX - " + emailSubject;
+            mm.Subject = "Team 01 - " + emailSubject;
             mm.Sender = senderEmail;
             mm.From = senderEmail;
             mm.To.Add(new MailAddress(toEmailAddress));
