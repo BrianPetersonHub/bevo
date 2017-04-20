@@ -7,13 +7,13 @@ namespace bevo.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class UpdatedSeedMethod : IMigrationMetadata
+    public sealed partial class Initial : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(UpdatedSeedMethod));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
         
         string IMigrationMetadata.Id
         {
-            get { return "201704182006409_Updated Seed Method"; }
+            get { return "201704200131571_Initial"; }
         }
         
         string IMigrationMetadata.Source
