@@ -7,6 +7,7 @@ using bevo.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.VisualBasic;
 using Microsoft.AspNet.Identity;
+using System.Data.Entity.Validation;
 
 namespace bevo.Migrations
 {
@@ -71,51 +72,80 @@ namespace bevo.Migrations
 
         public static void SeedPerson(AppDbContext db, String[] seedPerson)
         {
-            //create a user manager to add users to databases
-            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+                //create a user manager to add users to databases
+                UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
 
-            //create a role manager 
-            AppRoleManager roleManager = new AppRoleManager(new RoleStore<AppRole>(db));
+                //create a role manager 
+                AppRoleManager roleManager = new AppRoleManager(new RoleStore<AppRole>(db));
 
-            String roleName = seedPerson[11];
+                String roleName = seedPerson[11];
 
-            //check if role exists 
-            if (roleManager.RoleExists(roleName) == false) //role doesn't exist
-            {
-                roleManager.Create(new AppRole(roleName));
-            }
-
-            AppUser user = new AppUser()
-            {
-                UserName = seedPerson[0].ToString(),
-                Email = seedPerson[0].ToString(),
-                FirstName = seedPerson[1].ToString(),
-                MiddleInitial = seedPerson[2].ToString(),
-                LastName = seedPerson[3].ToString(),
-                Street = seedPerson[5].ToString(),
-                City = seedPerson[6].ToString(),
-                State = seedPerson[7].ToString(),
-                ZipCode = seedPerson[8].ToString(),
-                Birthday = seedPerson[10].ToString(),
-                PhoneNumber = seedPerson[9].ToString()
-            };
-
-            string strUserName = seedPerson[0].ToString();
-
-            //see if user is already there 
-            AppUser userToAdd = userManager.FindByName(strUserName);
-            if (userToAdd == null) //this user doesn't exist yet
-            {
-                string Password = seedPerson[4].ToString();
-                userManager.Create(user, Password);
-                userToAdd = userManager.FindByName(strUserName);
-
-                //add user to the role 
-                if (userManager.IsInRole(userToAdd.Id, roleName) == false) //the user isn't in the role
+                //check if role exists 
+                if (roleManager.RoleExists(roleName) == false) //role doesn't exist
                 {
-                    userManager.AddToRole(userToAdd.Id, roleName);
+                    roleManager.Create(new AppRole(roleName));
                 }
-            }
+
+                //Manually hash the password 
+                //string Password = seedPerson[4].ToString();
+                //var passwordHash = new PasswordHasher();
+                //string hashedPassword = passwordHash.HashPassword(Password);
+
+                string password = seedPerson[4];
+                string strUserName = seedPerson[0];
+
+                var user = userManager.Find(strUserName, password);
+
+                if (user != null)
+                {
+                    return;
+                }
+
+
+                user = new AppUser()
+                {
+                    //Id = Guid.NewGuid().ToString(),
+                    UserName = seedPerson[0],
+                    Email = seedPerson[0],
+                    FirstName = seedPerson[1],
+                    MiddleInitial = seedPerson[2],
+                    LastName = seedPerson[3],
+                    Street = seedPerson[5],
+                    City = seedPerson[6],
+                    State = seedPerson[7],
+                    ZipCode = seedPerson[8],
+                    Birthday = seedPerson[10],
+                    PhoneNumber = seedPerson[9]
+                    //PasswordHash = hashedPassword
+                };
+
+                var result = userManager.Create(user, password);
+
+                if (result.Succeeded)
+                {
+                    userManager.AddToRole(user.Id, roleName);
+                }
+                //else
+                //{
+                //    var e = new Exception("Could not add default account.");
+
+                //    throw e;
+                //}
+
+                ////see if user is already there 
+                //AppUser userToAdd = userManager.FindByEmail(strUserName);
+                //if (userToAdd == null) //this user doesn't exist yet
+                //{
+                //    userManager.Create(user, password);
+                //    userToAdd = userManager.FindByEmail(strUserName);
+
+                //    //add user to the role 
+                //    if (userManager.IsInRole(user.Id, roleName) == false) //the user isn't in the role
+                //    {
+                //        userManager.AddToRole(user.Id, roleName);
+                //    }
+                //}
+            
 
         }
 
