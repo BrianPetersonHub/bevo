@@ -102,6 +102,5 @@ namespace bevo.Models
 
         public DbSet<AppRole> AppRoles { get; set; }
 
-        public System.Data.Entity.DbSet<bevo.Models.AppUser> AppUsers { get; set; }
     }
 }

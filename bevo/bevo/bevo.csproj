@@ -169,17 +169,8 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <EmbeddedResource Include="Migrations\201704021835432_AddSeedingAndOneToOne.resx">
-      <DependentUpon>201704021835432_AddSeedingAndOneToOne.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704021846454_FunctioningSeeding.resx">
-      <DependentUpon>201704021846454_FunctioningSeeding.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704181721160_Identity.resx">
-      <DependentUpon>201704181721160_Identity.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704182006409_Updated Seed Method.resx">
-      <DependentUpon>201704182006409_Updated Seed Method.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201704200131571_Initial.resx">
+      <DependentUpon>201704200131571_Initial.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704192306529_Still working on seed.resx">
       <DependentUpon>201704192306529_Still working on seed.cs</DependentUpon>
@@ -223,21 +214,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704021835432_AddSeedingAndOneToOne.cs" />
-    <Compile Include="Migrations\201704021835432_AddSeedingAndOneToOne.Designer.cs">
-      <DependentUpon>201704021835432_AddSeedingAndOneToOne.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704021846454_FunctioningSeeding.cs" />
-    <Compile Include="Migrations\201704021846454_FunctioningSeeding.Designer.cs">
-      <DependentUpon>201704021846454_FunctioningSeeding.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704181721160_Identity.cs" />
-    <Compile Include="Migrations\201704181721160_Identity.Designer.cs">
-      <DependentUpon>201704181721160_Identity.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704182006409_Updated Seed Method.cs" />
-    <Compile Include="Migrations\201704182006409_Updated Seed Method.Designer.cs">
-      <DependentUpon>201704182006409_Updated Seed Method.cs</DependentUpon>
+    <Compile Include="Migrations\201704200131571_Initial.cs" />
+    <Compile Include="Migrations\201704200131571_Initial.Designer.cs">
+      <DependentUpon>201704200131571_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201704192306529_Still working on seed.cs" />
     <Compile Include="Migrations\201704192306529_Still working on seed.Designer.cs">
