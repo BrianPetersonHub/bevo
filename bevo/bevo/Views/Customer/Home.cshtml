@@ -1,6 +1,13 @@
-﻿@{
+﻿@model bevo.Models.AppUser
+@{
     ViewBag.Title = "Home";
 }
 
 <h2>Home</h2>
 
+<ul>
+    @foreach (var c in ViewBag.CheckingAccounts)
+    {
+        ;
+    }
+</ul>
