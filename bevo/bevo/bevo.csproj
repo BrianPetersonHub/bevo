@@ -259,6 +259,8 @@
     <Content Include="Views\Account\ChooseAccount.cshtml" />
     <Content Include="Views\CheckingAccounts\Create.cshtml" />
     <Content Include="Views\Customer\Home.cshtml" />
+    <Content Include="Views\CheckingAccounts\Details.cshtml" />
+    <Content Include="Views\CheckingAccounts\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

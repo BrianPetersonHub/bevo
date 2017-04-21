@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data.Entity;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using bevo.Models;
@@ -11,6 +13,22 @@ namespace bevo.Controllers
     public class CheckingAccountsController : Controller
     {
         private AppDbContext db = new AppDbContext();
+
+        //GET: CheckingAccounts/Index/#
+        //TODO: How do we get here from CustomerHome page's "view account" link?
+        public ActionResult Index(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            CheckingAccount checkingAccount = db.CheckingAccounts.Find(id);
+            if (checkingAccount == null)
+            {
+                return HttpNotFound();
+            }
+            return View(checkingAccount);
+        }
 
         //GET: CheckingAccount/Create
         public ActionResult Create()
@@ -32,6 +50,11 @@ namespace bevo.Controllers
                 return RedirectToAction("Home", "Customer");
             }
             return View(checkingAccount);
+        }
+
+        public ActionResult Details()
+        {
+            return View();
         }
     }
 }
