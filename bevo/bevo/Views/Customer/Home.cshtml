@@ -1,6 +1,39 @@
-﻿@{
+﻿@model bevo.Models.AppUser
+@{
     ViewBag.Title = "Home";
 }
 
 <h2>Home</h2>
 
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CheckingAccounts)
+        </th>
+        <th>
+            Balance
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var c in ViewBag.CheckingAccounts)
+    {
+        <tr>
+            <td>
+                @c.AccountName
+            </td>
+            <td>
+                $@c.Balance
+            </td>
+            <td>
+                @Html.ActionLink(
+                linkText: "Details",
+                actionName: "Index",
+                controllerName: "CheckingAccounts",
+                routeValues: new { id = c.CheckingAccountID },
+                htmlAttributes: null )
+            </td>
+        </tr>
+    }
+
+</table>

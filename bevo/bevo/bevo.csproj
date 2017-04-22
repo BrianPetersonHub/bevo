@@ -214,6 +214,7 @@
     <Compile Include="Controllers\RoleAdminController.cs" />
     <Compile Include="Controllers\SavingAccountsController.cs" />
     <Compile Include="Controllers\CheckingAccountsController.cs" />
+    <Compile Include="Controllers\TransactionsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -273,6 +274,7 @@
     <Content Include="Views\Account\ChooseAccount.cshtml" />
     <Content Include="Views\CheckingAccounts\Create.cshtml" />
     <Content Include="Views\Customer\Home.cshtml" />
+    <Content Include="Views\CheckingAccounts\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -283,7 +285,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\IRAccounts\" />
-    <Folder Include="Views\IRAccount\" />
     <Folder Include="Views\Payees\" />
     <Folder Include="Views\SavingAccounts\" />
     <Folder Include="Views\StockDetails\" />
