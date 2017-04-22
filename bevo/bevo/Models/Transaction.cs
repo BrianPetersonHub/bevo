@@ -22,6 +22,8 @@ namespace bevo.Models
         public Int32 ToAccount { get; set; }
 
         public TransType TransType { get; set; }
+        
+        public String Description { get; set; }
 
         public bool Dispute { get; set; }
 

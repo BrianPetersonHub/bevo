@@ -15,7 +15,6 @@ namespace bevo.Controllers
         private AppDbContext db = new AppDbContext();
 
         //GET: CheckingAccounts/Index/#
-        //TODO: How do we get here from CustomerHome page's "view account" link?
         public ActionResult Index(int? id)
         {
             if (id == null)
