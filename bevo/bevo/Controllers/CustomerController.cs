@@ -26,8 +26,19 @@ namespace bevo.Controllers
                         orderby c.AccountNum
                         select c;
 
-            List<CheckingAccount> checkingAccts = query.ToList();
+            List <CheckingAccount> checkingAccts = query.
+
+            List < CheckingAccount > checkingAccts = query.ToList();
             return checkingAccts;
+
+            //use this instead to grab checking accounts for only the person logged in
+            //var query = from c in db.Users
+            //            where c.Id = User.Identity.GetUserId()
+            //            select c;
+
+            //AppUser user = query;
+            //List<CheckingAccount> checkingAccts = user.CheckingAccounts.ToList();
+            //return checkingAccts;
         }
     }
 }
