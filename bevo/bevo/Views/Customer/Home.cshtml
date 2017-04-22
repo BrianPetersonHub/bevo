@@ -26,7 +26,12 @@
                 $@c.Balance
             </td>
             <td>
-                @Html.ActionLink("View Account", "Index",  new { id = c.CheckingAccountID })
+                @Html.ActionLink(
+                linkText: "Details",
+                actionName: "Index",
+                controllerName: "CheckingAccounts",
+                routeValues: new { id = c.CheckingAccountID },
+                htmlAttributes: null )
             </td>
         </tr>
     }
