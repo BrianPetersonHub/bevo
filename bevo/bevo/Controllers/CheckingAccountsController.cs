@@ -15,22 +15,6 @@ namespace bevo.Controllers
     {
         private AppDbContext db = new AppDbContext();
 
-        //GET: CheckingAccounts/Details/#
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CheckingAccount checkingAccount = db.CheckingAccounts.Find(id);
-            if (checkingAccount == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.Transactions = GetAllTransactions(id);
-            return View(checkingAccount);
-        }
-
         //GET: CheckingAccount/Create
         public ActionResult Create()
         {
@@ -53,6 +37,24 @@ namespace bevo.Controllers
             }
             return View(checkingAccount);
         }
+
+        //GET: CheckingAccounts/Details/#
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            CheckingAccount checkingAccount = db.CheckingAccounts.Find(id);
+            if (checkingAccount == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.Transactions = GetAllTransactions(id);
+            return View(checkingAccount);
+        }
+
+
 
         public List<Transaction> GetAllTransactions(int? id)
         {
