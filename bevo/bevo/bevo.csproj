@@ -178,6 +178,9 @@
     <EmbeddedResource Include="Migrations\201704202046539_Seeing if seed will work.resx">
       <DependentUpon>201704202046539_Seeing if seed will work.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704231540265_Seeding account data.resx">
+      <DependentUpon>201704231540265_Seeding account data.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SeedData\Payee.csv" />
     <EmbeddedResource Include="SeedData\CheckingAccount.csv" />
     <EmbeddedResource Include="SeedData\IRAccount.csv" />
@@ -229,6 +232,10 @@
     <Compile Include="Migrations\201704202046539_Seeing if seed will work.cs" />
     <Compile Include="Migrations\201704202046539_Seeing if seed will work.Designer.cs">
       <DependentUpon>201704202046539_Seeing if seed will work.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704231540265_Seeding account data.cs" />
+    <Compile Include="Migrations\201704231540265_Seeding account data.Designer.cs">
+      <DependentUpon>201704231540265_Seeding account data.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedIdentity.cs" />

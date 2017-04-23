@@ -21,6 +21,11 @@ namespace bevo.Migrations
         {
             SeedIdentity.AddDebugger();
             SeedIdentity.ReadPersonCSV();
+            SeedIdentity.ReadCheckingCSV();
+            SeedIdentity.ReadIRAccountCSV();
+            SeedIdentity.ReadPayeeCSV();
+            SeedIdentity.ReadSavingAccountCSV();
+            SeedIdentity.ReadStockAcctCSV();
             
         }
 

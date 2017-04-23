@@ -159,15 +159,13 @@ namespace bevo.Migrations
             {
 
                 AccountNum = acctNum,
-                AccountName = account[2],
+                AccountName = account[2].ToString(),
                 AppUser = userManager.FindByEmail(account[1]),
                 Balance = bal
             };
 
-            db.CheckingAccounts.AddOrUpdate(a => a.AccountName, checkAccount);
-            db.CheckingAccounts.AddOrUpdate(a => a.AccountNum, checkAccount);
-            db.CheckingAccounts.AddOrUpdate(a => a.AppUser, checkAccount);
-            db.CheckingAccounts.AddOrUpdate(a => a.Balance, checkAccount);
+            db.CheckingAccounts.AddOrUpdate(a => a.CheckingAccountID, checkAccount);
+            db.SaveChanges();
         }
 
         public static void SeedIRAccount(AppDbContext db, String[] account)
@@ -180,15 +178,13 @@ namespace bevo.Migrations
             var IRA = new IRAccount()
             {
                 AccountNum = acctNum,
-                AccountName = account[2],
+                AccountName = account[2].ToString(),
                 AppUser = userManager.FindByEmail(account[1]),
                 Balance = bal
             };
 
-            db.IRAccounts.AddOrUpdate(a => a.AccountName, IRA);
-            db.IRAccounts.AddOrUpdate(a => a.AccountNum, IRA);
-            db.IRAccounts.AddOrUpdate(a => a.AppUser, IRA);
-            db.IRAccounts.AddOrUpdate(a => a.Balance, IRA);
+            db.IRAccounts.AddOrUpdate(a => a.IRAccountID, IRA);
+            db.SaveChanges();
         }
 
         public static void SeedSavingAccount(AppDbContext db, String[] account)
@@ -201,15 +197,13 @@ namespace bevo.Migrations
             var saveAcct = new SavingAccount()
             {
                 AccountNum = acctNum,
-                AccountName = account[2],
+                AccountName = account[2].ToString(),
                 AppUser = userManager.FindByEmail(account[1]),
                 Balance = bal
             };
 
-            db.SavingAccounts.AddOrUpdate(a => a.AccountName, saveAcct);
-            db.SavingAccounts.AddOrUpdate(a => a.AccountNum, saveAcct);
-            db.SavingAccounts.AddOrUpdate(a => a.AppUser, saveAcct);
-            db.SavingAccounts.AddOrUpdate(a => a.Balance, saveAcct);
+            db.SavingAccounts.AddOrUpdate(a => a.SavingAccountID, saveAcct);
+            db.SaveChanges();
         }
 
         public static void SeedPayee(AppDbContext db, String[] account)
@@ -218,22 +212,17 @@ namespace bevo.Migrations
 
             var recipient = new Payee()
             {
-                Name = account[0],
+                Name = account[0].ToString(),
                 PayeeType = type,
-                Street = account[2],
-                City = account[3],
-                State = account[4],
-                Zipcode = account[5],
-                PhoneNumber = account[6]
+                Street = account[2].ToString(),
+                City = account[3].ToString(),
+                State = account[4].ToString(),
+                Zipcode = account[5].ToString(),
+                PhoneNumber = account[6].ToString()
             };
 
-            db.Payees.AddOrUpdate(a => a.Name, recipient);
-            db.Payees.AddOrUpdate(a => a.PayeeType, recipient);
-            db.Payees.AddOrUpdate(a => a.Street, recipient);
-            db.Payees.AddOrUpdate(a => a.City, recipient);
-            db.Payees.AddOrUpdate(a => a.State, recipient);
-            db.Payees.AddOrUpdate(a => a.Zipcode, recipient);
-            db.Payees.AddOrUpdate(a => a.PhoneNumber, recipient);
+            db.Payees.AddOrUpdate(a => a.PayeeID, recipient);
+            db.SaveChanges();
         }
 
         public static void SeedStockAccount(AppDbContext db, String[] account)
@@ -246,15 +235,13 @@ namespace bevo.Migrations
             var stockAcct = new StockPortfolio()
             {
                 AccountNum = acctNum,
-                AccountName = account[2],
+                AccountName = account[2].ToString(),
                 AppUser = userManager.FindByEmail(account[1]),
                 Balance = bal
             };
 
-            db.StockPortfolios.AddOrUpdate(a => a.AccountName, stockAcct);
-            db.StockPortfolios.AddOrUpdate(a => a.AccountNum, stockAcct);
-            db.StockPortfolios.AddOrUpdate(a => a.AppUser, stockAcct);
-            db.StockPortfolios.AddOrUpdate(a => a.Balance, stockAcct);
+            db.StockPortfolios.AddOrUpdate(a => a.StockPortfolioID, stockAcct);
+            db.SaveChanges();
         }
 
 
