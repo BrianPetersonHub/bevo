@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.VisualBasic;
 using Microsoft.AspNet.Identity;
 using System.Data.Entity.Validation;
+using System.Data.Entity.Migrations;
 
 namespace bevo.Migrations
 {
@@ -146,7 +147,124 @@ namespace bevo.Migrations
 
         }
 
+        public static void SeedCheckingAccount(AppDbContext db, String[] account)
+        {
 
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+
+            Int32 acctNum = Int32.Parse(account[0]);
+            Decimal bal = Decimal.Parse(account[3]);
+
+            var checkAccount = new CheckingAccount()
+            {
+
+                AccountNum = acctNum,
+                AccountName = account[2],
+                AppUser = userManager.FindByEmail(account[1]),
+                Balance = bal
+            };
+
+            db.CheckingAccounts.AddOrUpdate(a => a.AccountName, checkAccount);
+            db.CheckingAccounts.AddOrUpdate(a => a.AccountNum, checkAccount);
+            db.CheckingAccounts.AddOrUpdate(a => a.AppUser, checkAccount);
+            db.CheckingAccounts.AddOrUpdate(a => a.Balance, checkAccount);
+        }
+
+        public static void SeedIRAccount(AppDbContext db, String[] account)
+        {
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+
+            Int32 acctNum = Int32.Parse(account[0]);
+            Decimal bal = decimal.Parse(account[3]); 
+
+            var IRA = new IRAccount()
+            {
+                AccountNum = acctNum,
+                AccountName = account[2],
+                AppUser = userManager.FindByEmail(account[1]),
+                Balance = bal
+            };
+
+            db.IRAccounts.AddOrUpdate(a => a.AccountName, IRA);
+            db.IRAccounts.AddOrUpdate(a => a.AccountNum, IRA);
+            db.IRAccounts.AddOrUpdate(a => a.AppUser, IRA);
+            db.IRAccounts.AddOrUpdate(a => a.Balance, IRA);
+        }
+
+        public static void SeedSavingAccount(AppDbContext db, String[] account)
+        {
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+
+            Int32 acctNum = Int32.Parse(account[0]);
+            Decimal bal = decimal.Parse(account[3]);
+
+            var saveAcct = new SavingAccount()
+            {
+                AccountNum = acctNum,
+                AccountName = account[2],
+                AppUser = userManager.FindByEmail(account[1]),
+                Balance = bal
+            };
+
+            db.SavingAccounts.AddOrUpdate(a => a.AccountName, saveAcct);
+            db.SavingAccounts.AddOrUpdate(a => a.AccountNum, saveAcct);
+            db.SavingAccounts.AddOrUpdate(a => a.AppUser, saveAcct);
+            db.SavingAccounts.AddOrUpdate(a => a.Balance, saveAcct);
+        }
+
+        public static void SeedPayee(AppDbContext db, String[] account)
+        {
+            PayeeType type = (PayeeType) Enum.Parse(typeof(PayeeType), account[1], true);
+
+            var recipient = new Payee()
+            {
+                Name = account[0],
+                PayeeType = type,
+                Street = account[2],
+                City = account[3],
+                State = account[4],
+                Zipcode = account[5],
+                PhoneNumber = account[6]
+            };
+
+            db.Payees.AddOrUpdate(a => a.Name, recipient);
+            db.Payees.AddOrUpdate(a => a.PayeeType, recipient);
+            db.Payees.AddOrUpdate(a => a.Street, recipient);
+            db.Payees.AddOrUpdate(a => a.City, recipient);
+            db.Payees.AddOrUpdate(a => a.State, recipient);
+            db.Payees.AddOrUpdate(a => a.Zipcode, recipient);
+            db.Payees.AddOrUpdate(a => a.PhoneNumber, recipient);
+        }
+
+        public static void SeedStockAccount(AppDbContext db, String[] account)
+        {
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+
+            Int32 acctNum = Int32.Parse(account[0]);
+            Decimal bal = decimal.Parse(account[3]);
+
+            var stockAcct = new StockPortfolio()
+            {
+                AccountNum = acctNum,
+                AccountName = account[2],
+                AppUser = userManager.FindByEmail(account[1]),
+                Balance = bal
+            };
+
+            db.StockPortfolios.AddOrUpdate(a => a.AccountName, stockAcct);
+            db.StockPortfolios.AddOrUpdate(a => a.AccountNum, stockAcct);
+            db.StockPortfolios.AddOrUpdate(a => a.AppUser, stockAcct);
+            db.StockPortfolios.AddOrUpdate(a => a.Balance, stockAcct);
+        }
+
+
+
+
+
+        /// <summary>
+        /// THE FOLLOWING METHODS ARE FOR READING THE CSV FILES THEY CALL THE METHODS ABOVE TO SEED EACH 
+        /// OBJECT INTANCE INTO THE DATABASE 
+        /// </summary>
         public static void ReadPersonCSV()
         {
             //call manager seeding to seed in the one manager who is in charge of all this nonsense 
@@ -161,6 +279,56 @@ namespace bevo.Migrations
             }
         }
 
+        public static void ReadCheckingCSV()
+        {
+            string[] allLines = File.ReadAllLines(@"C:\Users\James Abbott\Desktop\MIS 333 Seed Data\CheckingAccount.csv");
+            foreach(String line in allLines)
+            {
+                String[] record = line.Split(',');
+                SeedCheckingAccount(db, record);
+            }
+        }
+
+        public static void ReadIRAccountCSV()
+        {
+            string[] allLines = File.ReadAllLines(@"C:\Users\James Abbott\Desktop\MIS 333 Seed Data\IRAccount.csv");
+            foreach(String line in allLines)
+            {
+                String[] record = line.Split(',');
+                SeedIRAccount(db, record);
+            }
+        }
+
+        public static void ReadSavingAccountCSV()
+        {
+            string[] allLines = File.ReadAllLines(@"C:\Users\James Abbott\Desktop\MIS 333 Seed Data\SavingAccount.csv");
+            foreach(String line in allLines)
+            {
+                String[] record = line.Split(',');
+                SeedSavingAccount(db, record);
+            }
+        }
+
+        public static void ReadPayeeCSV()
+        {
+            string[] allLines = File.ReadAllLines(@"C:\Users\James Abbott\Desktop\MIS 333 Seed Data\Payee.csv");
+            foreach(String line in allLines)
+            {
+                String[] record = line.Split(',');
+                SeedPayee(db, record);
+            }
+        }
+
+        public static void ReadStockAcctCSV()
+        {
+            string[] allLines = File.ReadAllLines(@"C:\Users\James Abbott\Desktop\MIS 333 Seed Data\StockPortfolio.csv");
+            foreach(String line in allLines)
+            {
+                String[] record = line.Split(',');
+                SeedStockAccount(db, record);
+            }
+        }
+
         public static void AddDebugger()
         {
             if (System.Diagnostics.Debugger.IsAttached == false)
@@ -169,6 +337,6 @@ namespace bevo.Migrations
                 System.Diagnostics.Debugger.Launch();
 
             }
-        }
+        }   
     }
 }

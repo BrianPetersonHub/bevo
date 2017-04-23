@@ -21,6 +21,7 @@ namespace bevo.Migrations
         {
             SeedIdentity.AddDebugger();
             SeedIdentity.ReadPersonCSV();
+            
         }
 
 
