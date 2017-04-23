@@ -68,41 +68,48 @@ namespace bevo.Controllers
                                                 Date selectedDate )
         {
 
-            //TODO: start query
+            //DONE: start query
             var query = from t in db.Transactions
                         select t;
 
-            //TODO: Description textbox search
+            //DONE: Description textbox search
             if (description != null && description != "")
             {
                 query = query.Where(t => t.Description.Contains(description));
             }
 
-            //TODO: Dropdown selected transaction type
+            //DONE: Dropdown selected transaction type
             var transTypeList = EnumHelper.GetSelectList(typeof(TransType));
-            if (selectedTransType == 0)
+
+            if (selectedTransType == 4)
             {
-                // query all 
+                // all 
             }
             else
             {
-                // query selected transaction type
+                foreach (SelectListItem type in transTypeList)
+                {
+                    if (transTypeList.IndexOf(type) == selectedTransType)
+                    {
+                        query = query.Where(t => t.TransType.Equals(type));
+                    }
+                }
             }
 
-            //TODO: Radio buttons selected range
+            //DONE: Radio buttons selected range
             switch (selectedRange)
             {
                 case Range.One:
-                    // query
+                    query = query.Where(t => t.Amount > 0 && t.Amount <= 100);
                     break;
                 case Range.Two:
-                    // query
+                    query = query.Where(t => t.Amount > 100 && t.Amount <= 200);
                     break;
                 case Range.Three:
-                    // query
+                    query = query.Where(t => t.Amount > 200 && t.Amount <= 300);
                     break;
                 case Range.Four:
-                    // query
+                    query = query.Where(t => t.Amount > 300);
                     break;
                 case Range.Custom:
                     // query
@@ -110,20 +117,21 @@ namespace bevo.Controllers
                     break;
             }
 
-            //TODO: Transaction number textbox search
+            //DONE: Transaction number textbox search
             if (transactionNumber != null && transactionNumber != "")
             {
-                Int32 intTransactionNumber;
+                Int32 intTransactionNum;
                 try
                 {
-                    intTransactionNumber = Convert.ToInt32(transactionNumber);
+                    intTransactionNum = Convert.ToInt32(transactionNumber);
                 }
 
                 catch
                 {
-
+                    return View();
                 }
-                // query
+
+                query = query.Where(t => t.TransactionNum == intTransactionNum);
             }
 
             //TODO: Radio buttons selected date
@@ -147,7 +155,13 @@ namespace bevo.Controllers
                     break;
             }
 
-        }
+
+            //TODO: query orderby
+
+            List<Transaction> SelectedTransactions = query.ToList();
+            return View("Index", SelectedTransactions);
+
+        } // end of SearchTransaction
 
     }
 }

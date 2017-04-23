@@ -16,12 +16,16 @@ namespace bevo.Models
     public class Transaction
     {
         public Int32 TransactionID { get; set; }
+        public Int32 TransactionNum { get; set; }
+        public DateTime Date { get; set; }
 
         public Int32 FromAccount { get; set; }
 
         public Int32 ToAccount { get; set; }
 
         public TransType TransType { get; set; }
+
+        public Decimal Amount { get; set; }
         
         public String Description { get; set; }
 

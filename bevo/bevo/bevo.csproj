@@ -259,7 +259,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Disputes\Detail.cshtml" />
     <Content Include="Views\Transactions\Detail.cshtml" />
-    <Content Include="Views\Transactions\Search.cshtml" />
+    <Content Include="Views\Transactions\SearchTransactions.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
@@ -275,6 +275,7 @@
     <Content Include="Views\CheckingAccounts\Create.cshtml" />
     <Content Include="Views\Customer\Home.cshtml" />
     <Content Include="Views\CheckingAccounts\Index.cshtml" />
+    <Content Include="Views\Transactions\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
