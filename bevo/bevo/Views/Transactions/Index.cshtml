@@ -1,23 +1,19 @@
 ﻿@model IEnumerable<bevo.Models.Transaction>
 
-<!-- This page shows detail for one checking account
-    Information needed on this page:
-    - Balance
-    - List of transactions
 
-    -->
+<!-- This page displays all transactions for employees and managers to view
+    Add search to this as well  -->
+
 
 @{
-    ViewBag.Title = "Checking Account Home";
+    ViewBag.Title = "All Transactions";
 }
 
-<h2>@ViewBag.Title</h2>
+<h2>All Transactions</h2>
 
-<!--TODO: add other info needed for checking account detail page-->
-
-
-
-<h3>List of Transactions</h3>
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
 <table class="table">
     <tr>
         <th>
@@ -56,7 +52,9 @@
             @Html.DisplayFor(modelItem => item.Dispute)
         </td>
         <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.TransactionID }) |
             @Html.ActionLink("Details", "Details", new { id=item.TransactionID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.TransactionID })
         </td>
     </tr>
 }
