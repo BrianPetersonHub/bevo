@@ -280,7 +280,7 @@
     <Content Include="Views\Account\ChooseAccount.cshtml" />
     <Content Include="Views\CheckingAccounts\Create.cshtml" />
     <Content Include="Views\Customer\Home.cshtml" />
-    <Content Include="Views\CheckingAccounts\Index.cshtml" />
+    <Content Include="Views\CheckingAccounts\Details.cshtml" />
     <Content Include="Views\Transactions\Index.cshtml" />
     <Content Include="Views\Transactions\Detail.cshtml" />
     <None Include="Web.Debug.config">

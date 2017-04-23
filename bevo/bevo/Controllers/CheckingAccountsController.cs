@@ -6,6 +6,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using bevo.Models;
+using Microsoft.AspNet.Identity;
 
 
 namespace bevo.Controllers
@@ -14,8 +15,8 @@ namespace bevo.Controllers
     {
         private AppDbContext db = new AppDbContext();
 
-        //GET: CheckingAccounts/Index/#
-        public ActionResult Index(int? id)
+        //GET: CheckingAccounts/Details/#
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -26,6 +27,7 @@ namespace bevo.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Transactions = GetAllTransactions(id);
             return View(checkingAccount);
         }
 
@@ -43,17 +45,20 @@ namespace bevo.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.CheckingAccounts.Add(checkingAccount);
+                AppUser user = db.Users.Find(User.Identity.GetUserId());
+                user.CheckingAccounts.Add(checkingAccount);
                 db.SaveChanges();
-                //TODO: Make sure this is redirecting to the customercontroller
+
                 return RedirectToAction("Home", "Customer");
             }
             return View(checkingAccount);
         }
 
-        public ActionResult Details()
+        public List<Transaction> GetAllTransactions(int? id)
         {
-            return View();
+            CheckingAccount checkingAccount = db.CheckingAccounts.Find(id);
+            List<Transaction> transactions = checkingAccount.Transactions;
+            return transactions;
         }
     }
 }
