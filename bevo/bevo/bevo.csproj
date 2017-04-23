@@ -265,7 +265,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Disputes\Detail.cshtml" />
-    <Content Include="Views\Transactions\Detail.cshtml" />
     <Content Include="Views\Transactions\SearchTransactions.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
@@ -283,6 +282,7 @@
     <Content Include="Views\Customer\Home.cshtml" />
     <Content Include="Views\CheckingAccounts\Index.cshtml" />
     <Content Include="Views\Transactions\Index.cshtml" />
+    <Content Include="Views\Transactions\Detail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -310,7 +310,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>65191</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

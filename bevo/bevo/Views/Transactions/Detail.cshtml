@@ -1,19 +1,82 @@
-﻿<!-- This page shows detail for one transaction
-    Information needed on this page:
-    - description
-    - transaction type
-    - amount
-    - transaction number
-    - comments added by employee
-    - option to dispute transaction
-    - option to include short message for management in dispute
-
-    -->
+﻿@model bevo.Models.Transaction
 
 @{
     ViewBag.Title = "Transaction Detail";
 }
 
-<h2>Transaction Detail</h2>
+<h2>@ViewBag.Title</h2>
 
+<div>
+    <h4>Transaction</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TransactionNum)
+        </dt>
 
+        <dd>
+            @Html.DisplayFor(model => model.TransactionNum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FromAccount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FromAccount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ToAccount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ToAccount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TransType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TransType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Dispute)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Dispute)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.TransactionID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
