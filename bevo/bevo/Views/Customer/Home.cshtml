@@ -26,11 +26,25 @@
         </div>
         <div class="quick-action-button">
             <!--TODO: Create new method on controller-->
-            <p>@Html.ActionLink("Transfer", "Create", "Transfer", new { @class = "quick-actions" })</p>
+            <p>
+                @Html.ActionLink(
+                linkText: "Make Transfer",
+                actionName: "Create",
+                controllerName: "Transfer",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
         </div>
         <div class="quick-action-button">
             <!--TODO: Create new method on controller-->
-            <p>@Html.ActionLink("Withdraw", "Create", "Withdraw", new { @class = "quick-actions" })</p>
+            <p>
+                @Html.ActionLink(
+                linkText: "Make Withdraw",
+                actionName: "Create",
+                controllerName: "Withdraw",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
         </div>
         <div class="quick-action-button">
             <!--TODO: Create new method on controller-->

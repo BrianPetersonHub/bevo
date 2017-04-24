@@ -4,13 +4,13 @@
     ViewBag.Title = "Create";
 }
 
-<h2>Make a Deposit</h2>
+<h2>Make a Withdraw</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Transaction</h4>
         <hr />
@@ -26,10 +26,10 @@
 
         @*TODO: make this a dropdown of all their accounts*@
         <div class="form-group">
-            @Html.LabelFor(model => model.ToAccount, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.FromAccount, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ToAccount, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ToAccount, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.FromAccount, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FromAccount, "", new { @class = "text-danger" })
             </div>
         </div>
 

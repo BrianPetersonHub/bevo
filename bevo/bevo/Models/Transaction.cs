@@ -27,8 +27,10 @@ namespace bevo.Models
         [Display(Name = "Date (MM/DD/YYYY)")]
         public DateTime Date { get; set; }
 
+        [Display(Name = "From Account")]
         public Int32 FromAccount { get; set; }
 
+        [Display(Name = "To Account")]
         public Int32 ToAccount { get; set; }
 
         public TransType TransType { get; set; }

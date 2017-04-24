@@ -220,6 +220,8 @@
     <Compile Include="Controllers\SavingAccountsController.cs" />
     <Compile Include="Controllers\CheckingAccountsController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
+    <Compile Include="Controllers\TransferController.cs" />
+    <Compile Include="Controllers\WithdrawController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -289,6 +291,8 @@
     <Content Include="Views\Manage\Index.cshtml" />
     <Content Include="Views\Manage\SetPassword.cshtml" />
     <Content Include="Views\Deposit\Create.cshtml" />
+    <Content Include="Views\Withdraw\Create.cshtml" />
+    <Content Include="Views\Transfer\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

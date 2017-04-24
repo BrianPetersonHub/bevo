@@ -11,26 +11,26 @@ using Microsoft.AspNet.Identity;
 
 namespace bevo.Controllers
 {
-    public class DepositController : Controller
+    public class WithdrawController : Controller
     {
         AppDbContext db = new AppDbContext();
 
-        //GET: Create/Deposit
+        // GET: Withdraw
         public ActionResult Create()
         {
             return View();
         }
 
-        //POST: Create/Deposit
+        //POST: Create/Withdraw
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description,Dispute")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
-                Int32 accountNum = transaction.ToAccount;
+                Int32 accountNum = transaction.FromAccount;
                 String accountType = GetAccountType(accountNum);
-                transaction.TransType = TransType.Deposit;
+                transaction.TransType = TransType.Withdrawal;
 
                 if (accountType == "CHECKING")
                 {
@@ -41,7 +41,7 @@ namespace bevo.Controllers
                     Int32 accountID = query.First();
                     CheckingAccount account = db.CheckingAccounts.Find(accountID);
                     account.Transactions.Add(transaction);
-                    account.Balance = account.Balance + transaction.Amount;
+                    account.Balance = account.Balance - transaction.Amount;
                 }
 
                 else if (accountType == "SAVING")
@@ -53,7 +53,7 @@ namespace bevo.Controllers
                     Int32 accountID = query.First();
                     SavingAccount account = db.SavingAccounts.Find(accountID);
                     account.Transactions.Add(transaction);
-                    account.Balance = account.Balance + transaction.Amount;
+                    account.Balance = account.Balance - transaction.Amount;
                 }
 
                 else if (accountType == "IRA")
@@ -65,7 +65,7 @@ namespace bevo.Controllers
                     String accountID = query.First();
                     IRAccount account = db.IRAccounts.Find(accountID);
                     account.Transactions.Add(transaction);
-                    account.Balance = account.Balance + transaction.Amount;
+                    account.Balance = account.Balance - transaction.Amount;
                 }
 
                 else if (accountType == "STOCKPORTFOLIO")
@@ -77,7 +77,7 @@ namespace bevo.Controllers
                     String accountID = query.First();
                     StockPortfolio account = db.StockPortfolios.Find(accountID);
                     account.Transactions.Add(transaction);
-                    account.Balance = account.Balance + transaction.Amount;
+                    account.Balance = account.Balance - transaction.Amount;
                 }
 
                 db.SaveChanges();
