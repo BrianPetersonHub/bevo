@@ -2,19 +2,39 @@
 @model bevo.Models.AppUser
 
 @{
-    ViewBag.Title = "Hello " + User.Identity.GetUserName() + "!";
+    ViewBag.Title = "Home";
 }
 
 <div class="row">
     <div class="homepage-top">
-        <h2>@ViewBag.Title</h2>
+        <h2>Hello [name]!</h2>
     </div>
 </div>
 
 
 <div class="homepage row">
-    <div class="quick-actions col-lg-3">
-        <h3>Quick Actions</h3>
+    <div class="quick-action-container col-lg-3">
+        <div class="quick-action-button">
+            <!--TODO: Create Create action on Deposit controller-->
+            <p>@Html.ActionLink("Make Deposit", "Create", "Deposit", new { @class = "quick-actions" })</p>
+        
+        </div>
+        <div class="quick-action-button">
+            <!--TODO: Create new method on controller-->
+            <p>@Html.ActionLink("Transfer", "Create", "Transfer", new { @class = "quick-actions" })</p>
+        </div>
+        <div class="quick-action-button">
+            <!--TODO: Create new method on controller-->
+            <p>@Html.ActionLink("Pay Bill", "Create", "Pay", new { @class = "quick-actions" })</p>
+        </div>
+        <div class="quick-action-button">
+            <!--TODO: Create new method on controller-->
+            <p>@Html.ActionLink("Create New Account", "Create", "ChooseAccount", new { @class = "quick-actions" })</p>
+        </div>
+        <div class="quick-action-button">
+            <!--TODO: Move this somewhere else...-->
+            <p>@Html.ActionLink("Edit Account", "Index", "Manage", new { @class = "quick-actions" })</p>
+        </div>
     </div>
     <div class="homepage-container col-lg-9">
         <h3>Account Overview</h3>
@@ -41,11 +61,11 @@
                     </td>
                     <td>
                         @Html.ActionLink(
-                linkText: "Details",
-                actionName: "Details",
-                controllerName: "CheckingAccounts",
-                routeValues: new { id = c.CheckingAccountID },
-                htmlAttributes: null)
+                        linkText: "Details",
+                        actionName: "Details",
+                        controllerName: "CheckingAccounts",
+                        routeValues: new { id = c.CheckingAccountID },
+                        htmlAttributes: null)
                     </td>
                 </tr>
             }
