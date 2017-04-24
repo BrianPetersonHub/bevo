@@ -17,6 +17,7 @@ namespace bevo.Models
         public CheckingAccount()
         {
             AccountNum = GetAcctNum();
+            //TODO: get this to give name when name not specified
             AccountName = "Longhorn Checking";
             Balance = 0;
         }
