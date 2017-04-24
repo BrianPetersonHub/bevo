@@ -37,7 +37,7 @@ namespace bevo.Controllers
         }
 
         //GET: IRA/Details/#
-        public ActionResult Details(int? id)
+        public ActionResult Details(String id)
         {
             if (id == null)
             {
@@ -52,7 +52,7 @@ namespace bevo.Controllers
             return View(irAccount);
         }
 
-        public List<Transaction> GetAllTransactions(int? id)
+        public List<Transaction> GetAllTransactions(String id)
         {
             IRAccount irAccount = db.IRAccounts.Find(id);
             List<Transaction> transactions = irAccount.Transactions;

@@ -140,7 +140,31 @@
                     </td>
                 </tr>
             }
-            @*TODO: show ira account here*@
+            @if (ViewBag.IRAccount != null)
+            {
+                <tr>
+                    <td>
+                        @ViewBag.IRAccount.AccountName
+                    </td>
+                    <td>
+                        IRA
+                    </td>
+                    <td>
+                        @ViewBag.IRAccount.AccountNum
+                    </td>
+                    <td>
+                        $@ViewBag.IRAccount.Balance
+                    </td>
+                    <td>
+                        @Html.ActionLink(
+                        linkText: "Details",
+                        actionName: "Details",
+                        controllerName: "IRAccount",
+                        routeValues: new { id = @ViewBag.IRAccount.IRAccountID },
+                        htmlAttributes: null)
+                    </td>
+                </tr>
+            }
         </table>
     </div>
 
