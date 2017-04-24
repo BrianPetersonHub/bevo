@@ -295,6 +295,8 @@
     <Content Include="Views\Transfer\Create.cshtml" />
     <Content Include="Views\SavingAccounts\Details.cshtml" />
     <Content Include="Views\SavingAccounts\Create.cshtml" />
+    <Content Include="Views\IRAccount\Create.cshtml" />
+    <Content Include="Views\IRAccount\Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -304,7 +306,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\IRAccounts\" />
     <Folder Include="Views\Payees\" />
     <Folder Include="Views\StockDetails\" />
     <Folder Include="Views\StockPortfolios\" />

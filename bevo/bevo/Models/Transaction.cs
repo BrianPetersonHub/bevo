@@ -12,7 +12,8 @@ namespace bevo.Models
         Withdrawal,
         Transfer,
         Purchase_Stock,
-        Pay_Payee
+        Pay_Payee,
+        Fee
     }
     public class Transaction
     {
