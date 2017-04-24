@@ -20,6 +20,7 @@ namespace bevo.Controllers
             ViewBag.CheckingAccounts = GetAllCheckingAccts();
             ViewBag.SavingAccounts = GetAllSavingAccts();
             ViewBag.IRAccount = GetIRAccount();
+            ViewBag.StockPortfolio = GetStockPortfolio();
             return View();
         }
 
@@ -40,6 +41,12 @@ namespace bevo.Controllers
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             IRAccount irAccount = user.IRAccount;
             return irAccount;
+        }
+        public StockPortfolio GetStockPortfolio()
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            StockPortfolio stockPortfolio = user.StockPortfolio;
+            return stockPortfolio;
         }
     }
 }

@@ -219,6 +219,7 @@
     <Compile Include="Controllers\RoleAdminController.cs" />
     <Compile Include="Controllers\SavingAccountsController.cs" />
     <Compile Include="Controllers\CheckingAccountsController.cs" />
+    <Compile Include="Controllers\StockPortfolioController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
     <Compile Include="Controllers\TransferController.cs" />
     <Compile Include="Controllers\WithdrawController.cs" />
@@ -297,6 +298,8 @@
     <Content Include="Views\SavingAccounts\Create.cshtml" />
     <Content Include="Views\IRAccount\Create.cshtml" />
     <Content Include="Views\IRAccount\Details.cshtml" />
+    <Content Include="Views\StockPortfolio\Create.cshtml" />
+    <Content Include="Views\StockPortfolio\Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

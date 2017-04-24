@@ -165,6 +165,31 @@
                     </td>
                 </tr>
             }
+            @if (ViewBag.StockPortfolio != null)
+            {
+                <tr>
+                    <td>
+                        @ViewBag.StockPortfolio.AccountName
+                    </td>
+                    <td>
+                        Stock Portfolio
+                    </td>
+                    <td>
+                        @ViewBag.StockPortfolio.AccountNum
+                    </td>
+                    <td>
+                        $@ViewBag.StockPortfolio.Balance
+                    </td>
+                    <td>
+                        @Html.ActionLink(
+                        linkText: "Details",
+                        actionName: "Details",
+                        controllerName: "StockPortfolio",
+                        routeValues: new { id = @ViewBag.StockPortfolio.StockPortfolioID },
+                        htmlAttributes: null)
+                    </td>
+                </tr>
+            }
         </table>
     </div>
 
