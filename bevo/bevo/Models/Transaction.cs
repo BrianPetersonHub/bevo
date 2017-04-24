@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace bevo.Models
 {
@@ -17,6 +18,13 @@ namespace bevo.Models
     {
         public Int32 TransactionID { get; set; }
         public Int32 TransactionNum { get; set; }
+
+        public Transaction()
+        {
+            TransactionNum = GetTransactionNum();
+        }
+
+        [Display(Name = "Date (MM/DD/YYYY)")]
         public DateTime Date { get; set; }
 
         public Int32 FromAccount { get; set; }
@@ -37,6 +45,12 @@ namespace bevo.Models
         public virtual List<IRAccount> IRAccounts { get; set; }
         public virtual List<StockPortfolio> StockPortfolios { get; set; }
 
-
+        public Int32 GetTransactionNum()
+        {
+            AppDbContext db = new AppDbContext();
+            Int32 intCount = 1000000000;
+            intCount = intCount + db.Transactions.Count();
+            return intCount;
+        }
     }
 }

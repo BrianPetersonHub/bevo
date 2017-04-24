@@ -1,5 +1,4 @@
-﻿@using Microsoft.AspNet.Identity
-@model bevo.Models.AppUser
+﻿@model bevo.Models.AppUser
 
 @{
     ViewBag.Title = "Home";
@@ -45,11 +44,17 @@
                     @Html.DisplayNameFor(model => model.CheckingAccounts)
                 </th>
                 <th>
+                    Account Number
+                </th>
+                <th>
                     Balance
                 </th>
-                <th></th>
+                <th>
+                    More
+                </th>
             </tr>
 
+<<<<<<< HEAD
             @foreach (var c in ViewBag.CheckingAccounts)
             {
                 <tr>
