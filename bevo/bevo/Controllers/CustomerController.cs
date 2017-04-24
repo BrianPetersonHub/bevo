@@ -17,7 +17,6 @@ namespace bevo.Controllers
         // GET: Customer
         public ActionResult Home()
         {
-
             ViewBag.CheckingAccounts = GetAllCheckingAccts();
             return View();
         }

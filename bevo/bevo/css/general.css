@@ -1,0 +1,145 @@
+﻿/*
+NAVIGATION
+
+    1. FONTS
+    2. GENERAL
+    3. NAVIGATION
+    4. HERO
+    5. HOME PAGES
+
+*/
+
+/* 1. FONTS 
+____________________________________________________________________*/
+@import url('https://fonts.googleapis.com/css?family=Muli|Open+Sans');
+
+
+/* 2. GENERAL 
+____________________________________________________________________*/
+html {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    color: #333;
+}
+
+.container {
+    padding-right: 10%;
+    padding-left: 10%;
+}
+
+
+/* 3. NAVIGATION 
+____________________________________________________________________*/
+.navbar-inverse {
+    background-color: #D87F61;
+    border-color: #D87F61;
+}
+
+.navbar-inverse .navbar-brand {
+    font-family: 'Muli', sans-serif;
+    font-size: 30px;
+    color: white;
+    font-weight: bold;
+    text-transform: lowercase;
+}
+
+.navbar-inverse li a {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+#registerLink {
+    color: white;
+}
+
+#loginLink {
+    color: white;
+}
+
+.navbar-inverse .navbar-nav li a {
+    color: white;
+}
+
+/* 4. HERO 
+____________________________________________________________________*/
+.hero {
+   height: 800px;
+}
+
+.hero h2 {
+    padding-top: 150px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 30px;
+    font-weight: 400;
+    text-align: center;
+    text-transform: lowercase;
+    letter-spacing: 0.5px;
+    color: #333;
+}
+
+
+/* 5. HOMEPAGES 
+____________________________________________________________________*/
+.homepage-top {
+    width: 100%;
+    padding-top: 75px;
+    height: 160px;
+}
+
+.homepage-top h2 {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: black;
+    text-transform: uppercase;
+}
+
+.homepage {
+    width: 100%;
+}
+
+.homepage-container {
+    background-color: #F3F3F3;
+    padding: 20px;
+    
+}
+
+.homepage-container h3 {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    color: black;
+    text-transform: uppercase;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.homepage-container table {
+    padding: 20px;
+}
+
+.quick-actions {
+    background-color: white;
+}
+
+.quick-actions h3 {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    letter-spacing: 1.5px;
+    color: black;
+    text-transform: uppercase;
+    text-align: left;
+}
+
