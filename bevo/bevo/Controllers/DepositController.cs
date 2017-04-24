@@ -64,6 +64,7 @@ namespace bevo.Controllers
                     //gets first (only) thing from query list
                     String accountID = query.First();
                     IRAccount account = db.IRAccounts.Find(accountID);
+                    //if()
                     account.Transactions.Add(transaction);
                     account.Balance = account.Balance + transaction.Amount;
                 }
@@ -131,5 +132,13 @@ namespace bevo.Controllers
 
             return "NOT FOUND";
         }
+
+        //method returns boolean on whether user can deposit into an IRA
+        //public Boolean UnderAgeLimt()
+        //{
+        //    AppUser user = db.Users.Find(User.Identity.GetUserId());
+        //    // Save today's date.
+        //    var today = DateTime.Today;
+        //}
     }
 }
