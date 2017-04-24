@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<bevo.Models.Transaction>
+@using bevo.Controllers;
 
 
 <!-- This page displays all transactions for employees and managers to view
@@ -10,7 +11,13 @@
 }
 
 <h2>All Transactions</h2>
-
+@using (Html.BeginForm("SearchTransactions", "Transactions", FormMethod.Get))
+{
+    <p class="form-group">
+        Name: @Html.TextBox("description", null, new { @class = "form-control" }) <br/>
+        <!--TODO: Add other advanced search options. Also do this for each account type "Detail" page-->
+    </p>
+}
 <table class="table">
     <tr>
         <th>
