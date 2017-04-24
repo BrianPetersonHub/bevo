@@ -20,11 +20,29 @@ namespace bevo.Models
         public String AccountName { get; set; }
         public Decimal Balance { get; set; }
 
+        public StockPortfolio()
+        {
+            AccountNum = GetAcctNum();
+            Balance = 0;
+        }
+
         //Stock portfolio can have many Persons
         public virtual AppUser AppUser { get; set; }
 
         //Stock portfolio can have one StockDetail
         public virtual StockDetail StockDetail { get; set; }
         public virtual List<Transaction> Transactions { get; set; }
+
+        //method to get next account number
+        private AppDbContext db = new AppDbContext();
+        public Int32 GetAcctNum()
+        {
+            Int32 intCount = 1000000000;
+            intCount += db.CheckingAccounts.Count();
+            intCount += db.SavingAccounts.Count();
+            intCount += db.IRAccounts.Count();
+            intCount += db.StockPortfolios.Count();
+            return intCount;
+        }
     }
 }
