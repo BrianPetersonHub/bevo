@@ -1,39 +1,57 @@
-﻿@model bevo.Models.AppUser
+﻿@using Microsoft.AspNet.Identity
+@model bevo.Models.AppUser
+
 @{
-    ViewBag.Title = "Home";
+    ViewBag.Title = "Hello " + User.Identity.GetUserName() + "!";
 }
 
-<h2>Home</h2>
+<div class="row">
+    <div class="homepage-top">
+        <h2>@ViewBag.Title</h2>
+    </div>
+</div>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CheckingAccounts)
-        </th>
-        <th>
-            Balance
-        </th>
-        <th></th>
-    </tr>
 
-    @foreach (var c in ViewBag.CheckingAccounts)
-    {
-        <tr>
-            <td>
-                @c.AccountName
-            </td>
-            <td>
-                $@c.Balance
-            </td>
-            <td>
-                @Html.ActionLink(
+<div class="homepage row">
+    <div class="quick-actions col-lg-3">
+        <h3>Quick Actions</h3>
+    </div>
+    <div class="homepage-container col-lg-9">
+        <h3>Account Overview</h3>
+        
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.CheckingAccounts)
+                </th>
+                <th>
+                    Balance
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var c in ViewBag.CheckingAccounts)
+            {
+                <tr>
+                    <td>
+                        @c.AccountName
+                    </td>
+                    <td>
+                        $@c.Balance
+                    </td>
+                    <td>
+                        @Html.ActionLink(
                 linkText: "Details",
                 actionName: "Details",
                 controllerName: "CheckingAccounts",
                 routeValues: new { id = c.CheckingAccountID },
-                htmlAttributes: null )
-            </td>
-        </tr>
-    }
+                htmlAttributes: null)
+                    </td>
+                </tr>
+            }
 
-</table>
+        </table>
+    </div>
+
+</div>
+

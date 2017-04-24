@@ -84,8 +84,7 @@ namespace bevo.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToAction("Home", "Customer");
-                    // return RedirectToLocal(returnUrl);
+                    return RedirectToLocal(returnUrl);
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");

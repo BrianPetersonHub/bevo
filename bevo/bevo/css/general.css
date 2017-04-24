@@ -5,6 +5,7 @@ NAVIGATION
     2. GENERAL
     3. NAVIGATION
     4. HERO
+    5. HOME PAGES
 
 */
 
@@ -15,6 +16,12 @@ ____________________________________________________________________*/
 
 /* 2. GENERAL 
 ____________________________________________________________________*/
+html {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Open Sans', sans-serif;
     font-size: 12px;
@@ -77,5 +84,62 @@ ____________________________________________________________________*/
     text-transform: lowercase;
     letter-spacing: 0.5px;
     color: #333;
+}
+
+
+/* 5. HOMEPAGES 
+____________________________________________________________________*/
+.homepage-top {
+    width: 100%;
+    padding-top: 75px;
+    height: 160px;
+}
+
+.homepage-top h2 {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: black;
+    text-transform: uppercase;
+}
+
+.homepage {
+    width: 100%;
+}
+
+.homepage-container {
+    background-color: #F3F3F3;
+    padding: 20px;
+    
+}
+
+.homepage-container h3 {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    color: black;
+    text-transform: uppercase;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.homepage-container table {
+    padding: 20px;
+}
+
+.quick-actions {
+    background-color: white;
+}
+
+.quick-actions h3 {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    letter-spacing: 1.5px;
+    color: black;
+    text-transform: uppercase;
+    text-align: left;
 }
 
