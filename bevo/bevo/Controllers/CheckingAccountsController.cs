@@ -34,7 +34,6 @@ namespace bevo.Controllers
                 {
                     checkingAccount.AccountName = "Longhorn Checking";
                 }
-
                 user.CheckingAccounts.Add(checkingAccount);
                 db.SaveChanges();
 

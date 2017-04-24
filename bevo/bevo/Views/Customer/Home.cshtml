@@ -95,8 +95,7 @@
                         @c.AccountName
                     </td>
                     <td>
-                        @*TODO: figure out how to display account type*@
-                        FIGURE OUT HOW TO DISPLAY ACCOUNT TYPE
+                        Checking
                     </td>
                     <td>
                         @c.AccountNum
@@ -110,6 +109,31 @@
                         actionName: "Details",
                         controllerName: "CheckingAccounts",
                         routeValues: new { id = c.CheckingAccountID },
+                        htmlAttributes: null)
+                    </td>
+                </tr>
+            }
+            @foreach (var s in ViewBag.SavingAccounts)
+            {
+                <tr>
+                    <td>
+                        @s.AccountName
+                    </td>
+                    <td>
+                        Saving
+                    </td>
+                    <td>
+                        @s.AccountNum
+                    </td>
+                    <td>
+                        $@s.Balance
+                    </td>
+                    <td>
+                        @Html.ActionLink(
+                        linkText: "Details",
+                        actionName: "Details",
+                        controllerName: "SavingAccounts",
+                        routeValues: new { id = s.SavingAccountID },
                         htmlAttributes: null)
                     </td>
                 </tr>

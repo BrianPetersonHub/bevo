@@ -18,6 +18,7 @@ namespace bevo.Controllers
         public ActionResult Home()
         {
             ViewBag.CheckingAccounts = GetAllCheckingAccts();
+            ViewBag.SavingAccounts = GetAllSavingAccts();
             return View();
         }
 
@@ -26,6 +27,12 @@ namespace bevo.Controllers
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             List<CheckingAccount> checkingAccounts = user.CheckingAccounts;
             return checkingAccounts;
+        }
+        public List<SavingAccount> GetAllSavingAccts()
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            List<SavingAccount> savingAccounts = user.SavingAccounts;
+            return savingAccounts;
         }
     }
 }
