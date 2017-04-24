@@ -175,11 +175,5 @@ namespace bevo.Controllers
             return View("Index", SelectedTransactions);
 
         } // end of SearchTransaction
-
-        //GET: Transaction/NewTransaction
-        public ActionResult ChooseTransaction()
-        {
-            return View();
-        }
     }
 }

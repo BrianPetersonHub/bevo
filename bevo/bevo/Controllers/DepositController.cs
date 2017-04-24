@@ -15,13 +15,13 @@ namespace bevo.Controllers
     {
         AppDbContext db = new AppDbContext();
 
-        //GET: Deposit/Transaction
+        //GET: Create/Deposit
         public ActionResult Create()
         {
             return View();
         }
 
-        //POST: Deposit/Transaction
+        //POST: Create/Deposit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,ToAccount,TransType,Amount,Description,Dispute")] Transaction transaction)

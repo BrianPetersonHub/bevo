@@ -30,6 +30,11 @@ namespace bevo.Controllers
             if (ModelState.IsValid)
             {
                 AppUser user = db.Users.Find(User.Identity.GetUserId());
+                if (checkingAccount.AccountName == null)
+                {
+                    checkingAccount.AccountName = "Longhorn Checking";
+                }
+
                 user.CheckingAccounts.Add(checkingAccount);
                 db.SaveChanges();
 
