@@ -101,6 +101,7 @@
                         @c.AccountNum
                     </td>
                     <td>
+                        @*TODO: only display last 4 digits*@
                         $@c.Balance
                     </td>
                     <td>
@@ -123,10 +124,11 @@
                         Saving
                     </td>
                     <td>
+                        @*TODO: only display last 4 digits*@
                         @s.AccountNum
                     </td>
                     <td>
-                        $@s.Balance
+                        $@s.Balance 
                     </td>
                     <td>
                         @Html.ActionLink(

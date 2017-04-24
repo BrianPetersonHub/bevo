@@ -35,7 +35,6 @@ namespace bevo.Controllers
         }
 
         //POST: IRAccount/Create
-        //TODO: look at if the way the correct acctnum is added is correct
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "IRAccountID,AccountNum,AccountName,Balance")] IRAccount IRAccount)

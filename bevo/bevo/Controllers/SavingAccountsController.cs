@@ -21,7 +21,6 @@ namespace bevo.Controllers
         }
 
         //POST: SavingAccount/Create
-        //TODO: look at if the way the correct acctnum is added is correct
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "SavingAccountID,AccountNum,AccountName,Balance")] SavingAccount savingAccount)
