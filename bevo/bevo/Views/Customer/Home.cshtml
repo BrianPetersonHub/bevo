@@ -15,7 +15,14 @@
     <div class="quick-action-container col-lg-3">
         <div class="quick-action-button">
             <!--TODO: Create Create action on Deposit controller-->
-            <p>@Html.ActionLink("Make Deposit", "Create", "Deposit", new { @class = "quick-actions" })</p>
+            <p>
+                @Html.ActionLink(
+                linkText: "Make Deposit",
+                actionName: "Create",
+                controllerName: "Deposit",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
         </div>
         <div class="quick-action-button">
             <!--TODO: Create new method on controller-->
@@ -31,7 +38,14 @@
         </div>
         <div class="quick-action-button">
             <!--TODO: Create new method on controller-->
-            <p>@Html.ActionLink("Create New Account", "Create", "ChooseAccount", new { @class = "quick-actions" })</p>
+            <p>
+                @Html.ActionLink(
+                linkText:"Create New Account", 
+                actionName: "ChooseAccount", 
+                controllerName: "Account", 
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
         </div>
         <div class="quick-action-button">
             <!--TODO: Move this somewhere else...-->
@@ -44,7 +58,10 @@
         <table class="table">
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.CheckingAccounts)
+                    Account Name
+                </th>
+                <th>
+                    Account Type
                 </th>
                 <th>
                     Account Number
@@ -55,12 +72,20 @@
                 <th>
                     More
                 </th>
+
             </tr>
             @foreach (var c in ViewBag.CheckingAccounts)
             {
                 <tr>
                     <td>
                         @c.AccountName
+                    </td>
+                    <td>
+                        @*TODO: figure out how to display account type*@
+                        FIGURE OUT HOW TO DISPLAY ACCOUNT TYPE
+                    </td>
+                    <td>
+                        @c.AccountNum
                     </td>
                     <td>
                         $@c.Balance
