@@ -18,13 +18,13 @@ namespace bevo.Controllers
         public ActionResult Create()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
-            if(user.IRAccount != null)
+            if(user.IRAccount == null)
             {
                 return View();
             }
             else
             {
-                return View("CannotCreate", "IRAccount");
+                return View("CannotCreate");
             }
             
         }

@@ -311,7 +311,6 @@
     <Content Include="Views\StockPortfolio\Create.cshtml" />
     <Content Include="Views\StockPortfolio\Details.cshtml" />
     <Content Include="Views\StockQuote\Index.cshtml" />
-    <Content Include="Views\IRAccount\CannotCreate.cshtml" />
     <Content Include="Views\IRAccount\AgeError.cshtml" />
     <Content Include="Views\IRAccount\DepositLimitError.cshtml" />
     <None Include="Web.Debug.config">
