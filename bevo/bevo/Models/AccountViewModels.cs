@@ -110,5 +110,10 @@ namespace bevo.Models
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
+
+        [Required]
+        [RegularExpression("^(0|[1-9][0-9]*)$", ErrorMessage ="Invalid Year")]
+        [Display(Name ="Birth Year")]
+        public string BirthYear { get; set; }
     }
 }
