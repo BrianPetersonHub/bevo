@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace bevo.Models
 {
@@ -11,16 +12,26 @@ namespace bevo.Models
         Withdrawal,
         Transfer,
         Purchase_Stock,
-        Pay_Payee
+        Pay_Payee,
+        Fee
     }
     public class Transaction
     {
         public Int32 TransactionID { get; set; }
         public Int32 TransactionNum { get; set; }
+
+        public Transaction()
+        {
+            TransactionNum = GetTransactionNum();
+        }
+
+        [Display(Name = "Date (MM/DD/YYYY)")]
         public DateTime Date { get; set; }
 
+        [Display(Name = "From Account")]
         public Int32 FromAccount { get; set; }
 
+        [Display(Name = "To Account")]
         public Int32 ToAccount { get; set; }
 
         public TransType TransType { get; set; }
@@ -37,6 +48,12 @@ namespace bevo.Models
         public virtual List<IRAccount> IRAccounts { get; set; }
         public virtual List<StockPortfolio> StockPortfolios { get; set; }
 
-
+        public Int32 GetTransactionNum()
+        {
+            AppDbContext db = new AppDbContext();
+            Int32 intCount = 1000000000;
+            intCount = intCount + db.Transactions.Count();
+            return intCount;
+        }
     }
 }

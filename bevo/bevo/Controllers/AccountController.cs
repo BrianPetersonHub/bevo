@@ -85,7 +85,7 @@ namespace bevo.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Home", "Customer");
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
@@ -126,7 +126,6 @@ namespace bevo.Controllers
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
 
-                //TODO:  Once you get roles working, you may want to add users to roles upon creation
                 await UserManager.AddToRoleAsync(user.Id, "Customer");
 
 
@@ -163,7 +162,6 @@ namespace bevo.Controllers
 
         public ActionResult ChooseSaving()
         {
-            //TODO: Make Create Action on SavingsAccountController
             return RedirectToAction("Create", "SavingAccountsController");
         }
 
@@ -175,7 +173,7 @@ namespace bevo.Controllers
 
         public ActionResult ChooseStockPortfolio()
         {
-            //TODO: MAke create action on Stock Portfolio Controller
+            //TODO: Make create action on Stock Portfolio Controller
             return RedirectToAction("Create", "StockPortfoliosController");
         }
         //

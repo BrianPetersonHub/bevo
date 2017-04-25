@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using bevo.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc.Html;
+using Microsoft.AspNet.Identity;
 
 namespace bevo.Controllers
 {
@@ -53,12 +55,23 @@ namespace bevo.Controllers
             return View();
         }
 
-        // GET: Transactions/Index/#
-        public ActionResult Index(int? id)
+        // GET: Transactions/Detail/#
+        public ActionResult Detail(int? id)
         {
-            //TODO: only get transactions associated with customer id
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Transaction transaction = db.Transactions.Find(id);
+            if (transaction == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(transaction);
         }
+    
 
         // Search Results
         public ActionResult SearchTransactions( String description,
@@ -162,6 +175,5 @@ namespace bevo.Controllers
             return View("Index", SelectedTransactions);
 
         } // end of SearchTransaction
-
     }
 }

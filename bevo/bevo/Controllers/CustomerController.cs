@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Data.Entity;
 using System.Net;
 using bevo.Models;
+using Microsoft.AspNet.Identity;
 
 namespace bevo.Controllers
 {
@@ -17,26 +18,35 @@ namespace bevo.Controllers
         public ActionResult Home()
         {
             ViewBag.CheckingAccounts = GetAllCheckingAccts();
+            ViewBag.SavingAccounts = GetAllSavingAccts();
+            ViewBag.IRAccount = GetIRAccount();
+            ViewBag.StockPortfolio = GetStockPortfolio();
             return View();
         }
 
         public List<CheckingAccount> GetAllCheckingAccts()
         {
-            var query = from c in db.CheckingAccounts
-                        orderby c.AccountNum
-                        select c;
-
-            List <CheckingAccount > checkingAccts = query.ToList();
-            return checkingAccts;
-
-            //use this instead to grab checking accounts for only the person logged in
-            //var query = from c in db.Users
-            //            where c.Id = User.Identity.GetUserId()
-            //            select c;
-
-            //AppUser user = query;
-            //List<CheckingAccount> checkingAccts = user.CheckingAccounts.ToList();
-            //return checkingAccts;
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            List<CheckingAccount> checkingAccounts = user.CheckingAccounts;
+            return checkingAccounts;
+        }
+        public List<SavingAccount> GetAllSavingAccts()
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            List<SavingAccount> savingAccounts = user.SavingAccounts;
+            return savingAccounts;
+        }
+        public IRAccount GetIRAccount()
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            IRAccount irAccount = user.IRAccount;
+            return irAccount;
+        }
+        public StockPortfolio GetStockPortfolio()
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            StockPortfolio stockPortfolio = user.StockPortfolio;
+            return stockPortfolio;
         }
     }
 }

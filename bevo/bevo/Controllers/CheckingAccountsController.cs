@@ -6,6 +6,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using bevo.Models;
+using Microsoft.AspNet.Identity;
 
 
 namespace bevo.Controllers
@@ -14,8 +15,36 @@ namespace bevo.Controllers
     {
         private AppDbContext db = new AppDbContext();
 
-        //GET: CheckingAccounts/Index/#
-        public ActionResult Index(int? id)
+        //GET: CheckingAccount/Create
+        public ActionResult Create()
+        {
+            return View();
+            Int32 myint = 1000;
+            String mystring = myint.ToString();
+        }
+
+        //POST: ChechingAccount/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "CheckingAccountID,AccountNum,AccountName,Balance")] CheckingAccount checkingAccount)
+        {
+            if (ModelState.IsValid)
+            {
+                AppUser user = db.Users.Find(User.Identity.GetUserId());
+                if (checkingAccount.AccountName == null)
+                {
+                    checkingAccount.AccountName = "Longhorn Checking";
+                }
+                user.CheckingAccounts.Add(checkingAccount);
+                db.SaveChanges();
+
+                return RedirectToAction("Home", "Customer");
+            }
+            return View(checkingAccount);
+        }
+
+        //GET: CheckingAccounts/Details/#
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -26,34 +55,17 @@ namespace bevo.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Transactions = GetAllTransactions(id);
             return View(checkingAccount);
         }
 
-        //GET: CheckingAccount/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
 
-        //POST: ChechingAccount/Create
-        //TODO: look at if the way the correct acctnum is added is correct
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CheckingAccountID,AccountNum,AccountName,Balance")] CheckingAccount checkingAccount)
-        {
-            if (ModelState.IsValid)
-            {
-                db.CheckingAccounts.Add(checkingAccount);
-                db.SaveChanges();
-                //TODO: Make sure this is redirecting to the customercontroller
-                return RedirectToAction("Home", "Customer");
-            }
-            return View(checkingAccount);
-        }
 
-        public ActionResult Details()
+        public List<Transaction> GetAllTransactions(int? id)
         {
-            return View();
+            CheckingAccount checkingAccount = db.CheckingAccounts.Find(id);
+            List<Transaction> transactions = checkingAccount.Transactions;
+            return transactions;
         }
     }
 }

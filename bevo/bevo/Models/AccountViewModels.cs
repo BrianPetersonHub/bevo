@@ -40,9 +40,6 @@ namespace bevo.Models
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        //TODO:  Add any fields that you need for creating a new user
-        //For example, first name
-
         [Required(ErrorMessage = "First Name is a Required field.")]
         [Display(Order = 1, Name = "First Name")]
         public String FirstName { get; set; }
@@ -78,9 +75,6 @@ namespace bevo.Models
         [Display(Order = 10, Name = "Date of Birth")]
         [DataType(DataType.Date)]
         public String Birthday { get; set; }
-
-
-
     }
 
     public class ResetPasswordViewModel

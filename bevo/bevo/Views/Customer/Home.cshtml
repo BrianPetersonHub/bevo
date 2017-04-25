@@ -1,39 +1,197 @@
 ﻿@model bevo.Models.AppUser
+
 @{
     ViewBag.Title = "Home";
 }
 
-<h2>Home</h2>
+<div class="row">
+    <div class="homepage-top">
+        <h2>Hello [name]!</h2>
+    </div>
+</div>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CheckingAccounts)
-        </th>
-        <th>
-            Balance
-        </th>
-        <th></th>
-    </tr>
 
-    @foreach (var c in ViewBag.CheckingAccounts)
-    {
-        <tr>
-            <td>
-                @c.AccountName
-            </td>
-            <td>
-                $@c.Balance
-            </td>
-            <td>
+<div class="homepage row">
+    <div class="quick-action-container col-lg-3">
+        <div class="quick-action-button">
+            <!--TODO: Create Create action on Deposit controller-->
+            <p>
                 @Html.ActionLink(
-                linkText: "Details",
-                actionName: "Index",
-                controllerName: "CheckingAccounts",
-                routeValues: new { id = c.CheckingAccountID },
-                htmlAttributes: null )
-            </td>
-        </tr>
-    }
+                linkText: "Make Deposit",
+                actionName: "Create",
+                controllerName: "Deposit",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <!--TODO: Create new method on controller-->
+            <p>
+                @Html.ActionLink(
+                linkText: "Make Transfer",
+                actionName: "Create",
+                controllerName: "Transfer",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <!--TODO: Create new method on controller-->
+            <p>
+                @Html.ActionLink(
+                linkText: "Make Withdraw",
+                actionName: "Create",
+                controllerName: "Withdraw",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <!--TODO: Create new method on controller-->
+            <p>@Html.ActionLink("Pay Bill", "Create", "Pay", new { @class = "quick-actions" })</p>
+        </div>
+        <div class="quick-action-button">
+            <!--TODO: Create new method on controller-->
+            <p>
+                @Html.ActionLink(
+                linkText:"Create New Account", 
+                actionName: "ChooseAccount", 
+                controllerName: "Account", 
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <!--TODO: Move this somewhere else...-->
+            <p>@Html.ActionLink("Edit Account", "Index", "Manage", new { @class = "quick-actions" })</p>
+        </div>
+    </div>
+    <div class="homepage-container col-lg-9">
+        <h3>Account Overview</h3>
+        
+        <table class="table">
+            <tr>
+                <th>
+                    Account Name
+                </th>
+                <th>
+                    Account Type
+                </th>
+                <th>
+                    Account Number
+                </th>
+                <th>
+                    Balance
+                </th>
+                <th>
+                    More
+                </th>
 
-</table>
+            </tr>
+            @foreach (var c in ViewBag.CheckingAccounts)
+            {
+                <tr>
+                    <td>
+                        @c.AccountName
+                    </td>
+                    <td>
+                        Checking
+                    </td>
+                    <td>
+                        @c.AccountNum
+                    </td>
+                    <td>
+                        @*TODO: only display last 4 digits*@
+                        $@c.Balance
+                    </td>
+                    <td>
+                        @Html.ActionLink(
+                        linkText: "Details",
+                        actionName: "Details",
+                        controllerName: "CheckingAccounts",
+                        routeValues: new { id = c.CheckingAccountID },
+                        htmlAttributes: null)
+                    </td>
+                </tr>
+            }
+            @foreach (var s in ViewBag.SavingAccounts)
+            {
+                <tr>
+                    <td>
+                        @s.AccountName
+                    </td>
+                    <td>
+                        Saving
+                    </td>
+                    <td>
+                        @*TODO: only display last 4 digits*@
+                        @s.AccountNum
+                    </td>
+                    <td>
+                        $@s.Balance 
+                    </td>
+                    <td>
+                        @Html.ActionLink(
+                        linkText: "Details",
+                        actionName: "Details",
+                        controllerName: "SavingAccounts",
+                        routeValues: new { id = s.SavingAccountID },
+                        htmlAttributes: null)
+                    </td>
+                </tr>
+            }
+            @if (ViewBag.IRAccount != null)
+            {
+                <tr>
+                    <td>
+                        @ViewBag.IRAccount.AccountName
+                    </td>
+                    <td>
+                        IRA
+                    </td>
+                    <td>
+                        @ViewBag.IRAccount.AccountNum
+                    </td>
+                    <td>
+                        $@ViewBag.IRAccount.Balance
+                    </td>
+                    <td>
+                        @Html.ActionLink(
+                        linkText: "Details",
+                        actionName: "Details",
+                        controllerName: "IRAccount",
+                        routeValues: new { id = @ViewBag.IRAccount.IRAccountID },
+                        htmlAttributes: null)
+                    </td>
+                </tr>
+            }
+            @if (ViewBag.StockPortfolio != null)
+            {
+                <tr>
+                    <td>
+                        @ViewBag.StockPortfolio.AccountName
+                    </td>
+                    <td>
+                        Stock Portfolio
+                    </td>
+                    <td>
+                        @ViewBag.StockPortfolio.AccountNum
+                    </td>
+                    <td>
+                        $@ViewBag.StockPortfolio.Balance
+                    </td>
+                    <td>
+                        @Html.ActionLink(
+                        linkText: "Details",
+                        actionName: "Details",
+                        controllerName: "StockPortfolio",
+                        routeValues: new { id = @ViewBag.StockPortfolio.StockPortfolioID },
+                        htmlAttributes: null)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+
+</div>
+

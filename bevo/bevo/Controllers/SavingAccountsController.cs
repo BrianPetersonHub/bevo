@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data.Entity;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using bevo.Models;
+using Microsoft.AspNet.Identity;
 
 namespace bevo.Controllers
 {
-    public class SavingsAccountController : Controller
+    public class SavingAccountsController : Controller
     {
         private AppDbContext db = new AppDbContext();
 
@@ -18,18 +21,45 @@ namespace bevo.Controllers
         }
 
         //POST: SavingAccount/Create
-        //TODO: look at if the way the correct acctnum is added is correct
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "SavingAccountID,AccountNum,AccountName,Balance")] SavingAccount savingAccount)
         {
             if (ModelState.IsValid)
             {
-                db.SavingAccounts.Add(savingAccount);
+                AppUser user = db.Users.Find(User.Identity.GetUserId());
+                if (savingAccount.AccountName == null)
+                {
+                    savingAccount.AccountName = "Longhorn Saving";
+                }
+                user.SavingAccounts.Add(savingAccount);
                 db.SaveChanges();
-                return RedirectToAction("CustomerHome", "PersonsController");
+                return RedirectToAction("Home", "Customer");
             }
             return View(savingAccount);
+        }
+
+        //GET: SavingAccounts/Details/#
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            SavingAccount savingAccount = db.SavingAccounts.Find(id);
+            if (savingAccount == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.Transactions = GetAllTransactions(id);
+            return View(savingAccount);
+        }
+
+        public List<Transaction> GetAllTransactions(int? id)
+        {
+            SavingAccount savingAccount = db.SavingAccounts.Find(id);
+            List<Transaction> transactions = savingAccount.Transactions;
+            return transactions;
         }
     }
 }
