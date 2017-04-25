@@ -48,7 +48,12 @@
         </div>
         <div class="quick-action-button">
             <!--TODO: Create new method on controller-->
-            <p>@Html.ActionLink("Pay Bill", "Create", "Pay", new { @class = "quick-actions" })</p>
+            <p>@Html.ActionLink(
+              linkText: "Pay Bill", 
+              actionName: "Create", 
+              controllerName: "Pay", 
+              routeValues: null,
+              htmlAttributes: new { @class = "quick-actions" })</p>
         </div>
         <div class="quick-action-button">
             <!--TODO: Create new method on controller-->
@@ -63,7 +68,13 @@
         </div>
         <div class="quick-action-button">
             <!--TODO: Move this somewhere else...-->
-            <p>@Html.ActionLink("Edit Account", "Index", "Manage", new { @class = "quick-actions" })</p>
+            <p>@Html.ActionLink(
+              linkText: "Edit Account", 
+              actionName: "Index",
+              controllerName: "Manage", 
+              routeValues: null,
+              htmlAttributes: new { @class = "quick-actions" })
+            </p>
         </div>
     </div>
     <div class="homepage-container col-lg-9">
