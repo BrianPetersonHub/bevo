@@ -19,13 +19,16 @@ namespace bevo.Migrations
 
         protected override void Seed(bevo.Models.AppDbContext db)
         {
-            SeedIdentity.AddDebugger();
-            SeedIdentity.ReadPersonCSV();
-            SeedIdentity.ReadCheckingCSV();
-            SeedIdentity.ReadIRAccountCSV();
-            SeedIdentity.ReadPayeeCSV();
-            SeedIdentity.ReadSavingAccountCSV();
-            SeedIdentity.ReadStockAcctCSV();
+            //ONLY UNCOMMENT THE FOLLOWING LINES IF YOU ARE TRYING TO SEED 
+            //NEW DATA INT OTHE DB. OTHERWISE YOU'LL MESS UP OUR EXISTING RECORDS
+
+            //SeedIdentity.AddDebugger();
+            //SeedIdentity.ReadPersonCSV();
+            //SeedIdentity.ReadCheckingCSV();
+            //SeedIdentity.ReadIRAccountCSV();
+            //SeedIdentity.ReadPayeeCSV();
+            //SeedIdentity.ReadSavingAccountCSV();
+            //SeedIdentity.ReadStockAcctCSV();
             
         }
 
