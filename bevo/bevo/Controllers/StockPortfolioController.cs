@@ -50,6 +50,7 @@ namespace bevo.Controllers
                 return HttpNotFound();
             }
             ViewBag.Transactions = GetAllTransactions(id);
+            ViewBag.StockViewModel = PortfolioSnapshot();
             return View(stockPortfolio);
         }
 
@@ -63,7 +64,7 @@ namespace bevo.Controllers
 
 
         //Method to check if portfolio is balanced
-        public Boolean BalanceCheck(StockPortfolio portfolio)
+        public Boolean BalanceCheck()
         {
             //TODO: Make it so the manager can look at balance checks for all customers at once
             //This method will only check the account of the user who is currently logged in,
@@ -74,9 +75,13 @@ namespace bevo.Controllers
             var user = userManager.FindById(User.Identity.GetUserId());
 
 
-            //Get a list of all the stock types in the account 
-            List<Stock> stockList = user.StockPortfolio.StockDetail.Stocks.ToList();
-            List<StockType> typesInAccount = new List<StockType>();
+            //Get a list of all the stocks in the account 
+            List<Stock> stockList = new List<Stock>();
+
+            foreach (StockDetail s in user.StockPortfolio.StockDetails)
+            {
+                stockList.Add(s.Stock);
+            }
 
             //Counts to keep track of each stock type in the account 
             Int32 numOrdinary = new Int32();
@@ -109,6 +114,45 @@ namespace bevo.Controllers
                 return false;
             }
 
+        }
+
+
+        //Make a method to get all the info for the current account stocks 
+        //TODO: Again, this method only works for the user who is currently logged in
+        public List<StockViewModel> PortfolioSnapshot()
+        {
+            //Get the ID of the user who is currently logged in
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+            var user = userManager.FindById(User.Identity.GetUserId());
+
+            //Look at each StockDetail in the person's account and make a StockViewModel to campture information about it 
+            //Get a list of all the stocks in the account 
+            List<StockDetail> stockDetailList = new List<StockDetail>();
+            foreach (StockDetail s in user.StockPortfolio.StockDetails)
+            {
+                stockDetailList.Add(s);
+            }
+
+            //Make viwebag space to hold all the stockviewmodel objects
+            List<StockViewModel> listToReturn = new List<StockViewModel>();
+
+            //Add information from each stock record into the viewbag 
+            foreach(StockDetail detail in stockDetailList)
+            {
+                StockViewModel model = new StockViewModel();
+                model.Name = detail.Stock.StockName;
+                model.NumInAccount = detail.Quantity;
+                model.Ticker = detail.Stock.StockTicker;
+
+                StockQuote quote = bevo.Utilities.GetQuote.GetStock(detail.Stock.StockTicker);
+
+                model.CurrentPrice = quote.LastTradePrice;
+
+                //Add the model to the list of models already in the viewbag
+                listToReturn.Add(model);
+            }
+
+            return listToReturn;
         }
     }
 }

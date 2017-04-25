@@ -12,7 +12,7 @@ namespace bevo.Models
         public Int32 Quantity { get; set; }
 
         //Stock portfolio can have many Persons
-        public virtual List<StockPortfolio> StockPortfolios { get; set; }
-        public virtual List<Stock> Stocks { get; set; }
+        public virtual StockPortfolio StockPortfolio { get; set; }
+        public virtual Stock Stock { get; set; }
     }
 }

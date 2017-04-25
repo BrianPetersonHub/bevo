@@ -17,8 +17,16 @@ namespace bevo.Migrations
         public static AppDbContext db = new AppDbContext();
         public static void SeedManager(AppDbContext db)
         {
-            //create a user manager to add users to databases
+            //create a user manager to add users to databases and change its password validator to be less  stringenet
             UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+            userManager.PasswordValidator = new PasswordValidator
+            {
+                RequiredLength = 3,
+                RequireNonLetterOrDigit = false,
+                RequireDigit = false,
+                RequireLowercase = false,
+                RequireUppercase = false,
+            };
 
             //create a role manager 
             AppRoleManager roleManager = new AppRoleManager(new RoleStore<AppRole>(db));

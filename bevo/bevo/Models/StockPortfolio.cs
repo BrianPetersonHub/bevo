@@ -29,8 +29,8 @@ namespace bevo.Models
         //Stock portfolio can have many Persons
         public virtual AppUser AppUser { get; set; }
 
-        //Stock portfolio can have one StockDetail
-        public virtual StockDetail StockDetail { get; set; }
+        //Stock portfolio can have many StockDetails
+        public virtual List<StockDetail> StockDetails { get; set; }
         public virtual List<Transaction> Transactions { get; set; }
 
         //method to get next account number
