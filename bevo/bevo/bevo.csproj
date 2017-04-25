@@ -198,6 +198,9 @@
     <EmbeddedResource Include="Migrations\201704250133147_Updated stock model.resx">
       <DependentUpon>201704250133147_Updated stock model.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704251750041_Fixing stock and stockdetail models.resx">
+      <DependentUpon>201704251750041_Fixing stock and stockdetail models.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SeedData\Payee.csv" />
     <EmbeddedResource Include="SeedData\CheckingAccount.csv" />
     <EmbeddedResource Include="SeedData\IRAccount.csv" />
@@ -264,6 +267,10 @@
     <Compile Include="Migrations\201704250133147_Updated stock model.Designer.cs">
       <DependentUpon>201704250133147_Updated stock model.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704251750041_Fixing stock and stockdetail models.cs" />
+    <Compile Include="Migrations\201704251750041_Fixing stock and stockdetail models.Designer.cs">
+      <DependentUpon>201704251750041_Fixing stock and stockdetail models.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedIdentity.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -326,16 +333,13 @@
     <Content Include="Views\StockPortfolio\Create.cshtml" />
     <Content Include="Views\StockPortfolio\Details.cshtml" />
     <Content Include="Views\StockQuote\Index.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\Stocks\Create.cshtml" />
     <Content Include="Views\Stocks\Delete.cshtml" />
     <Content Include="Views\Stocks\Details.cshtml" />
     <Content Include="Views\Stocks\Edit.cshtml" />
     <Content Include="Views\Stocks\Index.cshtml" />
-=======
     <Content Include="Views\IRAccount\AgeError.cshtml" />
     <Content Include="Views\IRAccount\DepositLimitError.cshtml" />
->>>>>>> 4bd0588734d7deba78427f64f93f5cf015eec098
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
