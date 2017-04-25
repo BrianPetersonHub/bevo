@@ -4,12 +4,12 @@
     ViewBag.Title = "my stock portfolio";
 }
 
+
 <div class="row">
     <div class="homepage-top">
         <h2>@ViewBag.Title</h2>
     </div>
 </div>
-
 
 <div class="homepage row">
     <div class="quick-action-container col-lg-3">
@@ -20,7 +20,6 @@
             </div>
         </div>
         <div class="quick-action-button">
-            <!--TODO: Create Create action on Deposit controller-->
             <p>
                 @Html.ActionLink(
                 linkText: "Make Deposit",
@@ -31,7 +30,6 @@
             </p>
         </div>
         <div class="quick-action-button">
-            <!--TODO: Create new method on controller-->
             <p>
                 @Html.ActionLink(
                 linkText: "Make Transfer",
@@ -42,7 +40,6 @@
             </p>
         </div>
         <div class="quick-action-button">
-            <!--TODO: Create new method on controller-->
             <p>
                 @Html.ActionLink(
                 linkText: "Make Withdraw",
@@ -53,7 +50,6 @@
             </p>
         </div>
         <div class="quick-action-button">
-            <!--TODO: Create new method on controller-->
             <p>
                 @Html.ActionLink(
               linkText: "Pay Bill",
@@ -64,7 +60,6 @@
         </p>
         </div>
         <div class="quick-action-button">
-            <!--TODO: Create new method on controller-->
             <p>
                 @Html.ActionLink(
                     linkText: "Create New Account",
@@ -75,7 +70,6 @@
             </p>
         </div>
         <div class="quick-action-button">
-            <!--TODO: Move this somewhere else...-->
             <p>
                 @Html.ActionLink(
                   linkText: "Edit Account",
@@ -86,26 +80,62 @@
             </p>
         </div>
     </div>
-    <div class="homepage-container col-lg-9">
-        <div class="col-lg-3 col-sm-1">
-            <table class="vertical-table">
-                <tr>
-                    <th>Gains</th>
-                    <td>[Gains Here]</td>
-                </tr>
-                <tr>
-                    <th>Fees</th>
-                    <td>[Fees Here]</td>
-                </tr>
-                <tr>
-                    <th>Bonuses</th>
-                    <td>[Fees Here]</td>
-                </tr>
-                <tr>
-                    <th>Available Cash</th>
-                    <td>[Cash Here]</td>
-                </tr>
-            </table>
+    <div class="col-lg-9">
+        <div class="table-container">
+            <h3 class="table-title">Cash Value</h3>
+            <div class="cash-portion-container">
+                <table class="table">
+                    <tr>
+                        <th>Gains</th>
+                        <td>[Gains Here]</td>
+                    </tr>
+                    <tr>
+                        <th>Fees</th>
+                        <td>[Fees Here]</td>
+                    </tr>
+                    <tr>
+                        <th>Bonuses</th>
+                        <td>[Fees Here]</td>
+                    </tr>
+                    <tr>
+                        <th>Available Cash</th>
+                        <td>[Cash Here]</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <h3 class="table-title">My Stocks</h3>
+            <div class="stock-portion-container">
+                <table class="table">
+                    <tr>
+                        <th>
+                            Stock
+                        </th>
+                        <th>
+                            Number of Shares
+                        </th>
+                        <th>
+                            Current Price of Stocks
+                        </th>
+                    </tr>
+                    @foreach (var s in ViewBag.StockViewModel)
+                    {
+                        <tr>
+                            <td>
+                                @s.Ticker
+                            </td>
+                            <td>
+                                @s.NumInAccount
+                            </td>
+                            <td>
+                                @s.CurrentPrice
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
         </div>
     </div>
 </div>
