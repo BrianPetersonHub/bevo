@@ -1,8 +1,7 @@
 ﻿@using Microsoft.AspNet.Identity
-@model bevo.Models.StockPortfolio
 
 @{
-    ViewBag.Title = "Hello " + User.Identity.GetUserName() + "!";
+    ViewBag.Title = "my stock portfolio";
 }
 
 <div class="row">
@@ -11,7 +10,108 @@
     </div>
 </div>
 
-<!--TODO: add other info needed for checking account detail page-->
+
+<div class="homepage row">
+    <div class="quick-action-container col-lg-3">
+        <div class="stock-value">
+            <h3>Current Value</h3>
+            <div class="value-container">
+                <p> [ STOCK VALUE HERE ]</p>
+            </div>
+        </div>
+        <div class="quick-action-button">
+            <!--TODO: Create Create action on Deposit controller-->
+            <p>
+                @Html.ActionLink(
+                linkText: "Make Deposit",
+                actionName: "Create",
+                controllerName: "Deposit",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <!--TODO: Create new method on controller-->
+            <p>
+                @Html.ActionLink(
+                linkText: "Make Transfer",
+                actionName: "Create",
+                controllerName: "Transfer",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <!--TODO: Create new method on controller-->
+            <p>
+                @Html.ActionLink(
+                linkText: "Make Withdraw",
+                actionName: "Create",
+                controllerName: "Withdraw",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <!--TODO: Create new method on controller-->
+            <p>
+                @Html.ActionLink(
+              linkText: "Pay Bill",
+              actionName: "Create",
+              controllerName: "Pay",
+              routeValues: null,
+              htmlAttributes: new { @class = "quick-actions" })
+        </p>
+        </div>
+        <div class="quick-action-button">
+            <!--TODO: Create new method on controller-->
+            <p>
+                @Html.ActionLink(
+                    linkText: "Create New Account",
+                    actionName: "ChooseAccount",
+                    controllerName: "Account",
+                    routeValues: null,
+                    htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <!--TODO: Move this somewhere else...-->
+            <p>
+                @Html.ActionLink(
+                  linkText: "Edit Account",
+                  actionName: "Index",
+                  controllerName: "Manage",
+                  routeValues: null,
+                  htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+    </div>
+    <div class="homepage-container col-lg-9">
+        <div class="col-lg-3 col-sm-1">
+            <table class="vertical-table">
+                <tr>
+                    <th>Gains</th>
+                    <td>[Gains Here]</td>
+                </tr>
+                <tr>
+                    <th>Fees</th>
+                    <td>[Fees Here]</td>
+                </tr>
+                <tr>
+                    <th>Bonuses</th>
+                    <td>[Fees Here]</td>
+                </tr>
+                <tr>
+                    <th>Available Cash</th>
+                    <td>[Cash Here]</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!--
 <div class="homepage row">
     <div class="quick-actions col-lg-3">
         <h3>Quick Actions</h3>
@@ -76,3 +176,4 @@
     </div>
 
 </div>
+-->
