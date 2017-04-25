@@ -220,6 +220,7 @@
     <Compile Include="Controllers\SavingAccountsController.cs" />
     <Compile Include="Controllers\CheckingAccountsController.cs" />
     <Compile Include="Controllers\StockPortfolioController.cs" />
+    <Compile Include="Controllers\StockQuoteController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
     <Compile Include="Controllers\TransferController.cs" />
     <Compile Include="Controllers\WithdrawController.cs" />
@@ -257,9 +258,11 @@
     <Compile Include="Models\Stock.cs" />
     <Compile Include="Models\StockDetail.cs" />
     <Compile Include="Models\StockPortfolio.cs" />
+    <Compile Include="Models\StockQuote.cs" />
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\Email.cs" />
+    <Compile Include="Utilities\GetQuote.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -300,6 +303,7 @@
     <Content Include="Views\IRAccount\Details.cshtml" />
     <Content Include="Views\StockPortfolio\Create.cshtml" />
     <Content Include="Views\StockPortfolio\Details.cshtml" />
+    <Content Include="Views\StockQuote\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
