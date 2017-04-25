@@ -22,11 +22,12 @@ namespace bevo.Controllers
             var user = userManager.FindById(User.Identity.GetUserId());
 
             //Get the list of the ticker for each stock in the user's portfolio 
-            List<Stock> stockList = user.StockPortfolio.StockDetail.Stocks.ToList();
+            List<StockDetail> stockDetailList = user.StockPortfolio.StockDetails;
             List<string> tickersInAccount = new List<string>();
-            foreach (Stock stock in stockList)
+            foreach (StockDetail detail in stockDetailList)
             {
-                tickersInAccount.Add(stock.StockTicker);
+                string tickerInQuestion = detail.Stock.StockTicker;
+                tickersInAccount.Add(tickerInQuestion);
             }
 
 
