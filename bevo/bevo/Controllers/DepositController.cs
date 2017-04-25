@@ -67,12 +67,12 @@ namespace bevo.Controllers
                     //TODO: test that this actually works
                     if (UnderAgeLimt() == false)
                     {
-                        return View("Age Error", "IRAccount");
+                        return RedirectToAction("AgeError", "IRAccount");
                     }
                     //TODO: test that this actually works
-                    if (UnderDepositLimit() == false)
+                    if (UnderDepositLimit(transaction.Amount) == false)
                     {
-                        return View("CannotCreate", "IRAccount");
+                        return RedirectToAction("DepositLimitError", "IRAccount");
                     }
 
                     account.Transactions.Add(transaction);
@@ -243,18 +243,19 @@ namespace bevo.Controllers
         }
 
         //method returns true in user's IRA deposits are under the deposit max
-        public Boolean UnderDepositLimit()
+        public Boolean UnderDepositLimit(Decimal transactionAmount)
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             IRAccount irAccount = user.IRAccount;
-            Int32 sumDeposits = 0;
+            Decimal sumDeposits = 0;
             foreach (var t in irAccount.Transactions)
             {
                 if(t.TransType == TransType.Deposit)
                 {
-                    sumDeposits = sumDeposits + Convert.ToInt32(t.Amount);
+                    sumDeposits = sumDeposits + (t.Amount);
                 }
             }
+            sumDeposits = sumDeposits + transactionAmount;
 
             if (sumDeposits > 5000)
             {
