@@ -17,7 +17,16 @@ namespace bevo.Controllers
         //GET: IRA/Create
         public ActionResult Create()
         {
-            return View();
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            if(user.IRAccount == null)
+            {
+                return View();
+            }
+            else
+            {
+                return View("CannotCreate");
+            }
+            
         }
 
         //POST: IRA/Create
@@ -29,7 +38,6 @@ namespace bevo.Controllers
             {
                 AppUser user = db.Users.Find(User.Identity.GetUserId());
                 user.IRAccount = irAccount;
-                //TODO: error here bc adding duplicate primary key
                 db.SaveChanges();
                 return RedirectToAction("Home", "Customer");
             }
@@ -57,6 +65,16 @@ namespace bevo.Controllers
             IRAccount irAccount = db.IRAccounts.Find(id);
             List<Transaction> transactions = irAccount.Transactions;
             return transactions;
+        }
+
+        public ActionResult AgeError()
+        {
+            return View();
+        }
+
+        public ActionResult DepositLimitError()
+        {
+            return View();
         }
     }
 }

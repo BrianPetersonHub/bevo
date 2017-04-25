@@ -326,11 +326,16 @@
     <Content Include="Views\StockPortfolio\Create.cshtml" />
     <Content Include="Views\StockPortfolio\Details.cshtml" />
     <Content Include="Views\StockQuote\Index.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\Stocks\Create.cshtml" />
     <Content Include="Views\Stocks\Delete.cshtml" />
     <Content Include="Views\Stocks\Details.cshtml" />
     <Content Include="Views\Stocks\Edit.cshtml" />
     <Content Include="Views\Stocks\Index.cshtml" />
+=======
+    <Content Include="Views\IRAccount\AgeError.cshtml" />
+    <Content Include="Views\IRAccount\DepositLimitError.cshtml" />
+>>>>>>> 4bd0588734d7deba78427f64f93f5cf015eec098
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
