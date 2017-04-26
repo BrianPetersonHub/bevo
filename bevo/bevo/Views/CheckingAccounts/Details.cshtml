@@ -2,7 +2,7 @@
 @model bevo.Models.CheckingAccount
 
 @{
-    ViewBag.Title = "Hello " + User.Identity.GetUserName() + "!";
+    ViewBag.Title = "checking account details";
 }
 
 <div class="row">
@@ -13,11 +13,41 @@
 
 <!--TODO: add other info needed for checking account detail page-->
 <div class="homepage row">
-    <div class="quick-actions col-lg-3">
-        <h3>Quick Actions</h3>
+    <div class="quick-action-container col-lg-3">
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
+                linkText: "Make Deposit",
+                actionName: "Create",
+                controllerName: "Deposit",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
+                linkText: "Make Transfer",
+                actionName: "Create",
+                controllerName: "Transfer",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
+                linkText: "Make Withdraw",
+                actionName: "Create",
+                controllerName: "Withdraw",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
     </div>
     <div class="homepage-container col-lg-9">
-        <h3>List of Transactions</h3><table class="table">
+        <h3>List of Transactions</h3>
+        <table class="table">
             <tr>
                 <th>
                     Date

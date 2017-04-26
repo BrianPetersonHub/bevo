@@ -104,7 +104,7 @@ ____________________________________________________________________*/
     font-family: 'Helvetica Neue', sans-serif;
     font-size: 16px;
     font-weight: bold;
-    letter-spacing: 1px;
+    letter-spacing: 1 px;
     color: black;
     text-transform: uppercase;
 }
