@@ -68,7 +68,7 @@ namespace bevo.Controllers
             return transactions;
         }
 
-        public ActionResult AgeError()
+        public ActionResult DepositAgeError()
         {
             return View();
         }
@@ -78,5 +78,14 @@ namespace bevo.Controllers
             return View();
         }
 
+        public ActionResult WithdrawAgeAmountError()
+        {
+            return View();
+        }
+
+        public ActionResult TransferAgeAmountError()
+        {
+            return View();
+        }
     }
 }

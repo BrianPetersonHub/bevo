@@ -23,7 +23,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Date)
+            @Model.Date.ToShortDateString()
         </dd>
 
         <dt>
@@ -77,6 +77,48 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.TransactionID }) |
+    @Html.ActionLink(
+                linkText: "Dispute this transaction",
+                actionName: "Create",
+                controllerName: "Dispute",
+                routeValues: new { id = Model.TransactionID },
+                htmlAttributes: null)
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+<div class="homepage-container col-lg-9">
+    <h3>List of 5 most recent similar transactions</h3>
+    <table class="table">
+        <tr>
+            <th>
+                Amount
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                See Details
+            </th>
+        </tr>
+        @foreach (var t in ViewBag.SimilarTransactions)
+            {
+            <tr>
+                <td>
+                    @t.Amount
+                </td>
+                <td>
+                    @t.Description
+                </td>
+                <td>
+                    @Html.ActionLink(
+                linkText: "Details",
+                actionName: "Detail",
+                controllerName: "Transactions",
+                routeValues: new { id = t.TransactionID },
+                htmlAttributes: null)
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+

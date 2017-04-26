@@ -110,13 +110,32 @@ namespace bevo.Controllers
                     String accountID = query.First();
                     IRAccount fromAccount = db.IRAccounts.Find(accountID);
 
+                    //checks if over 65, if so return error page
                     if (OverAgeLimt() == false)
                     {
-                        return RedirectToAction("AgeError", "IRAccount");
+                        if (transaction.Amount > 3000)
+                        {
+                            return RedirectToAction("TransferAgeAmountError", "IRAccount");
+                        }
+                        else
+                        {
+                            fromAccount.Transactions.Add(transaction);
+                            Transaction feeTransaction = new Transaction();
+                            feeTransaction.TransType = TransType.Fee;
+                            feeTransaction.Date = DateTime.Now;
+                            feeTransaction.FromAccount = transaction.FromAccount;
+                            feeTransaction.Amount = 30;
+                            feeTransaction.Description = "Fee for transfering funds out of IRA when under 65 years old";
+                            feeTransaction.Dispute = false;
+                            fromAccount.Transactions.Add(feeTransaction);
+                        }
                     }
-
-                    fromAccount.Transactions.Add(transaction);
-                    fromAccount.Balance = fromAccount.Balance - transaction.Amount;
+                    else
+                    {
+                         fromAccount.Transactions.Add(transaction);
+                         fromAccount.Balance = fromAccount.Balance - transaction.Amount;
+                    }
+                   
                 }
                 else if (fromAccountType == "STOCKPORTFOLIO")
                 {

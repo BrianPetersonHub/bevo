@@ -68,7 +68,7 @@ namespace bevo.Controllers
                     //if user is over 70, they cannot deposit
                     if (UnderAgeLimt() == false)
                     {
-                        return RedirectToAction("AgeError", "IRAccount");
+                        return RedirectToAction("DepositAgeError", "IRAccount");
                     }
 
                     //if deposit totals > 5000, they cannot deposit this amount
