@@ -1,4 +1,5 @@
-﻿
+﻿@using bevo.Models
+
 @{
     ViewBag.Title = "DepositLimitError";
 }
@@ -11,9 +12,3 @@ The max amount you can deposit is @ViewBag.MaxDepositAmount
 
 Click here to automatically deposit this amount
 
-@Html.ActionLink(
-                linkText: "Automatically deposit this amount",
-                actionName: "AutoCreateIRA",
-                controllerName: "Deposit",
-                routeValues: new { t =  ViewBag.Transaction},
-                htmlAttributes: null)

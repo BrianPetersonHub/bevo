@@ -72,11 +72,12 @@ namespace bevo.Controllers
                     }
 
                     //if deposit totals > 5000, they cannot deposit this amount
-                    Decimal iraDepositTotal = UnderDepositLimit(transaction.Amount);
+                    Decimal iraDepositTotal = TotalDeposits(transaction.Amount);
                     if (iraDepositTotal > 5000)
                     {
-                        Decimal maxDepositAmount = 5000 - iraDepositTotal;
-                        ViewBag.MaxDepositAmount = maxDepositAmount;
+                        Decimal maxDepositAmount = 5000 - (iraDepositTotal - transaction.Amount);
+                        transaction.Amount = maxDepositAmount;
+                        ViewBag.MaxDepositAmount = maxDepositAmount.ToString();
                         ViewBag.Transaction = transaction;
                         return RedirectToAction("DepositLimitError", "IRAccount");
                     }
@@ -105,30 +106,6 @@ namespace bevo.Controllers
             return View(transaction);
         }
 
-        //POST: AutoCreateIRA/Deposit
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult AutoCreateIRA([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description,Dispute")] Transaction t)
-        {
-            Int32 accountNum = t.ToAccount;
-            String accountType = GetAccountType(accountNum);
-            t.TransType = TransType.Deposit;
-            t.Amount = ViewBag.MaxDepositAmount;
-
-            var query = from a in db.IRAccounts
-                        where a.AccountNum == accountNum
-                        select a.IRAccountID;
-            //gets first (only) thing from query list
-            String accountID = query.First();
-            IRAccount account = db.IRAccounts.Find(accountID);
-
-            t.Amount = ViewBag.MaxDepositAmount;
-
-            account.Transactions.Add(t);
-            account.Balance = account.Balance + t.Amount;
-
-            return View("Home", "Customer");
-        }
         //method returns string (CHECKING, SAVING, IRA, STOCK PORTFOLIO) depending on what type of account 
         public String GetAccountType(Int32 accountNum)
         {
@@ -271,8 +248,8 @@ namespace bevo.Controllers
 
         }
 
-        //method returns true in user's IRA deposits are under the deposit max
-        public Decimal UnderDepositLimit(Decimal transactionAmount)
+        //method returns the users total deposits after this transaction
+        public Decimal TotalDeposits(Decimal transactionAmount)
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             IRAccount irAccount = user.IRAccount;
