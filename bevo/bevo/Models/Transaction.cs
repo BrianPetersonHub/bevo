@@ -40,13 +40,14 @@ namespace bevo.Models
         
         public String Description { get; set; }
 
-        public bool Dispute { get; set; }
 
         // Navigational
         public virtual List<CheckingAccount> CheckingAccounts { get; set; }
         public virtual List<SavingAccount> SavingAccounts { get; set; }
         public virtual List<IRAccount> IRAccounts { get; set; }
         public virtual List<StockPortfolio> StockPortfolios { get; set; }
+        public virtual Dispute Dispute { get; set; }
+
 
         public Int32 GetTransactionNum()
         {

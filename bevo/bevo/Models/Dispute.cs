@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace bevo.Models
 {
@@ -14,6 +16,7 @@ namespace bevo.Models
     }
     public class Dispute
     {
+        [Key, ForeignKey("Transaction")]
         public Int32 DisputeID { get; set; }
 
         public DisputeStatus DisputeStatus { get; set; }
@@ -21,5 +24,10 @@ namespace bevo.Models
         public String Message { get; set; }
 
         public Decimal DisputedAmount { get; set; }
+
+
+
+        //Nav properties 
+        public virtual Transaction Transaction { get; set; }
     }
 }
