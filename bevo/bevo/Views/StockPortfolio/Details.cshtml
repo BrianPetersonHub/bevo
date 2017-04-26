@@ -21,62 +21,24 @@
         </div>
         <div class="quick-action-button">
             <p>
+                <!--TODO: Which action on which controller to buy stock?-->
                 @Html.ActionLink(
-                linkText: "Make Deposit",
+                linkText: "Buy Stocks",
                 actionName: "Create",
-                controllerName: "Deposit",
+                controllerName: "Stock",
                 routeValues: null,
                 htmlAttributes: new { @class = "quick-actions" })
             </p>
         </div>
         <div class="quick-action-button">
             <p>
+                <!--TODO: Which action on which controller to sell stock?-->
                 @Html.ActionLink(
-                linkText: "Make Transfer",
+                linkText: "Sell Stocks",
                 actionName: "Create",
                 controllerName: "Transfer",
                 routeValues: null,
                 htmlAttributes: new { @class = "quick-actions" })
-            </p>
-        </div>
-        <div class="quick-action-button">
-            <p>
-                @Html.ActionLink(
-                linkText: "Make Withdraw",
-                actionName: "Create",
-                controllerName: "Withdraw",
-                routeValues: null,
-                htmlAttributes: new { @class = "quick-actions" })
-            </p>
-        </div>
-        <div class="quick-action-button">
-            <p>
-                @Html.ActionLink(
-              linkText: "Pay Bill",
-              actionName: "Create",
-              controllerName: "Pay",
-              routeValues: null,
-              htmlAttributes: new { @class = "quick-actions" })
-        </p>
-        </div>
-        <div class="quick-action-button">
-            <p>
-                @Html.ActionLink(
-                    linkText: "Create New Account",
-                    actionName: "ChooseAccount",
-                    controllerName: "Account",
-                    routeValues: null,
-                    htmlAttributes: new { @class = "quick-actions" })
-            </p>
-        </div>
-        <div class="quick-action-button">
-            <p>
-                @Html.ActionLink(
-                  linkText: "Edit Account",
-                  actionName: "Index",
-                  controllerName: "Manage",
-                  routeValues: null,
-                  htmlAttributes: new { @class = "quick-actions" })
             </p>
         </div>
     </div>
@@ -114,10 +76,10 @@
                             Stock
                         </th>
                         <th>
-                            Number of Shares
+                            My Shares
                         </th>
                         <th>
-                            Current Price of Stocks
+                            Current Price 
                         </th>
                     </tr>
                     @foreach (var s in ViewBag.StockViewModel)
