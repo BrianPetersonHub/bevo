@@ -47,6 +47,7 @@ namespace bevo.Models
 
     public class PurchaseSummaryViewModel
     {
+        public DateTime Date { get; set; }
         public String Name { get; set; }
         public String Ticker { get; set; }
         public Int32 NumSold { get; set; }
@@ -54,4 +55,6 @@ namespace bevo.Models
         public Double Fees { get; set; }
         public Double NetProfit { get; set; }
     }
+
+
 }
