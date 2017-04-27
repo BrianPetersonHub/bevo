@@ -360,6 +360,8 @@
     <Content Include="Views\IRAccount\TransferAgeError.cshtml" />
     <Content Include="Views\IRAccount\TransferLimitError.cshtml" />
     <Content Include="Views\Deposit\CreateAutoCorrect.cshtml" />
+    <Content Include="Views\Employee\Home.cshtml" />
+    <Content Include="Views\Manager\Home.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
