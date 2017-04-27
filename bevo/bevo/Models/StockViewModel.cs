@@ -35,6 +35,7 @@ namespace bevo.Models
 
     public class AccountsViewModel
     {
+        public Int32 AccountNum { get; set; }
         public String AccountName { get; set; }
         public Decimal Balance { get; set; }
     }
