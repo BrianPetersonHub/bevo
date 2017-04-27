@@ -8,12 +8,14 @@ namespace bevo.Models
 {
     public class StockPortfolioViewModel
     {
-        public Double CurrentValue { get; set; }
+        public Decimal CurrentValue { get; set; }
         public bool Balanced { get; set; }
-        public Double TotalGains { get; set; }
-        public Double TotalFees { get; set; }
-        public Double TotalBonuses { get; set; }
-        public Double CashAvailable { get; set; }
+        public Decimal TotalGains { get; set; }
+        public Decimal TotalFees { get; set; }
+        public Decimal TotalBonuses { get; set; }
+        public Decimal CashAvailable { get; set; }
+        public Decimal StockMarketValue { get; set; }
+
     }
 
     public class StockViewModel
@@ -26,7 +28,7 @@ namespace bevo.Models
         //if it isn't already there
         public String Ticker { get; set; }
 
-        public Double CurrentPrice { get; set; }
+        public Decimal CurrentPrice { get; set; }
 
         public Int32 NumInAccount { get; set; }
     }
@@ -34,15 +36,15 @@ namespace bevo.Models
     public class AccountsViewModel
     {
         public String AccountName { get; set; }
-        public Double Balance { get; set; }
+        public Decimal Balance { get; set; }
     }
 
     public class StockDetailsViewModel
     {
         public String Name { get; set; }
         public String Ticker { get; set; }
-        public Double PurchasePrice { get; set; }
-        public Double Delta { get; set; }
+        public Decimal PurchasePrice { get; set; }
+        public Decimal Delta { get; set; }
     }
 
     public class PurchaseSummaryViewModel
@@ -52,8 +54,8 @@ namespace bevo.Models
         public String Ticker { get; set; }
         public Int32 NumSold { get; set; }
         public Int32 NumRemaining { get; set; }
-        public Double Fees { get; set; }
-        public Double NetProfit { get; set; }
+        public Decimal Fees { get; set; }
+        public Decimal NetProfit { get; set; }
     }
 
 

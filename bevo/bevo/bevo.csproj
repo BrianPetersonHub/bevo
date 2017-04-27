@@ -204,6 +204,9 @@
     <EmbeddedResource Include="Migrations\201704261944138_relationship btn transaction and dispute.resx">
       <DependentUpon>201704261944138_relationship btn transaction and dispute.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704271650176_Transaction stock relationship.resx">
+      <DependentUpon>201704271650176_Transaction stock relationship.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SeedData\Payee.csv" />
     <EmbeddedResource Include="SeedData\CheckingAccount.csv" />
     <EmbeddedResource Include="SeedData\IRAccount.csv" />
@@ -279,6 +282,10 @@
     <Compile Include="Migrations\201704261944138_relationship btn transaction and dispute.cs" />
     <Compile Include="Migrations\201704261944138_relationship btn transaction and dispute.Designer.cs">
       <DependentUpon>201704261944138_relationship btn transaction and dispute.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704271650176_Transaction stock relationship.cs" />
+    <Compile Include="Migrations\201704271650176_Transaction stock relationship.Designer.cs">
+      <DependentUpon>201704271650176_Transaction stock relationship.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedIdentity.cs" />
