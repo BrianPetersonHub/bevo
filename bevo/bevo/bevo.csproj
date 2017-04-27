@@ -360,7 +360,6 @@
     <Content Include="Views\Stocks\Edit.cshtml" />
     <Content Include="Views\Stocks\Index.cshtml" />
     <Content Include="Views\IRAccount\DepositAgeError.cshtml" />
-    <Content Include="Views\IRAccount\DepositLimitError.cshtml" />
     <Content Include="Views\IRAccount\WithdrawAgeAmountError.cshtml" />
     <Content Include="Views\IRAccount\TransferAgeAmountError.cshtml" />
     <Content Include="Views\Dispute\Create.cshtml" />

@@ -76,13 +76,18 @@ namespace bevo.Controllers
                     if (iraContributionTotal > 5000)
                     {
                         Decimal maxDepositAmount = 5000 - (iraContributionTotal - transaction.Amount);
-                        transaction.Amount = maxDepositAmount;
-                        //ViewBag.MaxDepositAmount = maxDepositAmount.ToString();
-                        //ViewBag.Transaction = transaction;
-                        //return RedirectToAction("DepositLimitError", "IRAccount");
 
-                        //TODO: this should be returning a transaction.amount of max deoposit amount, but form isnt filled out that way
-                        return View("CreateAutoCorrect", transaction);
+                        if (maxDepositAmount > 0)
+                        {
+                            transaction.Amount = maxDepositAmount;
+                            ModelState.Clear();
+                            return View("CreateAutoCorrect", transaction);
+                        }
+                        else
+                        {
+                            return View("MaxDepositError", "IRAccount");
+                        }
+
                     }
 
                     account.Transactions.Add(transaction);
