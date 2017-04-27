@@ -243,7 +243,6 @@
     <Compile Include="Controllers\SavingAccountsController.cs" />
     <Compile Include="Controllers\CheckingAccountsController.cs" />
     <Compile Include="Controllers\StockPortfolioController.cs" />
-    <Compile Include="Controllers\StockQuoteController.cs" />
     <Compile Include="Controllers\StocksController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
     <Compile Include="Controllers\TransferController.cs" />
@@ -339,7 +338,6 @@
     <Content Include="Views\IRAccount\Details.cshtml" />
     <Content Include="Views\StockPortfolio\Create.cshtml" />
     <Content Include="Views\StockPortfolio\Details.cshtml" />
-    <Content Include="Views\StockQuote\Index.cshtml" />
     <Content Include="Views\Stocks\Create.cshtml" />
     <Content Include="Views\Stocks\Delete.cshtml" />
     <Content Include="Views\Stocks\Details.cshtml" />
@@ -364,7 +362,6 @@
     <Folder Include="fonts\App_Data\" />
     <Folder Include="Views\Payees\" />
     <Folder Include="Views\StockDetails\" />
-    <Folder Include="Views\StockPortfolios\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
