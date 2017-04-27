@@ -201,6 +201,9 @@
     <EmbeddedResource Include="Migrations\201704251750041_Fixing stock and stockdetail models.resx">
       <DependentUpon>201704251750041_Fixing stock and stockdetail models.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704261944138_relationship btn transaction and dispute.resx">
+      <DependentUpon>201704261944138_relationship btn transaction and dispute.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SeedData\Payee.csv" />
     <EmbeddedResource Include="SeedData\CheckingAccount.csv" />
     <EmbeddedResource Include="SeedData\IRAccount.csv" />
@@ -232,14 +235,16 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\DepositController.cs" />
+    <Compile Include="Controllers\DisputeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IRAccountController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PurchaseStockController.cs" />
     <Compile Include="Controllers\RoleAdminController.cs" />
     <Compile Include="Controllers\SavingAccountsController.cs" />
     <Compile Include="Controllers\CheckingAccountsController.cs" />
+    <Compile Include="Controllers\SellStockController.cs" />
     <Compile Include="Controllers\StockPortfolioController.cs" />
-    <Compile Include="Controllers\StockQuoteController.cs" />
     <Compile Include="Controllers\StocksController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
     <Compile Include="Controllers\TransferController.cs" />
@@ -271,6 +276,10 @@
     <Compile Include="Migrations\201704251750041_Fixing stock and stockdetail models.Designer.cs">
       <DependentUpon>201704251750041_Fixing stock and stockdetail models.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704261944138_relationship btn transaction and dispute.cs" />
+    <Compile Include="Migrations\201704261944138_relationship btn transaction and dispute.Designer.cs">
+      <DependentUpon>201704261944138_relationship btn transaction and dispute.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedIdentity.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -301,7 +310,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Disputes\Detail.cshtml" />
     <Content Include="Views\Transactions\SearchTransactions.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
@@ -332,14 +340,19 @@
     <Content Include="Views\IRAccount\Details.cshtml" />
     <Content Include="Views\StockPortfolio\Create.cshtml" />
     <Content Include="Views\StockPortfolio\Details.cshtml" />
-    <Content Include="Views\StockQuote\Index.cshtml" />
     <Content Include="Views\Stocks\Create.cshtml" />
     <Content Include="Views\Stocks\Delete.cshtml" />
     <Content Include="Views\Stocks\Details.cshtml" />
     <Content Include="Views\Stocks\Edit.cshtml" />
     <Content Include="Views\Stocks\Index.cshtml" />
-    <Content Include="Views\IRAccount\AgeError.cshtml" />
+    <Content Include="Views\IRAccount\DepositAgeError.cshtml" />
     <Content Include="Views\IRAccount\DepositLimitError.cshtml" />
+    <Content Include="Views\IRAccount\WithdrawAgeAmountError.cshtml" />
+    <Content Include="Views\IRAccount\TransferAgeAmountError.cshtml" />
+    <Content Include="Views\Dispute\Create.cshtml" />
+    <Content Include="Views\IRAccount\TransferAgeError.cshtml" />
+    <Content Include="Views\IRAccount\TransferLimitError.cshtml" />
+    <Content Include="Views\Deposit\CreateAutoCorrect.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -348,10 +361,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="fonts\App_Data\" />
     <Folder Include="Views\Payees\" />
+    <Folder Include="Views\PurchaseStock\" />
+    <Folder Include="Views\SellStock\" />
     <Folder Include="Views\StockDetails\" />
-    <Folder Include="Views\StockPortfolios\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

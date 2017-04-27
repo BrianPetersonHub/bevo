@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "TransferWithdrawAgeError";
+}
+
+<h2>TransferWithdrawAgeError</h2>
+
+You cannot withdraw more than $3000 at a time
+
+@Html.ActionLink(
+                linkText: "Try a different amount",
+                actionName: "Create",
+                controllerName: "Withdraw",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })

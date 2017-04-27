@@ -68,10 +68,24 @@ namespace bevo.Controllers
             {
                 return HttpNotFound();
             }
-
+            ViewBag.SimilarTransactions = Get5SimilarTransactions(transaction);
             return View(transaction);
         }
-    
+
+        //returns a list of 5 most recent similar transactions
+        public List<Transaction> Get5SimilarTransactions(Transaction transaction)
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            var query = (from t in db.Transactions
+                         where t.TransType == transaction.TransType
+                         where (t.FromAccount == transaction.FromAccount && transaction.FromAccount != 0) || (t.ToAccount == transaction.ToAccount && transaction.ToAccount != 0)
+                        orderby t.Date descending
+                        select t).Take(5);
+
+            List<Transaction> listTransactions = query.ToList();
+            return listTransactions;
+        }
+
 
         // Search Results
         public ActionResult SearchTransactions( String description,

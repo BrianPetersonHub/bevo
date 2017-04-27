@@ -1,7 +1,7 @@
 ﻿@model bevo.Models.AppUser
 
 @{
-    ViewBag.Title = "Home";
+    ViewBag.Title = "home";
 }
 
 <div class="row">
@@ -14,7 +14,6 @@
 <div class="homepage row">
     <div class="quick-action-container col-lg-3">
         <div class="quick-action-button">
-            <!--TODO: Create Create action on Deposit controller-->
             <p>
                 @Html.ActionLink(
                 linkText: "Make Deposit",
@@ -25,7 +24,6 @@
             </p>
         </div>
         <div class="quick-action-button">
-            <!--TODO: Create new method on controller-->
             <p>
                 @Html.ActionLink(
                 linkText: "Make Transfer",
@@ -36,7 +34,6 @@
             </p>
         </div>
         <div class="quick-action-button">
-            <!--TODO: Create new method on controller-->
             <p>
                 @Html.ActionLink(
                 linkText: "Make Withdraw",
@@ -47,7 +44,6 @@
             </p>
         </div>
         <div class="quick-action-button">
-            <!--TODO: Create new method on controller-->
             <p>@Html.ActionLink(
               linkText: "Pay Bill", 
               actionName: "Create", 
@@ -56,7 +52,6 @@
               htmlAttributes: new { @class = "quick-actions" })</p>
         </div>
         <div class="quick-action-button">
-            <!--TODO: Create new method on controller-->
             <p>
                 @Html.ActionLink(
                 linkText:"Create New Account", 
@@ -78,6 +73,7 @@
         </div>
     </div>
     <div class="homepage-container col-lg-9">
+        
         <h3>Account Overview</h3>
         
         <table class="table">

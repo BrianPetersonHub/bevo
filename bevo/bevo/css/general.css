@@ -104,7 +104,7 @@ ____________________________________________________________________*/
     font-family: 'Helvetica Neue', sans-serif;
     font-size: 16px;
     font-weight: bold;
-    letter-spacing: 2px;
+    letter-spacing: 1 px;
     color: black;
     text-transform: uppercase;
 }
@@ -116,7 +116,6 @@ ____________________________________________________________________*/
 .homepage-container {
     background-color: #F3F3F3;
     padding: 20px;
-    
 }
 
 .homepage-container h3 {
@@ -132,10 +131,6 @@ ____________________________________________________________________*/
 
 .homepage-container table {
     padding: 20px;
-}
-
-.quick-action-container {
-    background-color: white;
 }
 
 
@@ -170,10 +165,10 @@ ____________________________________________________________________*/
     width: 90%;
 }
 
-.stock-value h3{
+.stock-value h3 {
     font-family: 'Helvetica Neue', sans-serif;
     font-size: 11px;
-    font-weight: normal;
+    font-weight: bold;
     letter-spacing: 0.5px;
     color: black;
     text-transform: uppercase;
@@ -182,11 +177,22 @@ ____________________________________________________________________*/
     padding-bottom: 10px;
 }
 
+.stock-value p {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: darkred;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 100px;
+    padding-top: 10px;
+}
+
 .value-container {
     width: 100%;
     background-color: #F3F3F3;
-    height: 40px;
-    margin-bottom: 100px;
+    height: auto;
     text-align: center;
     display: block;
     padding-top: 10px;
@@ -194,7 +200,7 @@ ____________________________________________________________________*/
 
 .value-container p {
     font-family: 'Helvetica Neue', sans-serif;
-    font-size: 10px;
+    font-size: 13px;
     font-weight: bold;
     letter-spacing: 0;
     color: black;
@@ -203,3 +209,41 @@ ____________________________________________________________________*/
     padding-bottom: 20px;
     text-align: center;
 }
+
+.table-container {
+    display: inline-block;
+    margin: 0;
+}
+
+.table {
+    margin-bottom: 0 !important;
+}
+
+.portion-container {
+    background-color: #F3F3F3;
+    padding: 30px;
+    display: block;
+    width: 100%;
+}
+
+.table-title {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: black;
+    text-transform: uppercase;
+    text-align: left;
+    margin: 0;
+    padding-bottom: 10px;
+}
+.table td {
+    border: 0px !important;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.table th {
+    border: 0px !important;
+    font-family: 'Open Sans', sans-serif;
+}
+

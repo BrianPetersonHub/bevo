@@ -1,12 +1,14 @@
-﻿
+﻿@using bevo.Models
+
 @{
     ViewBag.Title = "DepositLimitError";
 }
 
 <h2>DepositLimitError</h2>
 
-This deposit will cause you to go over ira deposit limit
+We're sorry, but you cannot deposit more than $5000 into your IRA this year.
 
-click here to change amount to max amount without going over limit
+The max amount you can deposit is @ViewBag.MaxDepositAmount 
 
-click here to cancel
+Click here to automatically deposit this amount
+

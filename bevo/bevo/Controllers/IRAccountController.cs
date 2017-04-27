@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using bevo.Models;
 using Microsoft.AspNet.Identity;
+using bevo.Controllers;
 
 namespace bevo.Controllers
 {
@@ -18,7 +19,7 @@ namespace bevo.Controllers
         public ActionResult Create()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
-            if(user.IRAccount == null)
+            if (user.IRAccount == null)
             {
                 return View();
             }
@@ -26,7 +27,7 @@ namespace bevo.Controllers
             {
                 return View("CannotCreate");
             }
-            
+
         }
 
         //POST: IRA/Create
@@ -67,7 +68,11 @@ namespace bevo.Controllers
             return transactions;
         }
 
-        public ActionResult AgeError()
+        public ActionResult DepositAgeError()
+        {
+            return View();
+        }
+        public ActionResult TransferAgeError()
         {
             return View();
         }
@@ -76,5 +81,24 @@ namespace bevo.Controllers
         {
             return View();
         }
+
+        //for transfers going into account
+        public ActionResult TransferLimitError()
+        {
+            return View();
+        }
+
+        public ActionResult WithdrawAgeAmountError()
+        {
+            return View();
+        }
+
+        //for transfers going out of account
+        public ActionResult TransferAgeAmountError()
+        {
+            return View();
+        }
+
+
     }
 }

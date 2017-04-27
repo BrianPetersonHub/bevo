@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using bevo.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using bevo.Utilities;
 
 namespace bevo.Controllers
 {
@@ -34,6 +35,8 @@ namespace bevo.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Home", "Customer");
             }
+
+            //TODO: ** Add task to be approved by manager
             return View(stockPortfolio);
         }
 
@@ -49,13 +52,40 @@ namespace bevo.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Transactions = GetAllTransactions(id);
-            ViewBag.StockViewModel = PortfolioSnapshot();
+
+            //Bag up pertinent information about this account 
+            ViewBag.Transactions = GetAllTransactions();
+            ViewBag.PortfolioSnapshot = PortfolioSnapshot();
+            ViewBag.IsBalanced = BalanceCheck();
+
+            ViewBag.PortfolioInfo = GetPortfolioInfo();
             return View(stockPortfolio);
         }
 
-        public List<Transaction> GetAllTransactions(String id)
+        //TODO: ** Get total value of portfolio 
+        public StockPortfolioViewModel GetPortfolioInfo()
         {
+            // add logic for if null, error, etc.
+
+            StockPortfolioViewModel portfolioInfo = new StockPortfolioViewModel();
+
+            //TODO: ** add logic to each value
+            portfolioInfo.CurrentValue = 0;
+            portfolioInfo.TotalGains = 0;
+            portfolioInfo.TotalFees = 0;
+            portfolioInfo.TotalBonuses = 0;
+            portfolioInfo.CashAvailable = 0;
+
+            return portfolioInfo;
+        }
+
+        //Finds list of transactions based on the ID of the user who is currently logged in
+        public List<Transaction> GetAllTransactions()
+        {
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+            var user = userManager.FindById(User.Identity.GetUserId());
+            string id = user.Id;
+
             StockPortfolio stockPortfolio = db.StockPortfolios.Find(id);
             List<Transaction> transactions = stockPortfolio.Transactions;
             return transactions;
@@ -117,7 +147,7 @@ namespace bevo.Controllers
         }
 
 
-        //Make a method to get all the info for the current account stocks 
+        //Make a method to get all the info for the current account stocks (using stockviewmodels)
         //TODO: Again, this method only works for the user who is currently logged in
         public List<StockViewModel> PortfolioSnapshot()
         {
@@ -133,7 +163,7 @@ namespace bevo.Controllers
                 stockDetailList.Add(s);
             }
 
-            //Make viwebag space to hold all the stockviewmodel objects
+            //Make list to hold all the stockviewmodel objects
             List<StockViewModel> listToReturn = new List<StockViewModel>();
 
             //Add information from each stock record into the viewbag 
@@ -153,6 +183,39 @@ namespace bevo.Controllers
             }
 
             return listToReturn;
+        }
+
+
+        //Method that returns quotes for each stock appearing in the current user's account
+        //This is similar to the snapshot method except that it looks at the stocks in themselves
+        //rather than looking at how much the user has of each stock.
+        public List<StockQuote> StockQuotes()
+        {
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+
+            //Get the current user as an AppUser object 
+            var user = userManager.FindById(User.Identity.GetUserId());
+
+            //Get the list of the ticker for each stock in the user's portfolio 
+            List<StockDetail> stockDetailList = user.StockPortfolio.StockDetails;
+            List<string> tickersInAccount = new List<string>();
+            foreach (StockDetail detail in stockDetailList)
+            {
+                string tickerInQuestion = detail.Stock.StockTicker;
+                tickersInAccount.Add(tickerInQuestion);
+            }
+
+
+            //Return a quote for each stock in the user's account 
+            List<StockQuote> Quotes = new List<StockQuote>();
+            foreach (string ticker in tickersInAccount)
+            {
+                StockQuote sq1 = GetQuote.GetStock(ticker);
+                Quotes.Add(sq1);
+            }
+
+            //Return the list with a quote for each stock that is in the account 
+            return Quotes;
         }
     }
 }

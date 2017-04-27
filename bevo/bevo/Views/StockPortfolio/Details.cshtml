@@ -4,12 +4,12 @@
     ViewBag.Title = "my stock portfolio";
 }
 
+
 <div class="row">
     <div class="homepage-top">
         <h2>@ViewBag.Title</h2>
     </div>
 </div>
-
 
 <div class="homepage row">
     <div class="quick-action-container col-lg-3">
@@ -18,94 +18,140 @@
             <div class="value-container">
                 <p> [ STOCK VALUE HERE ]</p>
             </div>
+            <p>[ BALANCE STATUS HERE ]</p>
         </div>
         <div class="quick-action-button">
-            <!--TODO: Create Create action on Deposit controller-->
             <p>
+                <!--TODO: Which action on which controller to buy stock?-->
                 @Html.ActionLink(
-                linkText: "Make Deposit",
+                linkText: "Buy Stocks",
                 actionName: "Create",
-                controllerName: "Deposit",
+                controllerName: "Stock",
                 routeValues: null,
                 htmlAttributes: new { @class = "quick-actions" })
             </p>
         </div>
         <div class="quick-action-button">
-            <!--TODO: Create new method on controller-->
             <p>
+                <!--TODO: Which action on which controller to sell stock?-->
                 @Html.ActionLink(
-                linkText: "Make Transfer",
+                linkText: "Sell Stocks",
                 actionName: "Create",
                 controllerName: "Transfer",
                 routeValues: null,
                 htmlAttributes: new { @class = "quick-actions" })
             </p>
         </div>
-        <div class="quick-action-button">
-            <!--TODO: Create new method on controller-->
-            <p>
-                @Html.ActionLink(
-                linkText: "Make Withdraw",
-                actionName: "Create",
-                controllerName: "Withdraw",
-                routeValues: null,
-                htmlAttributes: new { @class = "quick-actions" })
-            </p>
-        </div>
-        <div class="quick-action-button">
-            <!--TODO: Create new method on controller-->
-            <p>
-                @Html.ActionLink(
-              linkText: "Pay Bill",
-              actionName: "Create",
-              controllerName: "Pay",
-              routeValues: null,
-              htmlAttributes: new { @class = "quick-actions" })
-        </p>
-        </div>
-        <div class="quick-action-button">
-            <!--TODO: Create new method on controller-->
-            <p>
-                @Html.ActionLink(
-                    linkText: "Create New Account",
-                    actionName: "ChooseAccount",
-                    controllerName: "Account",
-                    routeValues: null,
-                    htmlAttributes: new { @class = "quick-actions" })
-            </p>
-        </div>
-        <div class="quick-action-button">
-            <!--TODO: Move this somewhere else...-->
-            <p>
-                @Html.ActionLink(
-                  linkText: "Edit Account",
-                  actionName: "Index",
-                  controllerName: "Manage",
-                  routeValues: null,
-                  htmlAttributes: new { @class = "quick-actions" })
-            </p>
-        </div>
     </div>
-    <div class="homepage-container col-lg-9">
-        <div class="col-lg-3 col-sm-1">
-            <table class="vertical-table">
-                <tr>
-                    <th>Gains</th>
-                    <td>[Gains Here]</td>
-                </tr>
-                <tr>
-                    <th>Fees</th>
-                    <td>[Fees Here]</td>
-                </tr>
-                <tr>
-                    <th>Bonuses</th>
-                    <td>[Fees Here]</td>
-                </tr>
-                <tr>
-                    <th>Available Cash</th>
-                    <td>[Cash Here]</td>
-                </tr>
-            </table>
+    <div class="col-lg-9">
+        <div class="table-container">
+            <h3 class="table-title">Cash Value</h3>
+            <div class="portion-container">
+                <h2>Overview</h2>
+                <table class="table">
+                    <tr>
+                        <td>
+                            Gains
+                        </td>
+                        <td>
+                            @ViewBag.TotalGains
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Fees
+                        </td>
+                        <td>
+                            @ViewBag.TotalFees
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Bonus
+                        </td>
+                        <td>
+                            @ViewBag.TotalBonuses
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Available Cash
+                        </td>
+                        <td>
+                            @ViewBag.AvailableCash
+                        </td>
+                    </tr>
+                </table>
+                <h2>Details</h2>
+                <table class="table">
+                    <tr>
+                        <th>
+                            Type
+                        </th>
+                        <th>
+                            Amount
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                    </tr>
+                    @foreach (var t in ViewBag.Transactions)
+                    {
+                        <tr>
+                            <td>
+                                @t.TransType
+                            </td>
+                            <td>
+                                @t.Amount
+                            </td>
+                            <td>
+                                @t.Description
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <h3 class="table-title">My Stocks</h3>
+            <div class="portion-container">
+                <table class="table">
+                    <tr>
+                        <th>
+                            Stock
+                        </th>
+                        <th>
+                            My Shares
+                        </th>
+                        <th>
+                            Current Price 
+                        </th>
+                    </tr>
+                    @foreach (var s in ViewBag.StockViewModel)
+                    {
+                        <tr>
+                            <td>
+                                @s.Ticker
+                            </td>
+                            <td>
+                                @s.NumInAccount
+                            </td>
+                            <td>
+                                @s.CurrentPrice
+                            </td>
+                            <td>
+                                @Html.ActionLink(
+                                linkText: "Details",
+                                actionName: "Details",
+                                controllerName: "Stock",
+                                routeValues: new { id = s.StockID },
+                                htmlAttributes: null)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
         </div>
     </div>
 </div>
