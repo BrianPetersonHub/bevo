@@ -1,5 +1,4 @@
-﻿@model bevo.Models.PurchaseViewModel
-
+﻿@model bevo.Models.Transaction
 @{
     ViewBag.Title = "purchase stock";
 }
@@ -9,7 +8,6 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Transaction</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -21,14 +19,41 @@
             </div>
         </div>
 
-       @*TODO: Display available accounts*@
-        @*TODO: Display available stocks to purchase*@)
+        <h3>Available Accounts for Purchasing</h3>
+       <table class="table">
+            <tr>
+                <th>
+                    Account Name
+                </th>
+                <th>
+                    Balance
+                </th>
+            </tr>
+           @foreach (var a in ViewBag.AllAccounts)
+           {
+               <tr>
+                   <td></td>
+                   <td>
+                       a.AccountName
+                   </td>
+                   <td>
+                       a.Balance
+                   </td>
+               </tr>
+           }
+       </table>
 
+        @Html.DropDownList("SelectedAccount", (SelectList)ViewBag.SelectAccount, new { @class= "form-control" } )
+        <br /><br />
+
+        @*TODO: Display available stocks to purchase*@
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Stock.StockDetails, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Stock.StockDetails, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Stock.StockDetails, "", new { @class = "text-danger" })
             </div>
         </div>
 

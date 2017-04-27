@@ -4,17 +4,21 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using bevo.Models;
+using Microsoft.AspNet.Identity;
 
 namespace bevo.Controllers
 {
     public class PurchaseStockController : Controller
     {
+        private AppDbContext db = new AppDbContext();
+
         // GET: PurchaseStock
         public ActionResult Index()
         {
             // add relevant information to viewbag
             ViewBag.AllAccounts = GetAccounts();
             ViewBag.AllStocks = GetStocks();
+            ViewBag.SelectAccount = SelectAccount();
 
             return View();
         }
@@ -30,9 +34,55 @@ namespace bevo.Controllers
         //TODO: Get savings, checkings, and cash-portions
         public List<AccountsViewModel> GetAccounts()
         {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
             List<AccountsViewModel> allAccounts = new List<AccountsViewModel>();
-            // logic to get checkings, savings, cash-portion and respective balances
+            List<CheckingAccount> checkingAccounts = user.CheckingAccounts;
+            List<SavingAccount> savingAccounts = user.SavingAccounts;
+            StockPortfolio stockPortfolio = user.StockPortfolio;
+            
+            // get checkings
+            foreach (var c in checkingAccounts)
+            {
+                AccountsViewModel accountToAdd = new AccountsViewModel();
+                accountToAdd.AccountNum = c.AccountNum;
+                accountToAdd.AccountName = c.AccountName;
+                accountToAdd.Balance = c.Balance;
+                allAccounts.Add(accountToAdd);
+            }
+
+            // get savings
+            foreach (var s in checkingAccounts)
+            {
+                AccountsViewModel accountToAdd = new AccountsViewModel();
+                accountToAdd.AccountNum = s.AccountNum;
+                accountToAdd.AccountName = s.AccountName;
+                accountToAdd.Balance = s.Balance;
+                allAccounts.Add(accountToAdd);
+            }
+
+
+            // get cash portion stock portfolio
+            AccountsViewModel p = new AccountsViewModel();
+            p.AccountNum = stockPortfolio.AccountNum;
+            p.AccountName = stockPortfolio.AccountName;
+            p.Balance = stockPortfolio.Balance;
+            allAccounts.Add(p);
+
             return allAccounts;
+        }
+
+        public List<SavingAccount> GetAllSavingAccts()
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            List<SavingAccount> savingAccounts = user.SavingAccounts;
+            return savingAccounts;
+        }
+
+        public IEnumerable<SelectListItem> SelectAccount()
+        {
+            List<AccountsViewModel> allAccounts = GetAccounts();
+            SelectList selectAccount = new SelectList(allAccounts.OrderBy(a => a.AccountName), "AccountID", "AccountName");
+            return selectAccount;
         }
 
         //TODO: Create Purchase
