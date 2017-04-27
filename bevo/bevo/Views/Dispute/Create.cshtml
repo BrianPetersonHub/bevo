@@ -1,4 +1,4 @@
-﻿@model bevo.Models.Dispute
+﻿@model bevo.Models.DisputeTransactionViewModel
 
 @{
     ViewBag.Title = "Create";
@@ -31,6 +31,7 @@
             </div>
         </div>
 
+        @Html.HiddenFor(m => m.TransactionID)
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

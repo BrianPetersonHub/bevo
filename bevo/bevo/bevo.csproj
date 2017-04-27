@@ -292,6 +292,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CheckingAccount.cs" />
     <Compile Include="Models\Dispute.cs" />
+    <Compile Include="Models\DisputeTransactionViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\IdentityRoles.cs" />
     <Compile Include="Models\IRAccount.cs" />
@@ -363,6 +364,8 @@
     <Content Include="Views\Manager\Home.cshtml" />
     <Content Include="Views\PurchaseStock\Index.cshtml" />
     <Content Include="Views\PurchaseStock\Confirmation.cshtml" />
+    <Content Include="Views\IRAccount\MaxDepositError.cshtml" />
+    <Content Include="Views\Dispute\Confirmation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

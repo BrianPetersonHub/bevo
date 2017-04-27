@@ -53,43 +53,30 @@
                     Date
                 </th>
                 <th>
-                    From Account
-                </th>
-                <th>
-                    To Account
-                </th>
-                <th>
                     Transaction Type
                 </th>
                 <th>
                     Amount
                 </th>
                 <th>
-                    Dispute
+                    More info
                 </th>
-                <th></th>
+
+
+
             </tr>
 
             @foreach (var t in ViewBag.Transactions)
             {
                 <tr>
                     <td>
-                        @t.Date
-                    </td>
-                    <td>
-                        @t.FromAccount
-                    </td>
-                    <td>
-                        @t.ToAccount
+                        @(t.Date.ToShortDateString())
                     </td>
                     <td>
                         @t.TransType
                     </td>
                     <td>
-                        @t.Amount
-                    </td>
-                    <td>
-                        @t.Dispute
+                        $@t.Amount
                     </td>
                     <td>
                         @Html.ActionLink(

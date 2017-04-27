@@ -23,33 +23,33 @@ namespace bevo.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Transaction transaction = db.Transactions.Find(id);
+            DisputeTransactionViewModel d = new DisputeTransactionViewModel();
+            d.TransactionID = Convert.ToInt32(id);
 
-            if (transaction == null)
-            {
-                return HttpNotFound();
-            }
-
-            ViewBag.Transaction = transaction;
-            return View();
+            return View(d);
         }
 
         //POST: Create/Dispute
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "DisputeID,DisputeStatus,Message,DisputedAmount")] Dispute dispute)
+        public ActionResult Create([Bind(Include = "DisputeID,DisputeStatus,Message,DisputedAmount,TransactionID")] DisputeTransactionViewModel dt)
         {
             if (ModelState.IsValid)
             {
                 //TODO: how to find this specific transaction
-                Transaction transaction = dispute.Transaction;
-
-                transaction.Dispute = dispute;
+                Transaction transaction = db.Transactions.Find(dt.TransactionID);
+                Dispute dispute = new Dispute();
+                dispute.DisputeID = dt.DisputeID;
+                dispute.DisputeStatus = DisputeStatus.Submitted;
+                dispute.Message = dt.Message;
+                dispute.DisputedAmount = dt.DisputedAmount;
+                //transaction.Dispute = dispute;
+                dispute.Transaction = transaction;
                 db.SaveChanges();
 
                 return RedirectToAction("Confirmation");
             }
-            return View(dispute);
+            return View(dt);
         }
 
         public ActionResult Confirmation()
