@@ -77,7 +77,7 @@ namespace bevo.Controllers
             return View();
         }
 
-        public ActionResult DepositLimitError()
+        public ActionResult MaxDepositError()
         {
             return View();
         }
