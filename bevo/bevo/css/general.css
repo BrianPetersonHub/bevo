@@ -208,21 +208,11 @@ ____________________________________________________________________*/
     margin-bottom: 0 !important;
 }
 
-.cash-portion-container {
+.portion-container {
     background-color: #F3F3F3;
     padding: 30px;
-    display: inline-block;
-    min-height: 200px;
-    min-width: 200px;
-    margin-right: 10px;
-}
-
-.stock-portion-container {
-    background-color: #F3F3F3;
-    padding: 30px;
-    display: inline-block;
-    min-height: 200px;
-    min-width: 300px;
+    display: block;
+    width: 100%;
 }
 
 .table-title {

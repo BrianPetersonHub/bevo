@@ -360,7 +360,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Views\Payees\" />
     <Folder Include="Views\StockDetails\" />
-    <Folder Include="Views\StockPortfolios\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
