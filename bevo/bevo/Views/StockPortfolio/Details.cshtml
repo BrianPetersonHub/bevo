@@ -95,17 +95,17 @@
                             Description
                         </th>
                     </tr>
-                    @foreach (var t in ViewBag.CashTransactions)
+                    @foreach (var t in ViewBag.Transactions)
                     {
                         <tr>
                             <td>
-                                @t.type
+                                @t.TransType
                             </td>
                             <td>
-                                @t.amount
+                                @t.Amount
                             </td>
                             <td>
-                                @t.description
+                                @t.Description
                             </td>
                         </tr>
                     }

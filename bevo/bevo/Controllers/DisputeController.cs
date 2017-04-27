@@ -16,21 +16,22 @@ namespace bevo.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: Dispute
-        public ActionResult Create(int? id)
+        public ActionResult Create(int? id)  //this is an id for a transaction
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Transaction transaction = db.Transactions.Find(id);
+
             if (transaction == null)
             {
                 return HttpNotFound();
             }
 
-            //ViewBag.Transaction = transaction;
-
-            return View(transaction);
+            ViewBag.Transaction = transaction;
+            return View();
         }
 
         //POST: Create/Dispute
@@ -40,9 +41,10 @@ namespace bevo.Controllers
         {
             if (ModelState.IsValid)
             {
-                AppUser user = db.Users.Find(User.Identity.GetUserId());
+                //TODO: how to find this specific transaction
+                Transaction transaction = dispute.Transaction;
 
-                user.Dispute.Add(dispute);
+                transaction.Dispute = dispute;
                 db.SaveChanges();
 
                 return RedirectToAction("Confirmation");
@@ -54,4 +56,5 @@ namespace bevo.Controllers
         {
             return View();
         }
+    }
 }

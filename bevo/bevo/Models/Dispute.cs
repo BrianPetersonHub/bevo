@@ -23,6 +23,7 @@ namespace bevo.Models
 
         public String Message { get; set; }
 
+        [Display(Name = "Correct amount")]
         public Decimal DisputedAmount { get; set; }
 
 
