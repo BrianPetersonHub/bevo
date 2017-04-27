@@ -71,20 +71,14 @@ namespace bevo.Controllers
             return allAccounts;
         }
 
-        public List<SavingAccount> GetAllSavingAccts()
-        {
-            AppUser user = db.Users.Find(User.Identity.GetUserId());
-            List<SavingAccount> savingAccounts = user.SavingAccounts;
-            return savingAccounts;
-        }
-
         public IEnumerable<SelectListItem> SelectAccount()
         {
             List<AccountsViewModel> allAccounts = GetAccounts();
-            SelectList selectAccount = new SelectList(allAccounts.OrderBy(a => a.AccountName), "AccountID", "AccountName");
+            SelectList selectAccount = new SelectList(allAccounts.OrderBy(a => a.AccountName), "AccountNum", "AccountName");
             return selectAccount;
         }
 
+        //POST: 
         //TODO: Create Purchase
         public ActionResult PurchaseStock(Int32 numShares, Int32 selectedAccount, Int32 selectedStock, Date date)
         {
