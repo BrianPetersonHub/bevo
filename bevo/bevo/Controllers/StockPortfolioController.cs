@@ -16,6 +16,7 @@ namespace bevo.Controllers
     {
         private AppDbContext db = new AppDbContext();
 
+
         //GET: StockPortfolio/Create
         public ActionResult Create()
         {
@@ -62,10 +63,12 @@ namespace bevo.Controllers
             return View(stockPortfolio);
         }
 
-        //TODO: ** Get total value of portfolio 
+        //Get all total values associated with the portfolio.  
         public StockPortfolioViewModel GetPortfolioInfo()
         {
-            // add logic for if null, error, etc.
+            //Get userID for the user who is currently logged in 
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+            var user = userManager.FindById(User.Identity.GetUserId());
 
             StockPortfolioViewModel portfolioInfo = new StockPortfolioViewModel();
 
@@ -75,6 +78,80 @@ namespace bevo.Controllers
             portfolioInfo.TotalFees = 0;
             portfolioInfo.TotalBonuses = 0;
             portfolioInfo.CashAvailable = 0;
+            portfolioInfo.Balanced = false;
+            portfolioInfo.StockMarketValue = 0;
+
+            //Look at the type of transaction for each transaction on the stock portfolio and either addto or 
+            //subtract from the appropriate value in the portfolio
+            foreach(Transaction tr in user.StockPortfolio.Transactions)
+            {
+                if(tr.TransType == bevo.Models.TransType.Fee)
+                {
+                    portfolioInfo.TotalFees += tr.Amount;
+                }
+                else if(tr.TransType == bevo.Models.TransType.Deposit)
+                {
+                    portfolioInfo.CashAvailable += tr.Amount;
+                }
+                else if(tr.TransType == bevo.Models.TransType.Purchase_Stock)
+                {
+                    portfolioInfo.CashAvailable -= tr.Amount;
+                }
+                else if(tr.TransType == bevo.Models.TransType.Sell_Stock)
+                {
+                    portfolioInfo.CashAvailable += tr.Amount;
+                }
+                else if(tr.TransType == bevo.Models.TransType.Withdrawal)
+                {
+                    portfolioInfo.CashAvailable -= tr.Amount;
+                }
+                else if(tr.TransType == bevo.Models.TransType.Transfer && tr.ToAccount == user.StockPortfolio.AccountNum)
+                {
+                    portfolioInfo.CashAvailable += tr.Amount;
+                }
+                else if(tr.TransType == bevo.Models.TransType.Transfer && tr.ToAccount != user.StockPortfolio.AccountNum)
+                {
+                    portfolioInfo.CashAvailable -= tr.Amount;
+                }
+            }
+            
+
+            List<StockViewModel> snap = PortfolioSnapshot();
+            List<String> tickersInAccount = new List<String>();
+            foreach (StockViewModel s in snap)
+            {
+                decimal stockVal = s.NumInAccount * s.CurrentPrice;
+                portfolioInfo.StockMarketValue += stockVal;
+
+                tickersInAccount.Add(s.Ticker);
+            }
+
+
+            //Check to see if the portfolio is balanced 
+            bool bal = BalanceCheck();
+            if (bal == true)
+            {
+                portfolioInfo.Balanced = true;
+                portfolioInfo.TotalBonuses += (portfolioInfo.CashAvailable - portfolioInfo.TotalFees) * .1m;
+                portfolioInfo.TotalBonuses += portfolioInfo.StockMarketValue * .1m;
+            }
+
+            ////Look to see what the gains are for the account 
+            //decimal origSpend = new decimal();
+            ////find out how much they originally spent on their stocks 
+            //foreach(Transaction tr in user.StockPortfolio.Transactions)
+            //{
+            //    if(tr.TransType == bevo.Models.TransType.Purchase_Stock && tickersInAccount.Contains(tr.Stock.StockTicker)
+            //        && )
+            //    {
+            //        origSpend += tr.Amount;
+            //    }
+            //}
+
+            //Find the total value of the entire portfolio 
+            portfolioInfo.CurrentValue = portfolioInfo.CashAvailable + portfolioInfo.StockMarketValue - portfolioInfo.TotalFees
+                                         + portfolioInfo.TotalBonuses;
+
 
             return portfolioInfo;
         }

@@ -204,6 +204,9 @@
     <EmbeddedResource Include="Migrations\201704261944138_relationship btn transaction and dispute.resx">
       <DependentUpon>201704261944138_relationship btn transaction and dispute.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704271650176_Transaction stock relationship.resx">
+      <DependentUpon>201704271650176_Transaction stock relationship.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SeedData\Payee.csv" />
     <EmbeddedResource Include="SeedData\CheckingAccount.csv" />
     <EmbeddedResource Include="SeedData\IRAccount.csv" />
@@ -280,6 +283,10 @@
     <Compile Include="Migrations\201704261944138_relationship btn transaction and dispute.Designer.cs">
       <DependentUpon>201704261944138_relationship btn transaction and dispute.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704271650176_Transaction stock relationship.cs" />
+    <Compile Include="Migrations\201704271650176_Transaction stock relationship.Designer.cs">
+      <DependentUpon>201704271650176_Transaction stock relationship.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedIdentity.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -353,6 +360,10 @@
     <Content Include="Views\IRAccount\TransferAgeError.cshtml" />
     <Content Include="Views\IRAccount\TransferLimitError.cshtml" />
     <Content Include="Views\Deposit\CreateAutoCorrect.cshtml" />
+    <Content Include="Views\Employee\Home.cshtml" />
+    <Content Include="Views\Manager\Home.cshtml" />
+    <Content Include="Views\PurchaseStock\Index.cshtml" />
+    <Content Include="Views\PurchaseStock\Confirmation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -363,7 +374,6 @@
   <ItemGroup>
     <Folder Include="fonts\App_Data\" />
     <Folder Include="Views\Payees\" />
-    <Folder Include="Views\PurchaseStock\" />
     <Folder Include="Views\SellStock\" />
     <Folder Include="Views\StockDetails\" />
   </ItemGroup>

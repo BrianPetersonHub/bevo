@@ -12,6 +12,7 @@ namespace bevo.Models
         Withdrawal,
         Transfer,
         Purchase_Stock,
+        Sell_Stock,
         Pay_Payee,
         Fee
     }
@@ -47,6 +48,8 @@ namespace bevo.Models
         public virtual List<IRAccount> IRAccounts { get; set; }
         public virtual List<StockPortfolio> StockPortfolios { get; set; }
         public virtual Dispute Dispute { get; set; }
+        public virtual Stock Stock { get; set; }
+
 
 
         public Int32 GetTransactionNum()

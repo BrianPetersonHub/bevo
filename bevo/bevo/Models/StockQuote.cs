@@ -9,8 +9,8 @@ namespace bevo.Models
     {
             public String Symbol { get; set; }
             public String Name { get; set; }
-            public Double PreviousClose { get; set; }
-            public Double LastTradePrice { get; set; }
-            public Double Volume { get; set; }
+            public Decimal PreviousClose { get; set; }
+            public Decimal LastTradePrice { get; set; }
+            public Decimal Volume { get; set; }
     }
 }
