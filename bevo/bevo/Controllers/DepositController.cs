@@ -71,15 +71,18 @@ namespace bevo.Controllers
                         return RedirectToAction("DepositAgeError", "IRAccount");
                     }
 
-                    //if deposit totals > 5000, they cannot deposit this amount
-                    Decimal iraDepositTotal = TotalDeposits(transaction.Amount);
-                    if (iraDepositTotal > 5000)
+                    //if total contributions > 5000, they cannot deposit this amount
+                    Decimal iraContributionTotal = TotalContributions(transaction.Amount);
+                    if (iraContributionTotal > 5000)
                     {
-                        Decimal maxDepositAmount = 5000 - (iraDepositTotal - transaction.Amount);
+                        Decimal maxDepositAmount = 5000 - (iraContributionTotal - transaction.Amount);
                         transaction.Amount = maxDepositAmount;
-                        ViewBag.MaxDepositAmount = maxDepositAmount.ToString();
-                        ViewBag.Transaction = transaction;
-                        return RedirectToAction("DepositLimitError", "IRAccount");
+                        //ViewBag.MaxDepositAmount = maxDepositAmount.ToString();
+                        //ViewBag.Transaction = transaction;
+                        //return RedirectToAction("DepositLimitError", "IRAccount");
+
+                        //TODO: this should be returning a transaction.amount of max deoposit amount, but form isnt filled out that way
+                        return View("CreateAutoCorrect", transaction);
                     }
 
                     account.Transactions.Add(transaction);
@@ -249,14 +252,15 @@ namespace bevo.Controllers
         }
 
         //method returns the users total deposits after this transaction
-        public Decimal TotalDeposits(Decimal transactionAmount)
+        public Decimal TotalContributions(Decimal transactionAmount)
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             IRAccount irAccount = user.IRAccount;
             Decimal sumDeposits = 0;
             foreach (var t in irAccount.Transactions)
             {
-                if(t.TransType == TransType.Deposit)
+                if ((t.TransType == TransType.Deposit) || 
+                   ((t.TransType == TransType.Transfer) && (t.ToAccount == irAccount.AccountNum)))
                 {
                     sumDeposits = sumDeposits + (t.Amount);
                 }

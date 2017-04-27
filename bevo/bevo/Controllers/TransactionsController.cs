@@ -68,7 +68,6 @@ namespace bevo.Controllers
             {
                 return HttpNotFound();
             }
-
             ViewBag.SimilarTransactions = Get5SimilarTransactions(transaction);
             return View(transaction);
         }

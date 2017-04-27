@@ -72,8 +72,18 @@ namespace bevo.Controllers
         {
             return View();
         }
+        public ActionResult TransferAgeError()
+        {
+            return View();
+        }
 
         public ActionResult DepositLimitError()
+        {
+            return View();
+        }
+
+        //for transfers going into account
+        public ActionResult TransferLimitError()
         {
             return View();
         }
@@ -83,9 +93,12 @@ namespace bevo.Controllers
             return View();
         }
 
+        //for transfers going out of account
         public ActionResult TransferAgeAmountError()
         {
             return View();
         }
+
+
     }
 }

@@ -309,7 +309,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Disputes\Detail.cshtml" />
     <Content Include="Views\Transactions\SearchTransactions.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
@@ -351,6 +350,9 @@
     <Content Include="Views\IRAccount\WithdrawAgeAmountError.cshtml" />
     <Content Include="Views\IRAccount\TransferAgeAmountError.cshtml" />
     <Content Include="Views\Dispute\Create.cshtml" />
+    <Content Include="Views\IRAccount\TransferAgeError.cshtml" />
+    <Content Include="Views\IRAccount\TransferLimitError.cshtml" />
+    <Content Include="Views\Deposit\CreateAutoCorrect.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -359,7 +361,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="fonts\App_Data\" />
     <Folder Include="Views\Payees\" />
     <Folder Include="Views\StockDetails\" />
     <Folder Include="Views\StockPortfolios\" />
