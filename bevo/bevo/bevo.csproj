@@ -207,6 +207,9 @@
     <EmbeddedResource Include="Migrations\201704271650176_Transaction stock relationship.resx">
       <DependentUpon>201704271650176_Transaction stock relationship.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704272008592_Moved stock price property.resx">
+      <DependentUpon>201704272008592_Moved stock price property.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SeedData\Payee.csv" />
     <EmbeddedResource Include="SeedData\CheckingAccount.csv" />
     <EmbeddedResource Include="SeedData\IRAccount.csv" />
@@ -286,6 +289,10 @@
     <Compile Include="Migrations\201704271650176_Transaction stock relationship.cs" />
     <Compile Include="Migrations\201704271650176_Transaction stock relationship.Designer.cs">
       <DependentUpon>201704271650176_Transaction stock relationship.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704272008592_Moved stock price property.cs" />
+    <Compile Include="Migrations\201704272008592_Moved stock price property.Designer.cs">
+      <DependentUpon>201704272008592_Moved stock price property.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedIdentity.cs" />

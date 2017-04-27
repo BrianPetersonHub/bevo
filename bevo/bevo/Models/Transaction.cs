@@ -29,11 +29,20 @@ namespace bevo.Models
         [Display(Name = "Date (MM/DD/YYYY)")]
         public DateTime Date { get; set; }
 
+
+        //NOTE: I made these nullable for the purposes of buying and selling stocks when you'll have
+        //either a to account or a from account but not both. Also, we will need the from account to be 
+        //null for putting in deposits since they come in from the outside world and therefore
+        //don't originate from another account. 
+        //This means that on the Transfer, Deposit, and Withdraw controllers I changed the data types to
+        //nullable ints. This shouldn't affect functionality since the logic there shouldn't be
+        //asking for an account that doesn't exist, so our business logic ought to stop us from running
+        //in to any sort of run time error here. 
         [Display(Name = "From Account")]
-        public Int32 FromAccount { get; set; }
+        public Int32? FromAccount { get; set; }
 
         [Display(Name = "To Account")]
-        public Int32 ToAccount { get; set; }
+        public Int32? ToAccount { get; set; }
 
         public TransType TransType { get; set; }
 

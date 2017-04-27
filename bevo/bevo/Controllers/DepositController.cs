@@ -28,7 +28,7 @@ namespace bevo.Controllers
         {
             if (ModelState.IsValid)
             {
-                Int32 accountNum = transaction.ToAccount;
+                Int32? accountNum = transaction.ToAccount;
                 String accountType = GetAccountType(accountNum);
                 transaction.TransType = TransType.Deposit;
 
@@ -110,7 +110,7 @@ namespace bevo.Controllers
         }
 
         //method returns string (CHECKING, SAVING, IRA, STOCK PORTFOLIO) depending on what type of account 
-        public String GetAccountType(Int32 accountNum)
+        public String GetAccountType(Int32? accountNum)
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             String accountType;
