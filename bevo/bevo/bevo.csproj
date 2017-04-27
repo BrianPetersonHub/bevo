@@ -239,9 +239,11 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IRAccountController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PurchaseStockController.cs" />
     <Compile Include="Controllers\RoleAdminController.cs" />
     <Compile Include="Controllers\SavingAccountsController.cs" />
     <Compile Include="Controllers\CheckingAccountsController.cs" />
+    <Compile Include="Controllers\SellStockController.cs" />
     <Compile Include="Controllers\StockPortfolioController.cs" />
     <Compile Include="Controllers\StocksController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
@@ -359,6 +361,8 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Payees\" />
+    <Folder Include="Views\PurchaseStock\" />
+    <Folder Include="Views\SellStock\" />
     <Folder Include="Views\StockDetails\" />
   </ItemGroup>
   <PropertyGroup>

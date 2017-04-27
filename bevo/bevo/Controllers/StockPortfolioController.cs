@@ -35,6 +35,8 @@ namespace bevo.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Home", "Customer");
             }
+
+            //TODO: ** Add task to be approved by manager
             return View(stockPortfolio);
         }
 
@@ -55,13 +57,27 @@ namespace bevo.Controllers
             ViewBag.Transactions = GetAllTransactions();
             ViewBag.PortfolioSnapshot = PortfolioSnapshot();
             ViewBag.IsBalanced = BalanceCheck();
-            ViewBag.Quotes = StockQuotes();
 
-
-
+            ViewBag.PortfolioInfo = GetPortfolioInfo();
             return View(stockPortfolio);
         }
 
+        //TODO: ** Get total value of portfolio 
+        public StockPortfolioViewModel GetPortfolioInfo()
+        {
+            // add logic for if null, error, etc.
+
+            StockPortfolioViewModel portfolioInfo = new StockPortfolioViewModel();
+
+            //TODO: ** add logic to each value
+            portfolioInfo.CurrentValue = 0;
+            portfolioInfo.TotalGains = 0;
+            portfolioInfo.TotalFees = 0;
+            portfolioInfo.TotalBonuses = 0;
+            portfolioInfo.CashAvailable = 0;
+
+            return portfolioInfo;
+        }
 
         //Finds list of transactions based on the ID of the user who is currently logged in
         public List<Transaction> GetAllTransactions()
