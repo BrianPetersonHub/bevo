@@ -47,9 +47,9 @@ namespace bevo.Utilities
                     stock = new StockQuote();
                     stock.Symbol = symbol;
                     stock.Name = sa[0];
-                    stock.PreviousClose = double.Parse(sa[1]);
-                    stock.LastTradePrice = double.Parse(sa[2]);
-                    stock.Volume = double.Parse(sa[3]);
+                    stock.PreviousClose = decimal.Parse(sa[1]);
+                    stock.LastTradePrice = decimal.Parse(sa[2]);
+                    stock.Volume = decimal.Parse(sa[3]);
                 }
             }
             catch (Exception e)
