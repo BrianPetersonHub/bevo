@@ -4,35 +4,60 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using bevo.Models;
+using bevo.Controllers;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace bevo.Controllers
 {
     public class SellStockController : Controller
     {
+        private AppDbContext db = new AppDbContext();
+
+
         // GET: SellStock
         public ActionResult Index()
         {
             // get relevant information into view bags
-            ViewBag.AllAccounts = GetAccounts();
-            ViewBag.AllStocks = GetStocks();
+            ViewBag.AllStocks = PortfolioSnapshot();
             ViewBag.StockDetails = GetStockDetails();
             return View();
         }
 
-        //TODO: Get Stock Detail View Models
-        public List<StockViewModel> GetStocks()
+        public List<StockViewModel> PortfolioSnapshot()
         {
-            List<StockViewModel> allStocks = new List<StockViewModel>();
-            // logic to get stock details
-            return allStocks;
-        }
+            //Get the ID of the user who is currently logged in
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+            var user = userManager.FindById(User.Identity.GetUserId());
 
-        //TODO: Get savings, checkings, and cash-portions
-        public List<AccountsViewModel> GetAccounts()
-        {
-            List<AccountsViewModel> allAccounts = new List<AccountsViewModel>();
-            // logic to get checkings, savings, cash-portion and respective balances
-            return allAccounts;
+            //Look at each StockDetail in the person's account and make a StockViewModel to campture information about it 
+            //Get a list of all the stocks in the account 
+            List<StockDetail> stockDetailList = new List<StockDetail>();
+            foreach (StockDetail s in user.StockPortfolio.StockDetails)
+            {
+                stockDetailList.Add(s);
+            }
+
+            //Make list to hold all the stockviewmodel objects
+            List<StockViewModel> listToReturn = new List<StockViewModel>();
+
+            //Add information from each stock record into the viewbag 
+            foreach (StockDetail detail in stockDetailList)
+            {
+                StockViewModel model = new StockViewModel();
+                model.Name = detail.Stock.StockName;
+                model.NumInAccount = detail.Quantity;
+                model.Ticker = detail.Stock.StockTicker;
+
+                StockQuote quote = bevo.Utilities.GetQuote.GetStock(detail.Stock.StockTicker);
+
+                model.CurrentPrice = quote.LastTradePrice;
+
+                //Add the model to the list of models already in the viewbag
+                listToReturn.Add(model);
+            }
+
+            return listToReturn;
         }
 
 

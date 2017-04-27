@@ -19,7 +19,7 @@ namespace bevo.Controllers
             return View();
         }
 
-        //TODO: Get Stock Detail View Models
+        //TODO: Get information for all the stocks they are allowed to buy based on which stocks are in the DB 
         public List<StockViewModel> GetStocks()
         {
             List<StockViewModel> allStocks = new List<StockViewModel>();
@@ -27,7 +27,7 @@ namespace bevo.Controllers
             return allStocks;
         }
 
-        //TODO: Get savings, checkings, and cash-portions
+        //TODO: Get all the accounts for that user that they could use to buy stocks 
         public List<AccountsViewModel> GetAccounts()
         {
             List<AccountsViewModel> allAccounts = new List<AccountsViewModel>();
@@ -35,7 +35,8 @@ namespace bevo.Controllers
             return allAccounts;
         }
 
-        //TODO: Create Purchase
+        //TODO: Create Purchase based on the number of shares, the stock they want to buy, the date they enter for the
+        //purchase and the account that they wanted to execute the purchase 
         public ActionResult PurchaseStock(Int32 numShares, Int32 selectedAccount, Int32 selectedStock, Date date)
         {
             //check if funds are available
