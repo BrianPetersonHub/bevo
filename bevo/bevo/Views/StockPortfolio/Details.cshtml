@@ -18,6 +18,7 @@
             <div class="value-container">
                 <p> [ STOCK VALUE HERE ]</p>
             </div>
+            <p>[ BALANCE STATUS HERE ]</p>
         </div>
         <div class="quick-action-button">
             <p>
@@ -46,23 +47,68 @@
         <div class="table-container">
             <h3 class="table-title">Cash Value</h3>
             <div class="portion-container">
+                <h2>Overview</h2>
                 <table class="table">
                     <tr>
-                        <th>Gains</th>
-                        <td>[Gains Here]</td>
+                        <td>
+                            Gains
+                        </td>
+                        <td>
+                            @ViewBag.TotalGains
+                        </td>
                     </tr>
                     <tr>
-                        <th>Fees</th>
-                        <td>[Fees Here]</td>
+                        <td>
+                            Fees
+                        </td>
+                        <td>
+                            @ViewBag.TotalFees
+                        </td>
                     </tr>
                     <tr>
-                        <th>Bonuses</th>
-                        <td>[Fees Here]</td>
+                        <td>
+                            Bonus
+                        </td>
+                        <td>
+                            @ViewBag.TotalBonuses
+                        </td>
                     </tr>
                     <tr>
-                        <th>Available Cash</th>
-                        <td>[Cash Here]</td>
+                        <td>
+                            Available Cash
+                        </td>
+                        <td>
+                            @ViewBag.AvailableCash
+                        </td>
                     </tr>
+                </table>
+                <h2>Details</h2>
+                <table class="table">
+                    <tr>
+                        <th>
+                            Type
+                        </th>
+                        <th>
+                            Amount
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                    </tr>
+                    @foreach (var t in ViewBag.CashTransactions)
+                    {
+                        <tr>
+                            <td>
+                                @t.type
+                            </td>
+                            <td>
+                                @t.amount
+                            </td>
+                            <td>
+                                @t.description
+                            </td>
+                        </tr>
+                    }
                 </table>
             </div>
         </div>
@@ -93,6 +139,14 @@
                             </td>
                             <td>
                                 @s.CurrentPrice
+                            </td>
+                            <td>
+                                @Html.ActionLink(
+                                linkText: "Details",
+                                actionName: "Details",
+                                controllerName: "Stock",
+                                routeValues: new { id = t.StockID },
+                                htmlAttributes: null)
                             </td>
                         </tr>
                     }

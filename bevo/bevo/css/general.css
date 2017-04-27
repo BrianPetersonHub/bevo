@@ -177,11 +177,22 @@ ____________________________________________________________________*/
     padding-bottom: 10px;
 }
 
+.stock-value p {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: darkred;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 100px;
+    padding-top: 10px;
+}
+
 .value-container {
     width: 100%;
     background-color: #F3F3F3;
     height: auto;
-    margin-bottom: 100px;
     text-align: center;
     display: block;
     padding-top: 10px;
