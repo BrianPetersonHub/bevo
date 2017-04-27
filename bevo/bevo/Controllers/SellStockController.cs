@@ -14,7 +14,6 @@ namespace bevo.Controllers
     {
         private AppDbContext db = new AppDbContext();
 
-
         // GET: SellStock
         public ActionResult Index()
         {

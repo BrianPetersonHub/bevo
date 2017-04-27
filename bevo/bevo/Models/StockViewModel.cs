@@ -35,6 +35,7 @@ namespace bevo.Models
 
     public class AccountsViewModel
     {
+        public Int32 AccountNum { get; set; }
         public String AccountName { get; set; }
         public Decimal Balance { get; set; }
     }
@@ -49,6 +50,7 @@ namespace bevo.Models
 
     public class PurchaseSummaryViewModel
     {
+        public DateTime Date { get; set; }
         public String Name { get; set; }
         public String Ticker { get; set; }
         public Int32 NumSold { get; set; }
@@ -56,4 +58,6 @@ namespace bevo.Models
         public Decimal Fees { get; set; }
         public Decimal NetProfit { get; set; }
     }
+
+
 }
