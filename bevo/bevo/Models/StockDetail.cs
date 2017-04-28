@@ -10,6 +10,8 @@ namespace bevo.Models
     {
         public Int32 StockDetailID { get; set; }
         public Int32 Quantity { get; set; }
+        public decimal PurchasePrice { get; set; }
+
 
         //Stock portfolio can have many Persons
         public virtual StockPortfolio StockPortfolio { get; set; }

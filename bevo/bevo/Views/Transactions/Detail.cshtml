@@ -31,7 +31,14 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.FromAccount)
+            @if (Model.FromAccount == 0)
+            {
+                @("n/a")
+            }
+            else
+            {
+                @Html.DisplayFor(model => model.FromAccount)
+            }
         </dd>
 
         <dt>
@@ -39,7 +46,14 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ToAccount)
+            @if (Model.ToAccount == 0)
+            {
+                @("n/a")
+            }
+            else
+            {
+                @Html.DisplayFor(model => model.ToAccount)
+            }
         </dd>
 
         <dt>
@@ -71,7 +85,33 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Dispute)
+            @if (Model.Dispute != null)
+            {
+                if (Model.Dispute.DisputeStatus == bevo.Models.DisputeStatus.Accepted)
+                {
+                    @("Accepted")
+                }
+                else if (Model.Dispute.DisputeStatus == bevo.Models.DisputeStatus.Adjusted)
+                {
+                    @("Adjusted")
+                }
+                else if (Model.Dispute.DisputeStatus == bevo.Models.DisputeStatus.Rejected)
+                {
+                    @("Rejected")
+                }
+                else if (Model.Dispute.DisputeStatus == bevo.Models.DisputeStatus.Submitted)
+                {
+                    @("Submitted")
+                }
+                else
+                {
+                    @("No status")
+                }
+            }
+            else
+            {
+                @("none")
+            }
         </dd>
 
     </dl>

@@ -24,11 +24,11 @@ namespace bevo.Controllers
         //POST: Create/Deposit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description,Dispute")] Transaction transaction)
+        public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
-                Int32 accountNum = transaction.ToAccount;
+                Int32? accountNum = transaction.ToAccount;
                 String accountType = GetAccountType(accountNum);
                 transaction.TransType = TransType.Deposit;
 
@@ -76,13 +76,18 @@ namespace bevo.Controllers
                     if (iraContributionTotal > 5000)
                     {
                         Decimal maxDepositAmount = 5000 - (iraContributionTotal - transaction.Amount);
-                        transaction.Amount = maxDepositAmount;
-                        //ViewBag.MaxDepositAmount = maxDepositAmount.ToString();
-                        //ViewBag.Transaction = transaction;
-                        //return RedirectToAction("DepositLimitError", "IRAccount");
 
-                        //TODO: this should be returning a transaction.amount of max deoposit amount, but form isnt filled out that way
-                        return View("CreateAutoCorrect", transaction);
+                        if (maxDepositAmount > 0)
+                        {
+                            transaction.Amount = maxDepositAmount;
+                            ModelState.Clear();
+                            return View("CreateAutoCorrect", transaction);
+                        }
+                        else
+                        {
+                            return View("MaxDepositError", "IRAccount");
+                        }
+
                     }
 
                     account.Transactions.Add(transaction);
@@ -110,7 +115,7 @@ namespace bevo.Controllers
         }
 
         //method returns string (CHECKING, SAVING, IRA, STOCK PORTFOLIO) depending on what type of account 
-        public String GetAccountType(Int32 accountNum)
+        public String GetAccountType(Int32? accountNum)
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             String accountType;

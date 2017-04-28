@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace bevo.Models
 {
+    //Used when evaluating an EXISTING stock portfolio as a whole 
     public class StockPortfolioViewModel
     {
         public Decimal CurrentValue { get; set; }
@@ -18,6 +19,7 @@ namespace bevo.Models
 
     }
 
+    //Used when information for each stock within an EXISTING portfolio
     public class StockViewModel
     {
         public String Name { get; set; }
@@ -33,12 +35,23 @@ namespace bevo.Models
         public Int32 NumInAccount { get; set; }
     }
 
+    //Used when displaying information about a POTENTIALLY PURCHASABLE stock
+    public class AvailableStock
+    {
+        public String Name { get; set; }
+        public String Ticker { get; set; }
+        public Decimal CurrentPrice { get; set; }
+    }
+
+    //Used when looking at an account independent of what account type it is
     public class AccountsViewModel
     {
+        public Int32 AccountNum { get; set; }
         public String AccountName { get; set; }
         public Decimal Balance { get; set; }
     }
 
+    //I don't know what this is or why it's here. Please don't use this. I think I'm going to delete it
     public class StockDetailsViewModel
     {
         public String Name { get; set; }
@@ -47,6 +60,7 @@ namespace bevo.Models
         public Decimal Delta { get; set; }
     }
 
+    //I don't know what this is for either. Don't use it, please. 
     public class PurchaseSummaryViewModel
     {
         public DateTime Date { get; set; }

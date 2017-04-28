@@ -13,7 +13,6 @@ namespace bevo.Models
         public Int32 StockID { get; set; }
         public String StockName { get; set; }
         public String StockTicker { get; set; }
-        public Decimal PurchasePrice { get; set; }
         public StockType TypeOfStock { get; set; }
 
 

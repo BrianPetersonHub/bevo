@@ -88,6 +88,11 @@ namespace bevo.Models
         public DbSet<StockPortfolio> StockPortfolios { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
 
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Transaction>().HasOptional(f => f.Dispute).WithRequired(x => x.Transaction);
+        }
 
         //DONE: Make sure that your connection string name is correct here.
         public AppDbContext()

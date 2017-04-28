@@ -39,6 +39,18 @@ namespace bevo.Controllers
             {
                 AppUser user = db.Users.Find(User.Identity.GetUserId());
                 user.IRAccount = irAccount;
+
+                //TODO: make the initial balance count as a deposit
+                //Transaction t = new Transaction();
+
+                //t.Date = DateTime.Today;
+                //t.ToAccount = irAccount.AccountNum;
+                //t.TransType = TransType.Deposit;
+                //t.Amount = irAccount.Balance;
+                //t.Description = "Initial deposit amount";
+                //t.ToAccount = irAccount.AccountNum;
+                //irAccount.Transactions.Add(t);
+
                 db.SaveChanges();
                 return RedirectToAction("Home", "Customer");
             }
@@ -77,7 +89,7 @@ namespace bevo.Controllers
             return View();
         }
 
-        public ActionResult DepositLimitError()
+        public ActionResult MaxDepositError()
         {
             return View();
         }
