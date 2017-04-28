@@ -24,7 +24,7 @@ namespace bevo.Messaging
 
             //Add anything that you need to the body of the message
             // /n is a new line – this will add some white space after the main body of the message
-            String finalMessage = emailBody + "\n\n This is a disclaimer that will be on all messages. ";
+            String finalMessage = emailBody + "\n\n If you are dissatisfied with any of our services, you can contact us at test@example.com. ";
 
             //Create an email address object for the sender address
             MailAddress senderEmail = new MailAddress("patrickmis375@gmail.com", "Team 1");
@@ -36,6 +36,7 @@ namespace bevo.Messaging
             mm.From = senderEmail;
             mm.To.Add(new MailAddress(toEmailAddress));
             mm.Body = finalMessage;
+            mm.IsBodyHtml = true;
             client.Send(mm);
             //NOTE: Works but receiving gmail account needs to have security settings switched to "Less Secure"
         }

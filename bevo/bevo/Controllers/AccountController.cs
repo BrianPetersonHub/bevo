@@ -209,7 +209,7 @@ namespace bevo.Controllers
                     protocol: Request.Url.Scheme
                     );
 
-                EmailMessaging.SendEmail(user.Email, "Forgot Password", "You have requested to change your password. Go <a href=\"" + resetPassUrl + "\">here</a> to  reset your password.");
+                EmailMessaging.SendEmail(user.Email, "Forgot Password", "You have requested to change your password. Click <a href=\'"+ resetPassUrl + "'>here</a> to  reset your password.");
 
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
