@@ -225,6 +225,9 @@
     <EmbeddedResource Include="Migrations\201704281940557_Attempting to restore everything.resx">
       <DependentUpon>201704281940557_Attempting to restore everything.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704281947292_Putting foreign key back on dispute.resx">
+      <DependentUpon>201704281947292_Putting foreign key back on dispute.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SeedData\Payee.csv" />
     <EmbeddedResource Include="SeedData\CheckingAccount.csv" />
     <EmbeddedResource Include="SeedData\IRAccount.csv" />
@@ -328,6 +331,10 @@
     <Compile Include="Migrations\201704281940557_Attempting to restore everything.cs" />
     <Compile Include="Migrations\201704281940557_Attempting to restore everything.Designer.cs">
       <DependentUpon>201704281940557_Attempting to restore everything.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704281947292_Putting foreign key back on dispute.cs" />
+    <Compile Include="Migrations\201704281947292_Putting foreign key back on dispute.Designer.cs">
+      <DependentUpon>201704281947292_Putting foreign key back on dispute.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedIdentity.cs" />
