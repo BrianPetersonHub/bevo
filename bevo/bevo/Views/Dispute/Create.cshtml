@@ -1,4 +1,4 @@
-﻿@model bevo.Models.Dispute
+﻿@model bevo.Models.DisputeTransactionViewModel
 
 @{
     ViewBag.Title = "Create";
@@ -30,6 +30,8 @@
                 @Html.ValidationMessageFor(model => model.DisputedAmount, "", new { @class = "text-danger" })
             </div>
         </div>
+
+        @Html.HiddenFor(model => model.TransactionID)
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

@@ -31,7 +31,7 @@ namespace bevo.Messaging
 
 
             MailMessage mm = new MailMessage();
-            mm.Subject = "Team 01 - " + emailSubject;
+            mm.Subject = "Team 1 - " + emailSubject;
             mm.Sender = senderEmail;
             mm.From = senderEmail;
             mm.To.Add(new MailAddress(toEmailAddress));

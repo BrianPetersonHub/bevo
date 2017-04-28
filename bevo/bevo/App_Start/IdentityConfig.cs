@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using bevo.Models;
+using Microsoft.Owin.Security.DataProtection;
 
 namespace bevo
 {
@@ -31,6 +32,11 @@ namespace bevo
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
             };
+
+            //NOTE: Stan added this
+            var provider = new DpapiDataProtectionProvider("bevo");
+            manager.UserTokenProvider = new DataProtectorTokenProvider<AppUser, string>(provider.Create("UserToken"))
+                as IUserTokenProvider<AppUser, string>;
 
             // DONE: Configure validation logic for passwords
             manager.PasswordValidator = new PasswordValidator
