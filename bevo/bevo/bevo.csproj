@@ -210,6 +210,15 @@
     <EmbeddedResource Include="Migrations\201704272008592_Moved stock price property.resx">
       <DependentUpon>201704272008592_Moved stock price property.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704281819071_DisputeAlter.resx">
+      <DependentUpon>201704281819071_DisputeAlter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704281832308_Dispute2.resx">
+      <DependentUpon>201704281832308_Dispute2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704281834142_NoahsTesting.resx">
+      <DependentUpon>201704281834142_NoahsTesting.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SeedData\Payee.csv" />
     <EmbeddedResource Include="SeedData\CheckingAccount.csv" />
     <EmbeddedResource Include="SeedData\IRAccount.csv" />
@@ -293,6 +302,18 @@
     <Compile Include="Migrations\201704272008592_Moved stock price property.cs" />
     <Compile Include="Migrations\201704272008592_Moved stock price property.Designer.cs">
       <DependentUpon>201704272008592_Moved stock price property.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704281819071_DisputeAlter.cs" />
+    <Compile Include="Migrations\201704281819071_DisputeAlter.Designer.cs">
+      <DependentUpon>201704281819071_DisputeAlter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704281832308_Dispute2.cs" />
+    <Compile Include="Migrations\201704281832308_Dispute2.Designer.cs">
+      <DependentUpon>201704281832308_Dispute2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704281834142_NoahsTesting.cs" />
+    <Compile Include="Migrations\201704281834142_NoahsTesting.Designer.cs">
+      <DependentUpon>201704281834142_NoahsTesting.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedIdentity.cs" />
