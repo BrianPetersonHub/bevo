@@ -14,7 +14,7 @@ namespace bevo.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: PurchaseStock
-        public ActionResult PurchaseStock()
+        public ActionResult Index()
         {
             // add relevant information to viewbag
             ViewBag.AllAccounts = GetAccounts();
