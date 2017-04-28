@@ -241,7 +241,7 @@ namespace bevo.Controllers
             }
 
             // get savings
-            foreach (var s in checkingAccounts)
+            foreach (var s in savingAccounts)
             {
                 AccountsViewModel accountToAdd = new AccountsViewModel();
                 accountToAdd.AccountNum = s.AccountNum;

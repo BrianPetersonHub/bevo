@@ -2,52 +2,70 @@
     ViewBag.Title = "purchase stock";
 }
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("PurchaseStock", "PurchaseStock", FormMethod.Get))
 {
-    @Html.AntiForgeryToken()
+    <p class="form-group">
+        Date: @Html.TextBox("enteredDate", null, new { @class = "form-control"}) <br />
+        @Html.DropDownList("selectedAccount", (SelectList)ViewBag.SelectAccount, new { @class = "form-control" }) <br/>
+        @Html.DropDownList("selectStock", (SelectList)ViewBag.SelectStock, new { @class = "form-control" }) <br/>
+        Name: @Html.TextBox("numShares", null, new { @class="form-control" }) <br/>
+        <input type="submit" value="Submit" class="btn btn-default" />
+    </p>
 
-    <div class="form-horizontal">
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @*date*@
-
-        <p>Available Accounts for Purchasing</p>
-       <table class="table">
+    <p>Available Accounts to purchase from</p>
+    <table class="table">
+        <tr>
+            <th>
+                Account Name
+            </th>
+            <th>
+                Balance
+            </th>
+        </tr>
+        @foreach (var a in ViewBag.AllAccounts)
+        {
             <tr>
-                <th>
-                    Account Name
-                </th>
-                <th>
-                    Balance
-                </th>
+                <td>
+                    @a.AccountName
+                </td>
+                <td>
+                    @a.Balance
+                </td>
             </tr>
-           @foreach (var a in ViewBag.AllAccounts)
-           {
-               <tr>
-                   <td>
-                       a.AccountName
-                   </td>
-                   <td>
-                       a.Balance
-                   </td>
-               </tr>
-           }
-       </table>
+        }
+    </table>
 
-        @Html.DropDownList("SelectedAccount", (SelectList)ViewBag.SelectAccount, new { @class= "form-control" } )
-        <br /><br />
+    <p> Available Stocks for Purchasing </p>
+        <table class="table">
+        <tr>
+            <th>
+                Stock Name
+            </th>
+            <th>
+                Stock Ticker
+            </th>
+            <th>
+                Current Price
+            </th>
+        </tr>
+        @foreach (var s in ViewBag.AvailableStocks)
+            {
+                <tr>
+                    <td>
+                        @s.Name
+                    </td>
+                    <td>
+                        @s.Ticker
+                    </td>
+                    <td>
+                        @s.CurrentPrice
+                    </td>
+                </tr>
+            }
+        </table>
 
-        @*TODO: Display available stocks to purchase*@
+    
 
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @*quantity*@
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Submit" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
 }
 
 
