@@ -24,7 +24,7 @@ namespace bevo.Controllers
         //POST: Create/Deposit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description,Dispute")] Transaction transaction)
+        public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {

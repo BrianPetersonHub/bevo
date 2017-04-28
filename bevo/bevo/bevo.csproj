@@ -210,6 +210,7 @@
     <EmbeddedResource Include="Migrations\201704272008592_Moved stock price property.resx">
       <DependentUpon>201704272008592_Moved stock price property.cs</DependentUpon>
     </EmbeddedResource>
+<<<<<<< HEAD
     <EmbeddedResource Include="Migrations\201704272306481_Updating the DB for Barrett.resx">
       <DependentUpon>201704272306481_Updating the DB for Barrett.cs</DependentUpon>
     </EmbeddedResource>
@@ -221,6 +222,16 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704281914258_Doing this for Barrett.resx">
       <DependentUpon>201704281914258_Doing this for Barrett.cs</DependentUpon>
+=======
+    <EmbeddedResource Include="Migrations\201704281819071_DisputeAlter.resx">
+      <DependentUpon>201704281819071_DisputeAlter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704281832308_Dispute2.resx">
+      <DependentUpon>201704281832308_Dispute2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704281834142_NoahsTesting.resx">
+      <DependentUpon>201704281834142_NoahsTesting.cs</DependentUpon>
+>>>>>>> 78870b1b5743327e6da471f04e32c7c1ac4f5bf3
     </EmbeddedResource>
     <EmbeddedResource Include="SeedData\Payee.csv" />
     <EmbeddedResource Include="SeedData\CheckingAccount.csv" />
@@ -306,6 +317,7 @@
     <Compile Include="Migrations\201704272008592_Moved stock price property.Designer.cs">
       <DependentUpon>201704272008592_Moved stock price property.cs</DependentUpon>
     </Compile>
+<<<<<<< HEAD
     <Compile Include="Migrations\201704272306481_Updating the DB for Barrett.cs" />
     <Compile Include="Migrations\201704272306481_Updating the DB for Barrett.Designer.cs">
       <DependentUpon>201704272306481_Updating the DB for Barrett.cs</DependentUpon>
@@ -321,12 +333,26 @@
     <Compile Include="Migrations\201704281914258_Doing this for Barrett.cs" />
     <Compile Include="Migrations\201704281914258_Doing this for Barrett.Designer.cs">
       <DependentUpon>201704281914258_Doing this for Barrett.cs</DependentUpon>
+=======
+    <Compile Include="Migrations\201704281819071_DisputeAlter.cs" />
+    <Compile Include="Migrations\201704281819071_DisputeAlter.Designer.cs">
+      <DependentUpon>201704281819071_DisputeAlter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704281832308_Dispute2.cs" />
+    <Compile Include="Migrations\201704281832308_Dispute2.Designer.cs">
+      <DependentUpon>201704281832308_Dispute2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704281834142_NoahsTesting.cs" />
+    <Compile Include="Migrations\201704281834142_NoahsTesting.Designer.cs">
+      <DependentUpon>201704281834142_NoahsTesting.cs</DependentUpon>
+>>>>>>> 78870b1b5743327e6da471f04e32c7c1ac4f5bf3
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedIdentity.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CheckingAccount.cs" />
     <Compile Include="Models\Dispute.cs" />
+    <Compile Include="Models\DisputeTransactionViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\IdentityRoles.cs" />
     <Compile Include="Models\IRAccount.cs" />
@@ -398,6 +424,8 @@
     <Content Include="Views\Manager\Home.cshtml" />
     <Content Include="Views\PurchaseStock\Index.cshtml" />
     <Content Include="Views\PurchaseStock\Confirmation.cshtml" />
+    <Content Include="Views\IRAccount\MaxDepositError.cshtml" />
+    <Content Include="Views\Dispute\Confirmation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
