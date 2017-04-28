@@ -51,6 +51,20 @@ namespace bevo.Models
         public Decimal Balance { get; set; }
     }
 
+    //Used when looking at stock purchase transactions to just store how many shares of the stock
+    //were bought and at what price for each individual transaction
+    public class TransactionViewModel
+    {
+        public Int32 NumPurchased { get; set; }
+        public Decimal PurchasePrice { get; set; }
+
+    }
+
+
+
+
+
+
     //I don't know what this is or why it's here. Please don't use this. I think I'm going to delete it
     public class StockDetailsViewModel
     {

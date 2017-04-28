@@ -17,8 +17,13 @@ namespace bevo.Controllers
         public ActionResult Index()
         {
             // add relevant information to viewbag
+            //Returns all the accounts that the user is allowed to use to purchase stock 
             ViewBag.AllAccounts = GetAccounts();
+            //Gets availablestock viewmodel objects for each available stock
+            ViewBag.AvailableStocks = GetStocks();
+            //Returns a selectlist with stocks to choose 
             ViewBag.SelectStock = SelectStock();
+            //Returns a selectlist with the account they choase 
             ViewBag.SelectAccount = SelectAccount();
 
             return View();
@@ -257,6 +262,7 @@ namespace bevo.Controllers
         }
         
         //Create a select list of all the accoutns for the user  
+        //BASED ON ACCOUNTSVIEWMODEL OBJECTS
         public IEnumerable<SelectListItem> SelectAccount()
         {
             List<AccountsViewModel> allAccounts = GetAccounts();
@@ -265,9 +271,15 @@ namespace bevo.Controllers
         }
 
         //Create a select list of all the available stocks for the user
+        //BAED ON STOCK OBJECTS
         public IEnumerable<SelectListItem> SelectStock()
         {
-            List<AvailableStock> allStocks = GetStocks();
+            var query = from s in db.Stocks
+                        select s;
+
+            List<Stock> allStocks = query.ToList();
+
+
             SelectList selectStock = new SelectList(allStocks, "StockID", "StockName");
             return selectStock;
         }
