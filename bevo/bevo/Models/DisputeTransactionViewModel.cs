@@ -9,11 +9,6 @@ namespace bevo.Models
 {
     public class DisputeTransactionViewModel
     {
-        [Key, ForeignKey("Transaction")]
-        public Int32 DisputeID { get; set; }
-
-        public DisputeStatus DisputeStatus { get; set; }
-
         public String Message { get; set; }
 
         [Display(Name = "Correct amount")]

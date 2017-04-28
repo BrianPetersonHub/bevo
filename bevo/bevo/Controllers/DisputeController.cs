@@ -16,7 +16,7 @@ namespace bevo.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: Dispute
-        public ActionResult Create(int? id)  //this is an id for a transaction
+        public ActionResult Create(int? id)  //this is an id for a transaction (which will also be the disputes id)
         {
             if (id == null)
             {
@@ -32,21 +32,18 @@ namespace bevo.Controllers
         //POST: Create/Dispute
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "DisputeID,DisputeStatus,Message,DisputedAmount,TransactionID")] DisputeTransactionViewModel dt)
+        public ActionResult Create([Bind(Include = "Message,DisputedAmount,TransactionID")] DisputeTransactionViewModel dt)
         {
             if (ModelState.IsValid)
             {
-                //TODO: how to find this specific transaction
                 Transaction transaction = db.Transactions.Find(dt.TransactionID);
                 Dispute dispute = new Dispute();
-                dispute.DisputeID = dt.DisputeID;
-                dispute.DisputeStatus = DisputeStatus.Submitted;
                 dispute.Message = dt.Message;
                 dispute.DisputedAmount = dt.DisputedAmount;
-                //transaction.Dispute = dispute;
-                dispute.Transaction = transaction;
-                db.SaveChanges();
+                dispute.DisputeStatus = DisputeStatus.Submitted;
+                transaction.Dispute = dispute;
 
+                db.SaveChanges();
                 return RedirectToAction("Confirmation");
             }
             return View(dt);
