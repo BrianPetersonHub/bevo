@@ -14,7 +14,7 @@ namespace bevo.Controllers
     {
         private AppDbContext db = new AppDbContext();
 
-        // GET: Customer
+        // GET: Customer/Home
         public ActionResult Home()
         {
             ViewBag.CheckingAccounts = GetAllCheckingAccts();
@@ -47,6 +47,18 @@ namespace bevo.Controllers
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             StockPortfolio stockPortfolio = user.StockPortfolio;
             return stockPortfolio;
+        }
+
+        //GET: Customer/ManageAccount
+        public ActionResult ViewInfo()
+        {
+            return View();
+        }
+
+        //GET: Customer/Edit
+        public ActionResult EditInfo()
+        {
+            return View();
         }
     }
 }

@@ -414,6 +414,7 @@
     <Content Include="Views\PurchaseStock\Index.cshtml" />
     <Content Include="Views\PurchaseStock\Confirmation.cshtml" />
     <Content Include="Views\Dispute\Confirmation.cshtml" />
+    <Content Include="Views\Customer\ViewInfo.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

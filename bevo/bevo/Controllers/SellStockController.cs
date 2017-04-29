@@ -41,7 +41,6 @@ namespace bevo.Controllers
         //TODO: Create Purchase
         public ActionResult SellStock(Int32 numShares, Int32 selectedStock, Date date)
         {
-
             //Get the ID for the user who is currently logged in 
             UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
             var user = userManager.FindById(User.Identity.GetUserId());
@@ -79,7 +78,7 @@ namespace bevo.Controllers
             foreach(Transaction t in relevantTransactions)
             {
                 TransactionViewModel trvmobj = new TransactionViewModel();
-                trvmobj.NumPurchased = 
+                //trvmobj.NumPurchased = 
                     //HOW THE FUCK DO I KNOW HOW MUCH THE STOCK WAS ORIGINALLY PURCHASED FOR
                     //I MAY NEED TO ADD A NULLABLE PROPERTY ON THE TRANSACTION MODEL AND JUST 
                     //MAKE A NOTE OF HOW MANY OF THAT STOCK WERE PURCHASED WHEN I MAKE THE TRANSACTION
