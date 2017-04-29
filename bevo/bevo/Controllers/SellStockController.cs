@@ -79,11 +79,36 @@ namespace bevo.Controllers
             foreach(Transaction t in relevantTransactions)
             {
                 TransactionViewModel trvmobj = new TransactionViewModel();
-                //trvmobj.NumPurchased = 
-                    //HOW THE FUCK DO I KNOW HOW MUCH THE STOCK WAS ORIGINALLY PURCHASED FOR
-                    //I MAY NEED TO ADD A NULLABLE PROPERTY ON THE TRANSACTION MODEL AND JUST 
-                    //MAKE A NOTE OF HOW MANY OF THAT STOCK WERE PURCHASED WHEN I MAKE THE TRANSACTION
-                    //OTHERWISE I DON'T KNOW HOW I'M GOING TO HAV THIS INFORMATION
+
+                trvmobj.NumPurchased = t.NumShares;
+                trvmobj.PurchasePrice = (t.Amount / t.NumShares);
+                transViewModels.Add(trvmobj);
+            }
+
+
+            //Running number of shares still to be subtracted
+            Int32 runningShares = numShares;
+            //Total ORIGINAL market value of the stocks sold from the account
+            //We assume FIFO for stock sales 
+            Decimal ? stockMarketValueReduction = new Decimal?();
+            stockMarketValueReduction = 0;
+
+            //Logic to get how much the original stock market value should decrease by
+            //Based on incrementally determining how many transactions need to be negated to
+            //sell as many stocks as the user wants to sell 
+            Int32 listIndex = 0;
+            while (numShares > 0)
+            {
+                //Take one away from the stocks in that purchase 
+                transViewModels[listIndex].NumPurchased -= 1;
+                //Add that stock's original market value to the amount to be subtracted from the 
+                //StockMarketValue of the portfolio
+                stockMarketValueReduction += transViewModels[listIndex].PurchasePrice;
+                //If that is all the stocks from that transaction, move on to the next one
+                if (transViewModels[listIndex].NumPurchased == 0)
+                {
+                    listIndex += 1;
+                }
             }
 
 
