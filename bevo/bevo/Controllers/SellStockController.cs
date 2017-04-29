@@ -90,7 +90,7 @@ namespace bevo.Controllers
             //Make an actual Transaction object to record the sale of stock 
             Transaction transToAdd = new Transaction();
             //Assign the SMVRedux property on the transaction record  
-            transToAdd.SMVRedux = stockMarketValueReduction;
+           //  transToAdd.SMVRedux = stockMarketValueReduction;
             transToAdd.Stock = detailInQuestion.Stock;
             transToAdd.FromAccount = portfolio.AccountNum;
             transToAdd.StockPortfolios.Add(portfolio);

@@ -39,14 +39,16 @@
                 <p>Available Accounts to purchase from</p>
                 <table class="table">
                     <tr>
-                        <th>Account Name</th>
-                        <th>Balance</th>
+                        <th>Stock</th>
+                        <th>Ticker</th>
+                        <th>Current Price</th>
                     </tr>
-                    @foreach (var a in ViewBag.AllAccounts)
+                    @foreach (var s in ViewBag.AvailableStocks)
                 {
                         <tr>
-                            <td>@a.AccountName</td>
-                            <td>@a.Balance</td>
+                            <td>@s.Name</td>
+                            <td>@s.Ticker</td>
+                            <td>@s.CurrentPrice</td>
                         </tr>
                     }
                 </table>

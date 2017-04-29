@@ -46,7 +46,7 @@ namespace bevo.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "StockID,StockName,StockTicker,PurchasePrice,TypeOfStock")] Stock stock)
+        public ActionResult Create([Bind(Include = "StockID,StockName,StockTicker,TypeOfStock")] Stock stock)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +78,7 @@ namespace bevo.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "StockID,StockName,StockTicker,PurchasePrice,TypeOfStock")] Stock stock)
+        public ActionResult Edit([Bind(Include = "StockID,StockName,StockTicker,TypeOfStock")] Stock stock)
         {
             if (ModelState.IsValid)
             {
