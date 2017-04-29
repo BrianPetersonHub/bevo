@@ -228,6 +228,9 @@
     <EmbeddedResource Include="Migrations\201704281947292_Putting foreign key back on dispute.resx">
       <DependentUpon>201704281947292_Putting foreign key back on dispute.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704291612052_Updating transaction class again.resx">
+      <DependentUpon>201704291612052_Updating transaction class again.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SeedData\Payee.csv" />
     <EmbeddedResource Include="SeedData\CheckingAccount.csv" />
     <EmbeddedResource Include="SeedData\IRAccount.csv" />
@@ -335,6 +338,10 @@
     <Compile Include="Migrations\201704281947292_Putting foreign key back on dispute.cs" />
     <Compile Include="Migrations\201704281947292_Putting foreign key back on dispute.Designer.cs">
       <DependentUpon>201704281947292_Putting foreign key back on dispute.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704291612052_Updating transaction class again.cs" />
+    <Compile Include="Migrations\201704291612052_Updating transaction class again.Designer.cs">
+      <DependentUpon>201704291612052_Updating transaction class again.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedIdentity.cs" />
