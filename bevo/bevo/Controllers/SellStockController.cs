@@ -22,24 +22,24 @@ namespace bevo.Controllers
             //Remember that these objects contain a property saying how many of each stock are in
             //that particular account as well as a property for the current price of the stock
             ViewBag.GetAcctStocks = GetAcctStocks();
-            ViewBag.StockDetails = GetStockDetails();
+            ViewBag.SelectStock = SelectStock();
+
             return View();
         }
 
 
         //TODO: Get stock changes
-        public List<StockDetailsViewModel> GetStockDetails()
+        //I'm not sure if this is necessary. Let's discuss it next time we meet. 
+        public List<StockViewModel> GetStockDetails()
         {
-            List<StockDetailsViewModel> stockDetails = new List<StockDetailsViewModel>();
-            // logic to get stock details
-            // this is to display the changes in stock prices
-            // i am making the decision here to not show a graph of stock prices bc that's too complicated 
+            List<StockViewModel> stockDetails = new List<StockViewModel>();
+            ////
             return stockDetails;
         }
 
 
-        //TODO: Create Purchase
-        public ActionResult SellStock(Int32 numShares, Int32 selectedStock, Date date)
+        //Create Purchase: Extensive description if you expand the method
+        public ActionResult SellStock(Int32 numShares, Int32 selectedStock, DateTime dateEntered)
         {
             //Get the ID for the user who is currently logged in 
             UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
@@ -47,15 +47,16 @@ namespace bevo.Controllers
             //Find the portfolio belonging to this user 
             StockPortfolio portfolio = user.StockPortfolio;
 
+            ///SUMMARY OF THIS METHOD
             //Get a list of all the transactions for buying that stock and then determine the purchase
             //price based upon that information. Subtract however many shares you need going to the first
-            //purchase transaction first and then workign your way forward. For each one, remove the 
-            //corresponding value from the current value portion of the stock portfolio we're dealing with
-            //and then subtract however much the stock is worth NOW from gains. The gains part is easy.
-            //The other part may prove troublesome. 
+            //purchase transaction first and then workign your way forward. 
+            //Then make a transaction object to reflect all of this information 
+            ///SUMMARY OF THIS METHOD 
 
             //First, make sure they have adequate shares to begin with 
             //If they don't, boot them back to the sale page 
+            //also boot them if they try to sell a negative number of shares 
             StockDetail detailInQuestion = new StockDetail();
             foreach (StockDetail sd in portfolio.StockDetails)
             {
@@ -64,7 +65,7 @@ namespace bevo.Controllers
                     detailInQuestion = sd;
                 }
             }
-            if(numShares > detailInQuestion.Quantity)
+            if (numShares > detailInQuestion.Quantity || numShares < 0)
             {
                 return View();
             }
@@ -73,7 +74,7 @@ namespace bevo.Controllers
             List<Transaction> relevantTransactions = GetRelevantTransactions(detailInQuestion);
 
 
-            List<TransactionViewModel> transViewModel = new List<TransactionViewModel>();
+            List<TransactionViewModel> transViewModels = new List<TransactionViewModel>();
             //Make a list of transactionviewmodel objects to reflect each of these transactions 
             foreach(Transaction t in relevantTransactions)
             {
@@ -86,24 +87,54 @@ namespace bevo.Controllers
             }
 
 
+            //Make an actual Transaction object to record the sale of stock 
+            Transaction transToAdd = new Transaction();
+            //Assign the SMVRedux property on the transaction record  
+            transToAdd.SMVRedux = stockMarketValueReduction;
+            transToAdd.Stock = detailInQuestion.Stock;
+            transToAdd.FromAccount = portfolio.AccountNum;
+            transToAdd.StockPortfolios.Add(portfolio);
+            transToAdd.Amount = numShares * bevo.Utilities.GetQuote.GetStock(detailInQuestion.Stock.StockTicker).LastTradePrice;
+            transToAdd.Description = "Sold " + numShares.ToString() + " shares of " + detailInQuestion.Stock.StockName +
+                                     " (" + detailInQuestion.Stock.StockTicker + ") stock for $" + transToAdd.Amount.ToString();
+            transToAdd.Date = dateEntered;
+            transToAdd.TransType = TransType.Sell_Stock;
+
+            //Save this to the DB
+            db.Transactions.Add(transToAdd);
+            db.SaveChanges();
+
+            //create a transaction to reflect the fee
+            Int32 sellStockFee = 10;
+            Transaction feeTransaction = new Transaction();
+            feeTransaction.FromAccount = portfolio.AccountNum;
+            feeTransaction.Date = dateEntered;
+            feeTransaction.TransType = TransType.Fee;
+            feeTransaction.Amount = sellStockFee;
+            feeTransaction.Description = "Fee incurred from selling " + numShares.ToString() + " shares of " +
+                                         detailInQuestion.Stock.StockName + " (" + detailInQuestion.Stock.StockTicker +
+                                         ") stock on " + dateEntered.ToString();
+            feeTransaction.StockPortfolios.Add(portfolio);
+
+            //Take away the appropriate number of stocks from the relevant stockdetail object attached to this 
+            //portfolio 
+            detailInQuestion.Quantity -= numShares;
+            db.Entry(detailInQuestion).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+
+            //Subtract the ten dollars from the stock portfolio cash section as a result of the fee for selling stock
+            //Assume here that they have at least ten bucks in their account 
+            portfolio.Balance -= sellStockFee;
+            db.Entry(portfolio).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
 
 
-            //numShares cannot be <0 or > currentshares 
-            //if unsuccessful: error message
-            //if successful:
-                // create two transactions
-                // 1) type: deposit, amount: $amount, Description: string
-                // 2) type: Fee, amount: $amount, Description: string
-                // create summary screen View model object
-                // return RedirectToAction(SummaryScreen); ? I think this is the right way to do this, not sure
-
+            //Redirect to the details page
             return RedirectToAction("Details", "StockPortfolio");
         }
 
-        //TODO: summary screen display view
         public ActionResult SummaryScreen()
         {
-            //TODO: create view for summary screen
             return View();
         }
 
@@ -188,15 +219,9 @@ namespace bevo.Controllers
 
 
 
-
-
-
-
-
-
-
-
         //Get all the accounts for that user that they could use to buy stocks 
+        //This is relavent for getting all the transactions in which they purchased 
+        //a given stock 
         public List<AccountsViewModel> GetAccounts()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());

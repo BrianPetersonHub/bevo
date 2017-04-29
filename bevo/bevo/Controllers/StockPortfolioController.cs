@@ -122,7 +122,7 @@ namespace bevo.Controllers
                 }
             }
             
-            //Get a list of all the stock tieckers in the account 
+            //Get a list of all the stock tickers in the account 
             //Also get the value of the STOCKMARKETVALUE PORTION of the portfolio
             List<String> tickersInAccount = new List<String>();
             foreach (Transaction t in user.StockPortfolio.Transactions)
@@ -134,8 +134,8 @@ namespace bevo.Controllers
                 }
                 else if(t.TransType == TransType.Sell_Stock)
                 {
-                    decimal stockVal = t.Amount;
-                    portfolioInfo.StockMarketValue -= stockVal;
+                    Decimal? stockMarketValueReduction = t.SMVRedux;
+                    portfolioInfo.StockMarketValue -= stockMarketValueReduction;
                 }
 
                 tickersInAccount.Add(t.Stock.StockTicker);
@@ -147,6 +147,7 @@ namespace bevo.Controllers
             if (bal == true)
             {
                 portfolioInfo.Balanced = true;
+                portfolioInfo.TotalBonuses = 0;
                 portfolioInfo.TotalBonuses += (portfolioInfo.CashAvailable - portfolioInfo.TotalFees) * .1m;
                 portfolioInfo.TotalBonuses += portfolioInfo.StockMarketValue * .1m;
             }

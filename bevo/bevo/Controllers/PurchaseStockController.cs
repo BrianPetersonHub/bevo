@@ -36,6 +36,13 @@ namespace bevo.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PurchaseStock(Int32 numShares, Int32 selectedAccount, Int32 selectedStock, DateTime enteredDate)
         {
+            //If they tried to purchase a negative number of shares, boot them back to the page
+            if(numShares < 0)
+            {
+                return View();
+            }
+
+
             //SUMMARY
             //THIS WILL MAKE A NEW TRANSACTION OBJECT THAT WILL REFLECT THE INFORMATION FROM THE PURCHASE STOCK PAGE
             //SUMMARY
@@ -100,7 +107,7 @@ namespace bevo.Controllers
             if (saQuery != null)
             {
                 trans.SavingAccounts.Add(connectedSavingsAccount[0]);
-                trans.FromAccount = connectedCheckingAccount[0].AccountNum;
+                trans.FromAccount = connectedSavingsAccount[0].AccountNum;
                 if (connectedSavingsAccount[0].Balance < (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice))
                 {
                     return View();
@@ -120,7 +127,7 @@ namespace bevo.Controllers
             if (spQuery != null)
             {
                 trans.StockPortfolios.Add(connectedStockPortfolio[0]);
-                trans.FromAccount = connectedCheckingAccount[0].AccountNum;
+                trans.FromAccount = connectedStockPortfolio[0].AccountNum;
                 if (connectedStockPortfolio[0].Balance < (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice))
                 {
                     return View();
@@ -132,6 +139,8 @@ namespace bevo.Controllers
             }
 
 
+            //Set number of stocks purchased in this transaction
+            trans.NumShares = numShares;
 
             //Set transaction amount 
             trans.Amount = (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice);
@@ -192,6 +201,10 @@ namespace bevo.Controllers
                 db.StockDetails.Add(detail);
                 db.SaveChanges();
             }
+
+
+            //TODO: Figure out if I need to add a transaction for the fee associated with stock purchase 
+
 
             //Redirect the user to the details page on the stockportfoliocontroller
             return RedirectToAction("Details", "StockPortfolio");
