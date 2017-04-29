@@ -9,13 +9,13 @@ namespace bevo.Models
     //Used when evaluating an EXISTING stock portfolio as a whole 
     public class StockPortfolioViewModel
     {
-        public Decimal CurrentValue { get; set; }
+        public Decimal? CurrentValue { get; set; }
         public bool Balanced { get; set; }
-        public Decimal TotalGains { get; set; }
-        public Decimal TotalFees { get; set; }
-        public Decimal TotalBonuses { get; set; }
-        public Decimal CashAvailable { get; set; }
-        public Decimal StockMarketValue { get; set; }
+        public Decimal? TotalGains { get; set; }
+        public Decimal? TotalFees { get; set; }
+        public Decimal? TotalBonuses { get; set; }
+        public Decimal? CashAvailable { get; set; }
+        public Decimal? StockMarketValue { get; set; }
 
     }
 
@@ -55,10 +55,19 @@ namespace bevo.Models
     //were bought and at what price for each individual transaction
     public class TransactionViewModel
     {
-        public Int32 NumPurchased { get; set; }
-        public Decimal PurchasePrice { get; set; }
+        public Int32? NumPurchased { get; set; }
+        public Decimal? PurchasePrice { get; set; }
 
     }
+
+
+
+
+
+
+
+
+
 
 
 

@@ -38,6 +38,7 @@ namespace bevo.Models
         //nullable ints. This shouldn't affect functionality since the logic there shouldn't be
         //asking for an account that doesn't exist, so our business logic ought to stop us from running
         //in to any sort of run time error here. 
+        // - James 
         [Display(Name = "From Account")]
         public Int32? FromAccount { get; set; }
 
@@ -49,6 +50,15 @@ namespace bevo.Models
         public Decimal Amount { get; set; }
         
         public String Description { get; set; }
+
+        //This property is nullable and will only be filled by the purchase stock 
+        //controller. Users should never be allowed to alter this property through any 
+        //view 
+        // - James 
+        public Int32? NumShares { get; set; }
+        //Same here as for NumShares, except this property will only be generated
+        //By the sell stocks controller 
+        public Decimal? SMVRedux { get; set; }
 
 
         // Navigational
