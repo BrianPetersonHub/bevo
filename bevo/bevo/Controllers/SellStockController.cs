@@ -79,7 +79,7 @@ namespace bevo.Controllers
             foreach(Transaction t in relevantTransactions)
             {
                 TransactionViewModel trvmobj = new TransactionViewModel();
-                trvmobj.NumPurchased = 
+                //trvmobj.NumPurchased = 
                     //HOW THE FUCK DO I KNOW HOW MUCH THE STOCK WAS ORIGINALLY PURCHASED FOR
                     //I MAY NEED TO ADD A NULLABLE PROPERTY ON THE TRANSACTION MODEL AND JUST 
                     //MAKE A NOTE OF HOW MANY OF THAT STOCK WERE PURCHASED WHEN I MAKE THE TRANSACTION
