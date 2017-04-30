@@ -270,6 +270,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IRAccountController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PayeesController.cs" />
     <Compile Include="Controllers\PurchaseStockController.cs" />
     <Compile Include="Controllers\RoleAdminController.cs" />
     <Compile Include="Controllers\SavingAccountsController.cs" />
@@ -432,6 +433,11 @@
     <Content Include="Views\Customer\ViewInfo.cshtml" />
     <Content Include="Views\Customer\EditInfo.cshtml" />
     <Content Include="Views\SellStock\Index.cshtml" />
+    <Content Include="Views\Payees\Create.cshtml" />
+    <Content Include="Views\Payees\Delete.cshtml" />
+    <Content Include="Views\Payees\Details.cshtml" />
+    <Content Include="Views\Payees\Edit.cshtml" />
+    <Content Include="Views\Payees\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -441,7 +447,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="fonts\App_Data\" />
-    <Folder Include="Views\Payees\" />
     <Folder Include="Views\StockDetails\" />
   </ItemGroup>
   <PropertyGroup>

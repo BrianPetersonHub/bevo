@@ -60,9 +60,31 @@ namespace bevo.Controllers
             ViewBag.Transactions = GetAllTransactions();
             ViewBag.PortfolioSnapshot = PortfolioSnapshot();
             ViewBag.IsBalanced = BalanceCheck();
-
+            ViewBag.StockViewModel = GetStocks();
             ViewBag.PortfolioInfo = GetPortfolioInfo();
             return View(stockPortfolio);
+        }
+
+        //Get all stocks into stockviewmodel
+        public List<StockViewModel> GetStocks()
+        {
+            List<StockViewModel> allStocks = new List<StockViewModel>();
+
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+            var user = userManager.FindById(User.Identity.GetUserId());
+            List<StockDetail> stocks = user.StockPortfolio.StockDetails;
+            foreach (StockDetail s in stocks )
+            {
+                StockViewModel stockToAdd = new StockViewModel();
+
+                stockToAdd.Ticker = s.Stock.StockTicker;
+                stockToAdd.NumInAccount = s.Quantity;
+                stockToAdd.CurrentPrice = Utilities.GetQuote.GetStock(s.Stock.StockTicker).LastTradePrice;
+
+                allStocks.Add(stockToAdd);
+            }
+            
+            return allStocks;
         }
 
         //Get all total values associated with the portfolio. 
