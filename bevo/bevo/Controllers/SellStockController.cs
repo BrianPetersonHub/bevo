@@ -111,6 +111,9 @@ namespace bevo.Controllers
                 {
                     listIndex += 1;
                 }
+                //Reduce the number of stocks on the stockdetail by one 
+                detailInQuestion.Quantity -= 1;
+                //Reduce the number of shares still to be sold by one
                 numShares -= 1;
             }
 
