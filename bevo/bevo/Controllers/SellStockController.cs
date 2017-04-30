@@ -95,6 +95,13 @@ namespace bevo.Controllers
             Decimal ? stockMarketValueReduction = new Decimal?();
             stockMarketValueReduction = 0;
 
+            //Make an actual Transaction object to record the sale of stock 
+            //And determine its value before you stubtract the number of shares down to one,
+            //you fucking idiot 
+            Transaction transToAdd = new Transaction();
+            transToAdd.Amount = numShares * bevo.Utilities.GetQuote.GetStock(detailInQuestion.Stock.StockTicker).LastTradePrice;
+
+
             //Logic to get how much the original stock market value should decrease by
             //Based on incrementally determining how many transactions need to be negated to
             //sell as many stocks as the user wants to sell 
@@ -118,15 +125,13 @@ namespace bevo.Controllers
             }
 
 
-            //Make an actual Transaction object to record the sale of stock 
-            Transaction transToAdd = new Transaction();
+            //Assign all the remaining values to the transaction to be created
             //Assign the SMVRedux property on the transaction record  
             transToAdd.SMVRedux = stockMarketValueReduction;
             transToAdd.Stock = detailInQuestion.Stock;
             transToAdd.FromAccount = portfolio.AccountNum;
             transToAdd.StockPortfolios = new List<StockPortfolio>();
             transToAdd.StockPortfolios.Add(db.StockPortfolios.Find(portfolio.StockPortfolioID));
-            transToAdd.Amount = numShares * bevo.Utilities.GetQuote.GetStock(detailInQuestion.Stock.StockTicker).LastTradePrice;
             transToAdd.Description = "Sold " + numShares.ToString() + " shares of " + detailInQuestion.Stock.StockName +
                                      " (" + detailInQuestion.Stock.StockTicker + ") stock for $" + transToAdd.Amount.ToString();
             transToAdd.Date = dateEntered;
