@@ -4,11 +4,17 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using bevo.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace bevo.Controllers
 {
     public class PayBillsController : Controller
     {
+        //Define the appdbcontext
+        private AppDbContext db = new AppDbContext();
+
+
         // GET: PayBills
         public ActionResult Index()
         {
@@ -29,33 +35,72 @@ namespace bevo.Controllers
         public ActionResult AddPayee(Int32 selectedPayee)
         {
             Payee payeeToAdd = new Payee();
-            // get user
-            // query to get payee that matches selectedPayee PayeeID
-            // add payee to customer's list of payees
+            //Get the curent user
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+            var user = userManager.FindById(User.Identity.GetUserId());
+
+            var query = from p in db.Payees
+                        select p;
+            query = query.Where(p => p.PayeeID == selectedPayee);
+
+            List<Payee> qList = query.ToList();
+
+            foreach(Payee p in qList)
+            {
+                user.Payees.Add(p);
+            }
 
             return RedirectToAction("Index");
         }
 
-        // Get ALL payees in db
-        public List<PayeeViewModels> GetPayees()
+        //Get ALL payees in db
+        public List<PayeeViewModel> GetPayees()
         {
-            List<PayeeViewModels> allPayees = new List<PayeeViewModels>();
-            // logic to gett ALL payees in db
+            List<PayeeViewModel> allPayees = new List<PayeeViewModel>();
+            foreach(Payee p in db.Payees)
+            {
+                PayeeViewModel payee = new PayeeViewModel();
+                payee.PayeeName = p.Name;
+                payee.PayeeID = p.PayeeID;
+                payee.Type = p.PayeeType;
+                allPayees.Add(payee);
+
+            }
+
             return allPayees;
         }
 
-        // Get ONLY payees that the customer has
-        public List<PayeeViewModels> GetCustomerPayees()
+        //Get ONLY payees that the customer has
+        public List<PayeeViewModel> GetCustomerPayees()
         {
-            List<PayeeViewModels> customerPayees = new List<PayeeViewModels>();
-            // logic to gett only payees that customer has added
+            //Get the curent user
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+            var user = userManager.FindById(User.Identity.GetUserId());
+
+            List<PayeeViewModel> customerPayees = new List<PayeeViewModel>();
+            var query = from p in db.Payees
+                        select p;
+            List<Payee> qList = query.ToList();
+
+            foreach(Payee p in qList)
+            {
+                if(user.Payees.Contains(p))
+                {
+                    PayeeViewModel payee = new PayeeViewModel();
+                    payee.PayeeName = p.Name;
+                    payee.PayeeID = p.PayeeID;
+                    payee.Type = p.PayeeType;
+                    customerPayees.Add(payee);
+                }
+            }
+            
             return customerPayees;
         }
         
         // SelectList to make drop down for select payee
         public IEnumerable<SelectListItem> SelectPayee()
         {
-            List<PayeeViewModels> allPayees = GetCustomerPayees();
+            List<PayeeViewModel> allPayees = GetCustomerPayees();
             SelectList selectPayee = new SelectList(allPayees.OrderBy(p => p.PayeeID), "PayeeID", "PayeeName");
             return selectPayee;
         }
@@ -63,8 +108,44 @@ namespace bevo.Controllers
         // Get all checkings and savings accounts
         public List<AccountsViewModel> GetAccounts()
         {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
             List<AccountsViewModel> allAccounts = new List<AccountsViewModel>();
-            // hass properties AccountNum, AccountName, Balance
+            if (user.CheckingAccounts != null)
+            {
+                List<CheckingAccount> checkingAccounts = user.CheckingAccounts.ToList<CheckingAccount>();
+                // get checkings
+                foreach (var c in checkingAccounts)
+                {
+                    AccountsViewModel accountToAdd = new AccountsViewModel();
+                    accountToAdd.AccountNum = c.AccountNum;
+                    accountToAdd.AccountName = c.AccountName;
+                    accountToAdd.Balance = c.Balance;
+                    allAccounts.Add(accountToAdd);
+                }
+            }
+            if (user.SavingAccounts != null)
+            {
+                List<SavingAccount> savingAccounts = user.SavingAccounts.ToList<SavingAccount>();
+                // get savings
+                foreach (var s in savingAccounts)
+                {
+                    AccountsViewModel accountToAdd = new AccountsViewModel();
+                    accountToAdd.AccountNum = s.AccountNum;
+                    accountToAdd.AccountName = s.AccountName;
+                    accountToAdd.Balance = s.Balance;
+                    allAccounts.Add(accountToAdd);
+                }
+            }
+            if (user.StockPortfolio != null)
+            {
+                StockPortfolio stockPortfolio = user.StockPortfolio;
+                // get cash portion stock portfolio
+                AccountsViewModel p = new AccountsViewModel();
+                p.AccountNum = stockPortfolio.AccountNum;
+                p.AccountName = stockPortfolio.AccountName;
+                p.Balance = stockPortfolio.Balance;
+                allAccounts.Add(p);
+            }
             return allAccounts;
         }
 
@@ -75,6 +156,13 @@ namespace bevo.Controllers
             SelectList selectAccount = new SelectList(allAccounts.OrderBy(p => p.AccountNum), "AccountNum", "AccountName");
             return selectAccount;
         }
+
+
+
+
+
+
+
 
         // POST: Pay bill, make payment 
         public ActionResult PayBill(Int32 selectedPayee, Int32 selectedAccount, Decimal paymentAmount, DateTime dateEntered)
