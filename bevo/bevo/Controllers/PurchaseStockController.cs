@@ -240,7 +240,19 @@ namespace bevo.Controllers
 
 
 
-            //TODO: Figure out if I need to add a transaction for the fee associated with stock purchase 
+            //Add a transaction for the fee associated with stock purchase 
+            decimal FeeToPay = 10m;
+            Transaction newFee = new Transaction();
+            newFee.TransType = TransType.Fee;
+            newFee.Date = enteredDate;
+            newFee.FromAccount = portfolio.AccountNum;
+            newFee.Amount = FeeToPay;
+            newFee.Description = "$10 fee for purchasing " + numShares.ToString() + " shares of " + stockInQuestion.StockTicker.ToString();
+            newFee.StockPortfolios = new List<StockPortfolio>();
+            newFee.StockPortfolios.Add(portfolio);
+            db.Transactions.Add(newFee);
+            db.SaveChanges();
+
 
 
             //Redirect the user to the details page on the stockportfoliocontroller
@@ -365,11 +377,15 @@ namespace bevo.Controllers
             }
 
             IRAccount iraAccount = user.IRAccount;
-            if (accountNum == iraAccount.AccountNum)
+            if (user.IRAccount != null)
             {
-                accountType = "IRA";
-                return accountType;
+                if (accountNum == iraAccount.AccountNum)
+                {
+                    accountType = "IRA";
+                    return accountType;
+                }
             }
+            
 
             StockPortfolio stockPortfolio = user.StockPortfolio;
             if (accountNum == stockPortfolio.AccountNum)
