@@ -43,7 +43,7 @@ namespace bevo.Models
 
         [Required(ErrorMessage = "Date of Birth is a Required field.")]
         [Display(Order = 10, Name = "Date of Birth")]
-        [DataType(DataType.Date)]
+        //[DataType(DataType.Date)]
         public String Birthday { get; set; }
 
         public String Email { get; set; }

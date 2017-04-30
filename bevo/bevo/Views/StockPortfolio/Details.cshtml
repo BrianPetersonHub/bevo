@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity
+@model bevo.Models.StockPortfolio
 
 @{
     ViewBag.Title = "my stock portfolio";
@@ -16,17 +17,24 @@
         <div class="stock-value">
             <h3>Current Value</h3>
             <div class="value-container">
-                <p> [ STOCK VALUE HERE ]</p>
+                <p>@ViewBag.PortfolioInfo.CurrentValue</p>
             </div>
-            <p>[ BALANCE STATUS HERE ]</p>
+            <p>@{
+                if (ViewBag.IsBalanced == true)
+                { ViewBag.BalanceStatus = "BALANCED"; }
+                else
+                { ViewBag.BalanceStatus = "UNBALANCED"; }
+            }
+            @ViewBag.BalanceStatus
+            </p>
         </div>
         <div class="quick-action-button">
             <p>
                 <!--TODO: Which action on which controller to buy stock?-->
                 @Html.ActionLink(
                 linkText: "Buy Stocks",
-                actionName: "Create",
-                controllerName: "Stock",
+                actionName: "Index",
+                controllerName: "PurchaseStock",
                 routeValues: null,
                 htmlAttributes: new { @class = "quick-actions" })
             </p>
@@ -36,9 +44,19 @@
                 <!--TODO: Which action on which controller to sell stock?-->
                 @Html.ActionLink(
                 linkText: "Sell Stocks",
-                actionName: "Create",
-                controllerName: "Transfer",
+                actionName: "Index",
+                controllerName: "SellStock",
                 routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
+                linkText: "Change Account Name",
+                actionName: "EditName",
+                controllerName: "StockPortfolio",
+                routeValues: new { id = Model.StockPortfolioID },
                 htmlAttributes: new { @class = "quick-actions" })
             </p>
         </div>
@@ -54,7 +72,7 @@
                             Gains
                         </td>
                         <td>
-                            @ViewBag.TotalGains
+                            @ViewBag.PortfolioInfo.TotalGains
                         </td>
                     </tr>
                     <tr>
@@ -62,7 +80,7 @@
                             Fees
                         </td>
                         <td>
-                            @ViewBag.TotalFees
+                            @ViewBag.PortfolioInfo.TotalFees
                         </td>
                     </tr>
                     <tr>
@@ -70,7 +88,7 @@
                             Bonus
                         </td>
                         <td>
-                            @ViewBag.TotalBonuses
+                            @ViewBag.PortfolioInfo.TotalBonuses
                         </td>
                     </tr>
                     <tr>
@@ -78,7 +96,7 @@
                             Available Cash
                         </td>
                         <td>
-                            @ViewBag.AvailableCash
+                            @ViewBag.PortfolioInfo.CashAvailable
                         </td>
                     </tr>
                 </table>
