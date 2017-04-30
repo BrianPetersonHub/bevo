@@ -180,12 +180,13 @@ namespace bevo.Controllers
                           where sd.StockPortfolio == portfolio
                           select sd;
 
+            List<StockDetail> stockDetails = sdQuery.ToList();
+            List<Int32> stockIDsInAccount = new List<Int32>();
+
 
             if (sdQuery != null)
             {
                 //Make a list of all of those stock detail tables 
-                List<StockDetail> stockDetails = sdQuery.ToList();
-                List<Int32> stockIDsInAccount = new List<Int32>();
                 foreach (StockDetail detail in stockDetails)
                 {
                     stockIDsInAccount.Add(detail.Stock.StockID);
