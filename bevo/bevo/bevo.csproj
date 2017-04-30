@@ -444,6 +444,7 @@
     <Content Include="Views\SavingAccounts\EditName.cshtml" />
     <Content Include="Views\IRAccount\EditName.cshtml" />
     <Content Include="Views\StockPortfolio\EditName.cshtml" />
+    <Content Include="Views\Withdraw\CreateAutoCorrect.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
