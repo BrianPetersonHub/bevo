@@ -155,33 +155,34 @@ namespace bevo.Controllers
 
             //Look at the type of transaction for each transaction on the stock portfolio and either addto or 
             //subtract from the appropriate CASH AVAILABLE PORTION of the portfolio 
-            foreach(Transaction tr in user.StockPortfolio.Transactions)
-            {
-                if(tr.TransType == bevo.Models.TransType.Deposit)
-                {
-                    portfolioInfo.CashAvailable += tr.Amount;
-                }
-                else if(tr.TransType == bevo.Models.TransType.Purchase_Stock && GetAccountNumbers().Contains(tr.FromAccount))
-                {
-                    portfolioInfo.CashAvailable -= tr.Amount;
-                }
-                else if(tr.TransType == bevo.Models.TransType.Sell_Stock && tr.FromAccount == user.StockPortfolio.AccountNum)
-                {
-                    portfolioInfo.CashAvailable += tr.Amount;
-                }
-                else if(tr.TransType == bevo.Models.TransType.Withdrawal)
-                {
-                    portfolioInfo.CashAvailable -= tr.Amount;
-                }
-                else if(tr.TransType == bevo.Models.TransType.Transfer && tr.ToAccount == user.StockPortfolio.AccountNum)
-                {
-                    portfolioInfo.CashAvailable += tr.Amount;
-                }
-                else if(tr.TransType == bevo.Models.TransType.Transfer && tr.ToAccount != user.StockPortfolio.AccountNum)
-                {
-                    portfolioInfo.CashAvailable -= tr.Amount;
-                }
-            }
+            portfolioInfo.CashAvailable = user.StockPortfolio.Balance;
+            //foreach(Transaction tr in user.StockPortfolio.Transactions)
+            //{
+            //    if(tr.TransType == bevo.Models.TransType.Deposit)
+            //    {
+            //        portfolioInfo.CashAvailable += tr.Amount;
+            //    }
+            //    else if(tr.TransType == bevo.Models.TransType.Purchase_Stock && GetAccountNumbers().Contains(tr.FromAccount))
+            //    {
+            //        portfolioInfo.CashAvailable -= tr.Amount;
+            //    }
+            //    else if(tr.TransType == bevo.Models.TransType.Sell_Stock && tr.FromAccount == user.StockPortfolio.AccountNum)
+            //    {
+            //        portfolioInfo.CashAvailable += tr.Amount;
+            //    }
+            //    else if(tr.TransType == bevo.Models.TransType.Withdrawal)
+            //    {
+            //        portfolioInfo.CashAvailable -= tr.Amount;
+            //    }
+            //    else if(tr.TransType == bevo.Models.TransType.Transfer && tr.ToAccount == user.StockPortfolio.AccountNum)
+            //    {
+            //        portfolioInfo.CashAvailable += tr.Amount;
+            //    }
+            //    else if(tr.TransType == bevo.Models.TransType.Transfer && tr.ToAccount != user.StockPortfolio.AccountNum)
+            //    {
+            //        portfolioInfo.CashAvailable -= tr.Amount;
+            //    }
+            //}
             
             //Get a list of all the stock tickers in the account 
             //Also get the value of the STOCKMARKETVALUE PORTION of the portfolio

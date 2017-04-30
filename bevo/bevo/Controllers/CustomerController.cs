@@ -17,6 +17,8 @@ namespace bevo.Controllers
         // GET: Customer/Home
         public ActionResult Home()
         {
+            ViewBag.OverdraftStatus = OverdraftStatus();
+            ViewBag.Name = GetUserName();
             ViewBag.CurrentUser = db.Users.Find(User.Identity.GetUserId());
             ViewBag.CheckingAccounts = GetAllCheckingAccts();
             ViewBag.SavingAccounts = GetAllSavingAccts();
@@ -25,12 +27,71 @@ namespace bevo.Controllers
             return View();
         }
 
-        public bool OverdraftStatus()
+        public ActionResult CheckAccounts()
         {
-            bool isOverdraft = true;
-            // add logic to check if checkings or savings is overdrafted 
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            List<CheckingAccount> checkingAccounts = user.CheckingAccounts;
+            List<SavingAccount> savingAccounts = user.SavingAccounts;
+            IRAccount irAccount = user.IRAccount;
+            StockPortfolio stockPortfolio = user.StockPortfolio;
+
+            if (checkingAccounts.Count() == 0 && savingAccounts.Count() == 0 && irAccount == null && stockPortfolio == null)
+            {
+                return RedirectToAction("ChooseAccount", "Account");
+            }
+
+            else
+                return RedirectToAction("Home");
+        }
+
+        public String GetUserName()
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            return user.FirstName;
+        }
+
+        public bool OverdraftStatus()
+        {   
+            // get all accounts
+            // check if overdrafted 
+            bool isOverdraft = false;
+
+            List<CheckingAccount> checkingAccounts = GetAllCheckingAccts();
+            foreach (CheckingAccount c in checkingAccounts)
+            {
+                if (c.Balance < 0)
+                { isOverdraft = true;  }
+            }
+
+            List<SavingAccount> savingAccounts = GetAllSavingAccts();
+            foreach (SavingAccount s in savingAccounts)
+            {
+                if (s.Balance < 0)
+                { isOverdraft = true; }
+            }
+
+            IRAccount irAccount = GetIRAccount();
+            if (irAccount != null)
+            {
+                if (irAccount.Balance < 0)
+                {
+                    isOverdraft = true;
+                }
+            }
+
+            StockPortfolio portfolio = GetStockPortfolio();
+            if(portfolio != null)
+            {
+                if(portfolio.Balance < 0)
+                {
+                    isOverdraft = true;
+                }
+            }
+            
+
             return isOverdraft;
         }
+
         public List<CheckingAccount> GetAllCheckingAccts()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());

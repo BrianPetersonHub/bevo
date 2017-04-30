@@ -110,6 +110,17 @@ namespace bevo.Controllers
             transToAdd.TransType = TransType.Sell_Stock;
 
 
+            //Take away the appropriate number of stocks from the relevant stockdetail object attached to this 
+            //portfolio 
+            detailInQuestion.Quantity -= numShares;
+            db.Entry(detailInQuestion).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+
+            //Add the amount of money made from selling the stock back into the portfolio's balance
+            portfolio.Balance += transToAdd.Amount;
+            db.Entry(portfolio).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+
             //Logic to get how much the original stock market value should decrease by
             //Based on incrementally determining how many transactions need to be negated to
             //sell as many stocks as the user wants to sell 
@@ -126,8 +137,6 @@ namespace bevo.Controllers
                 {
                     listIndex += 1;
                 }
-                //Reduce the number of stocks on the stockdetail by one 
-                detailInQuestion.Quantity -= 1;
                 //Reduce the number of shares still to be sold by one
                 numShares -= 1;
             }
@@ -142,6 +151,8 @@ namespace bevo.Controllers
             db.Transactions.Add(transToAdd);
             db.SaveChanges();
 
+
+            //FEE TRANSACTION
             //create a transaction to reflect the fee
             Int32 sellStockFee = 10;
             Transaction feeTransaction = new Transaction();
@@ -155,15 +166,12 @@ namespace bevo.Controllers
             feeTransaction.StockPortfolios = new List<StockPortfolio>();
             feeTransaction.StockPortfolios.Add(portfolio);
 
-            //Take away the appropriate number of stocks from the relevant stockdetail object attached to this 
-            //portfolio 
-            detailInQuestion.Quantity -= numShares;
-            db.Entry(detailInQuestion).State = System.Data.Entity.EntityState.Modified;
+            db.Transactions.Add(feeTransaction);
             db.SaveChanges();
+            
 
             //Subtract the ten dollars from the stock portfolio cash section as a result of the fee for selling stock
             //Assume here that they have at least ten bucks in their account 
-            portfolio.Balance -= sellStockFee;
             db.Entry(portfolio).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
