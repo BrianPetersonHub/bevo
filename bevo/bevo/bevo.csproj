@@ -357,6 +357,8 @@
     <Compile Include="Models\CheckingAccount.cs" />
     <Compile Include="Models\Dispute.cs" />
     <Compile Include="Models\DisputeTransactionViewModel.cs" />
+    <Compile Include="Models\EditAccountNameViewModel.cs" />
+    <Compile Include="Models\EditUserViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\IdentityRoles.cs" />
     <Compile Include="Models\IRAccount.cs" />
@@ -401,7 +403,7 @@
     <Content Include="Views\Transactions\Index.cshtml" />
     <Content Include="Views\Transactions\Detail.cshtml" />
     <Content Include="Views\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Manage\Confirmation.cshtml" />
     <Content Include="Views\Manage\SetPassword.cshtml" />
     <Content Include="Views\Deposit\Create.cshtml" />
     <Content Include="Views\Withdraw\Create.cshtml" />
@@ -431,6 +433,7 @@
     <Content Include="Views\Dispute\Confirmation.cshtml" />
     <Content Include="Views\Customer\ViewInfo.cshtml" />
     <Content Include="Views\Customer\EditInfo.cshtml" />
+    <Content Include="Views\CheckingAccounts\EditName.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

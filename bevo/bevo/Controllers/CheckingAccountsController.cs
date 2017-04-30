@@ -59,6 +59,40 @@ namespace bevo.Controllers
             return View(checkingAccount);
         }
 
+        //GET: CheckingAccounts/Edit/#
+        [HttpGet]
+        public ActionResult EditName(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            CheckingAccount checkingAccount = db.CheckingAccounts.Find(id);
+            if (checkingAccount == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.AccountID = id;
+            EditAccountNameViewModel editAccountNameVM = new EditAccountNameViewModel();
+            editAccountNameVM.AccountName = checkingAccount.AccountName;
+
+            return View(editAccountNameVM);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditName([Bind(Include = "AccountName")] EditAccountNameViewModel vm, int? id)
+        {
+            if (ModelState.IsValid)
+            {
+                CheckingAccount checkingAccount = db.CheckingAccounts.Find(id);
+                checkingAccount.AccountName = vm.AccountName;
+                db.SaveChanges();
+                return RedirectToAction("Details", new { id = id });
+            }
+            return View(vm);
+        }
 
 
         public List<Transaction> GetAllTransactions(int? id)
