@@ -31,6 +31,11 @@ namespace bevo.Controllers
         public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description")] Transaction transaction, Int32 toAccount)
         {
             transaction.ToAccount = toAccount;
+            if (transaction.Amount < 0)
+            {
+                ViewBag.Error = "putting in positive values for what you want to deposit";
+                return View("Error");
+            }
             if (ModelState.IsValid)
             {
                 Int32? accountNum = transaction.ToAccount;
