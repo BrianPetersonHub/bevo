@@ -211,7 +211,6 @@ namespace bevo.Controllers
                     detail.StockPortfolio = user.StockPortfolio;
                     detail.Stock = db.Stocks.Find(selectedStock);
                     detail.Quantity = numShares;
-                    detail.PurchasePrice = bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice;
                     //Save this new stock detail in the DB
                     db.StockDetails.Add(detail);
                     db.SaveChanges();
@@ -224,7 +223,6 @@ namespace bevo.Controllers
                 detail.StockPortfolio = user.StockPortfolio;
                 detail.Stock = db.Stocks.Find(selectedStock);
                 detail.Quantity = numShares;
-                detail.PurchasePrice = bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice;
                 //Save this new stock detail in the DB
                 db.StockDetails.Add(detail);
                 db.SaveChanges();
