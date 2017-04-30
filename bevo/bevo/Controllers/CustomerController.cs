@@ -71,10 +71,23 @@ namespace bevo.Controllers
             }
 
             IRAccount irAccount = GetIRAccount();
-            if (irAccount.Balance < 0)
+            if (irAccount != null)
             {
-                isOverdraft = true;
+                if (irAccount.Balance < 0)
+                {
+                    isOverdraft = true;
+                }
             }
+
+            StockPortfolio portfolio = GetStockPortfolio();
+            if(portfolio != null)
+            {
+                if(portfolio.Balance < 0)
+                {
+                    isOverdraft = true;
+                }
+            }
+            
 
             return isOverdraft;
         }
