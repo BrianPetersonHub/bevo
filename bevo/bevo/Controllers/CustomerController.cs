@@ -27,6 +27,23 @@ namespace bevo.Controllers
             return View();
         }
 
+        public ActionResult CheckAccounts()
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            List<CheckingAccount> checkingAccounts = user.CheckingAccounts;
+            List<SavingAccount> savingAccounts = user.SavingAccounts;
+            IRAccount irAccount = user.IRAccount;
+            StockPortfolio stockPortfolio = user.StockPortfolio;
+
+            if (checkingAccounts.Count() == 0 && savingAccounts.Count() == 0 && irAccount == null && stockPortfolio == null)
+            {
+                return RedirectToAction("ChooseAccount", "Account");
+            }
+
+            else
+                return RedirectToAction("Home");
+        }
+
         public String GetUserName()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
