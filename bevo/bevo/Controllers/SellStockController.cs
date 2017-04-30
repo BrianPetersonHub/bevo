@@ -72,6 +72,8 @@ namespace bevo.Controllers
 
             //Get a list of all the transactions we care about 
             List<Transaction> relevantTransactions = GetRelevantTransactions(detailInQuestion);
+            
+                
 
 
             List<TransactionViewModel> transViewModels = new List<TransactionViewModel>();
@@ -109,16 +111,18 @@ namespace bevo.Controllers
                 {
                     listIndex += 1;
                 }
+                numShares -= 1;
             }
 
 
             //Make an actual Transaction object to record the sale of stock 
             Transaction transToAdd = new Transaction();
             //Assign the SMVRedux property on the transaction record  
-           //  transToAdd.SMVRedux = stockMarketValueReduction;
+            transToAdd.SMVRedux = stockMarketValueReduction;
             transToAdd.Stock = detailInQuestion.Stock;
             transToAdd.FromAccount = portfolio.AccountNum;
-            transToAdd.StockPortfolios.Add(portfolio);
+            transToAdd.StockPortfolios = new List<StockPortfolio>();
+            transToAdd.StockPortfolios.Add(db.StockPortfolios.Find(portfolio.StockPortfolioID));
             transToAdd.Amount = numShares * bevo.Utilities.GetQuote.GetStock(detailInQuestion.Stock.StockTicker).LastTradePrice;
             transToAdd.Description = "Sold " + numShares.ToString() + " shares of " + detailInQuestion.Stock.StockName +
                                      " (" + detailInQuestion.Stock.StockTicker + ") stock for $" + transToAdd.Amount.ToString();
@@ -139,6 +143,7 @@ namespace bevo.Controllers
             feeTransaction.Description = "Fee incurred from selling " + numShares.ToString() + " shares of " +
                                          detailInQuestion.Stock.StockName + " (" + detailInQuestion.Stock.StockTicker +
                                          ") stock on " + dateEntered.ToString();
+            feeTransaction.StockPortfolios = new List<StockPortfolio>();
             feeTransaction.StockPortfolios.Add(portfolio);
 
             //Take away the appropriate number of stocks from the relevant stockdetail object attached to this 
@@ -224,23 +229,41 @@ namespace bevo.Controllers
         //Get a list of transactions that purchased this stock from this account 
         public List<Transaction> GetRelevantTransactions(StockDetail detailInQuestion)
         {
-            //Get a list of all the transactions that were buystock transactions from this stock account 
-            //and bought the stock in question 
-            var query = from tr in db.Transactions
-                        select tr;
-            //Only interested in stock purchase 
-            query = query.Where(tr => tr.TransType == TransType.Purchase_Stock);
             //Only interested in purchases from this account 
             List<Int32?> userAcctNums = new List<Int32?>();
             foreach (AccountsViewModel acct in GetAccounts())
             {
                 userAcctNums.Add(acct.AccountNum);
             }
-            query = query.Where(tr => userAcctNums.Contains(tr.FromAccount));
-            //Only interested in purchases of the stock in question 
-            query = query.Where(tr => tr.Stock == detailInQuestion.Stock);
+            //Get a list of all the transactions that were buystock transactions from this stock account 
+            //and bought the stock in question 
+            var query = db.Transactions
+                        .Where(tr => tr.TransType == TransType.Purchase_Stock)
+                   //   .Where(tr => userAcctNums.Contains(tr.FromAccount))
+                        .Where(tr => tr.Stock.StockID == detailInQuestion.Stock.StockID)
+                        .OrderBy(tr => tr.Date)
+                        .Select(tr => tr.TransactionID)
+                        .ToList();
 
-            return query.OrderBy(tr => tr.Date).ToList();
+            List<Transaction> queryList = new List<Transaction>();
+            foreach(Int32 q in query)
+            {
+                Transaction trans = db.Transactions.Find(q);
+                queryList.Add(trans);
+            }
+
+            List<Transaction> relevantTransactions = new List<Transaction>();
+            foreach (Transaction t in queryList)
+            {
+                if(userAcctNums.Contains(t.FromAccount))
+                {
+                    relevantTransactions.Add(t);
+                }
+            }
+
+            
+
+            return relevantTransactions;
         }
 
 
