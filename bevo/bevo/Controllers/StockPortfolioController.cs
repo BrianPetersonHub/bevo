@@ -155,6 +155,7 @@ namespace bevo.Controllers
 
             //Look at the type of transaction for each transaction on the stock portfolio and either addto or 
             //subtract from the appropriate CASH AVAILABLE PORTION of the portfolio 
+            portfolioInfo.CashAvailable = user.StockPortfolio.Balance;
             foreach(Transaction tr in user.StockPortfolio.Transactions)
             {
                 if(tr.TransType == bevo.Models.TransType.Deposit)
