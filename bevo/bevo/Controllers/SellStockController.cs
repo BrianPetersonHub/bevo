@@ -190,6 +190,7 @@ namespace bevo.Controllers
                 viewModel.Name = s.Stock.StockName;
                 viewModel.NumInAccount = s.Quantity;
                 viewModel.Ticker = s.Stock.StockTicker;
+                viewModel.PurchasePrice = 10.00m;
                 listViewModels.Add(viewModel);
             }
 

@@ -9,11 +9,52 @@ NAVIGATION
 ____________________________________________________________________*/
 .form-container {
     padding: 20px;
+    padding-top: 40px;
 }
 
-.from-container p {
-    font-family: Arial, sans-serif;
+.form-container p {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 11px;
+    font-weight: normal;
+    letter-spacing: 0.5px;
+    color: black;
+    text-transform: uppercase;
+    text-align: left;
+    line-height: 20px;
 }
 
+.form-table-container {
+    padding: 20px;
+}
+.form-display-table {
+    background-color: #F3F3F3;
+    margin-bottom: 20px;
+}
 
+.form-table-container p {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: black;
+    text-transform: uppercase;
+    text-align: left;
+    margin: 0;
+    padding-bottom: 10px;
+}
 
+.color {
+    background-color: #6497D1;
+    color: white;
+    border: 0px;
+    width: 100px;
+}
+
+.color:hover {
+    background-color: #3F6187;
+    color: white;
+}
+
+.form-control {
+    margin-top: 5px;
+}

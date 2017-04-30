@@ -431,6 +431,7 @@
     <Content Include="Views\Dispute\Confirmation.cshtml" />
     <Content Include="Views\Customer\ViewInfo.cshtml" />
     <Content Include="Views\Customer\EditInfo.cshtml" />
+    <Content Include="Views\SellStock\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -441,7 +442,6 @@
   <ItemGroup>
     <Folder Include="fonts\App_Data\" />
     <Folder Include="Views\Payees\" />
-    <Folder Include="Views\SellStock\" />
     <Folder Include="Views\StockDetails\" />
   </ItemGroup>
   <PropertyGroup>
