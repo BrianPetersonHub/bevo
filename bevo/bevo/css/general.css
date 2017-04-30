@@ -206,6 +206,7 @@ ____________________________________________________________________*/
     text-transform: uppercase;
     padding-bottom: 20px;
     text-align: center;
+    margin-bottom: 20px;
 }
 
 .table-container {
@@ -225,14 +226,14 @@ ____________________________________________________________________*/
 }
 
 .section-title {
-    font-family: 'Helvetica Neue', sans-serif;
-    font-size: 11px;
+    font-family: 'Helvetica Neue', sans-serif !important;
+    font-size: 12px;
     font-weight: bold;
     letter-spacing: 0.5px;
     color: black;
     text-transform: uppercase;
     text-align: left;
-    margin: 0;
+    margin-bottom: 10px;
     padding-bottom: 10px;
 }
 

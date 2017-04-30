@@ -100,9 +100,12 @@
                         </td>
                     </tr>
                 </table>
-                <h2>Details</h2>
+                <h3 class="section-title">Details</h3>
                 <table class="table">
                     <tr>
+                        <th>
+                            Date
+                        </th>
                         <th>
                             Type
                         </th>
@@ -116,6 +119,7 @@
                     @foreach (var t in ViewBag.Transactions)
                     {
                         <tr>
+                            <td>@t.Date</td>
                             <td>
                                 @t.TransType
                             </td>
