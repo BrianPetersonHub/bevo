@@ -1,4 +1,5 @@
-﻿@model bevo.Models.Transaction
+﻿@using System.Web.Optimization
+@model bevo.Models.Transaction
 
 @{
     ViewBag.Title = "transfer between accounts";
@@ -64,9 +65,11 @@
 }
 
 <div>
-    @Html.ActionLink("Choose another transaction type", "ChooseTransaction")
+    @Html.ActionLink(
+    linkText: "Home Page",
+    actionName: "Home",
+    controllerName: "Customer");
 </div>
 
-<script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

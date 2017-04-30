@@ -177,14 +177,20 @@ namespace bevo.Controllers
             StockPortfolio portfolio = user.StockPortfolio;
             //Get all the stock details attached to this user's stock portfolio
             var sdQuery = from sd in db.StockDetails
-                          where sd.StockPortfolio == portfolio
-                          select sd;
+                          where sd.StockPortfolio.StockPortfolioID == portfolio.StockPortfolioID
+                          select sd.StockDetailID;
+            
 
-            List<StockDetail> stockDetails = sdQuery.ToList();
+            List<StockDetail> stockDetails = new List<StockDetail>();
+            foreach(Int32 o in sdQuery)
+            {
+                StockDetail newDetail = db.StockDetails.Find(o);
+                stockDetails.Add(newDetail);
+            }
             List<Int32> stockIDsInAccount = new List<Int32>();
 
 
-            if (sdQuery != null)
+            if (stockDetails.Count != 0)
             {
                 //Make a list of all of those stock detail tables 
                 foreach (StockDetail detail in stockDetails)
@@ -270,38 +276,42 @@ namespace bevo.Controllers
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             List<AccountsViewModel> allAccounts = new List<AccountsViewModel>();
-            List<CheckingAccount> checkingAccounts = user.CheckingAccounts;
-            List<SavingAccount> savingAccounts = user.SavingAccounts;
-            StockPortfolio stockPortfolio = user.StockPortfolio;
-
-            // get checkings
-            foreach (var c in checkingAccounts)
+            if(user.CheckingAccounts != null)
             {
-                AccountsViewModel accountToAdd = new AccountsViewModel();
-                accountToAdd.AccountNum = c.AccountNum;
-                accountToAdd.AccountName = c.AccountName;
-                accountToAdd.Balance = c.Balance;
-                allAccounts.Add(accountToAdd);
+                List<CheckingAccount> checkingAccounts = user.CheckingAccounts.ToList<CheckingAccount>();
+                // get checkings
+                foreach (var c in checkingAccounts)
+                {
+                    AccountsViewModel accountToAdd = new AccountsViewModel();
+                    accountToAdd.AccountNum = c.AccountNum;
+                    accountToAdd.AccountName = c.AccountName;
+                    accountToAdd.Balance = c.Balance;
+                    allAccounts.Add(accountToAdd);
+                }
             }
-
-            // get savings
-            foreach (var s in savingAccounts)
+            if(user.SavingAccounts != null)
             {
-                AccountsViewModel accountToAdd = new AccountsViewModel();
-                accountToAdd.AccountNum = s.AccountNum;
-                accountToAdd.AccountName = s.AccountName;
-                accountToAdd.Balance = s.Balance;
-                allAccounts.Add(accountToAdd);
+                List<SavingAccount> savingAccounts = user.SavingAccounts.ToList<SavingAccount>();
+                // get savings
+                foreach (var s in savingAccounts)
+                {
+                    AccountsViewModel accountToAdd = new AccountsViewModel();
+                    accountToAdd.AccountNum = s.AccountNum;
+                    accountToAdd.AccountName = s.AccountName;
+                    accountToAdd.Balance = s.Balance;
+                    allAccounts.Add(accountToAdd);
+                }
             }
-
-
-            // get cash portion stock portfolio
-            AccountsViewModel p = new AccountsViewModel();
-            p.AccountNum = stockPortfolio.AccountNum;
-            p.AccountName = stockPortfolio.AccountName;
-            p.Balance = stockPortfolio.Balance;
-            allAccounts.Add(p);
-
+            if (user.StockPortfolio != null)
+            {
+                StockPortfolio stockPortfolio = user.StockPortfolio;
+                // get cash portion stock portfolio
+                AccountsViewModel p = new AccountsViewModel();
+                p.AccountNum = stockPortfolio.AccountNum;
+                p.AccountName = stockPortfolio.AccountName;
+                p.Balance = stockPortfolio.Balance;
+                allAccounts.Add(p);
+            }
             return allAccounts;
         }
 

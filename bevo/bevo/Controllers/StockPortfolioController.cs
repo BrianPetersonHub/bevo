@@ -42,12 +42,14 @@ namespace bevo.Controllers
         }
 
         //GET: StockPortfolio/Details/#
-        public ActionResult Details(String id)
+        public ActionResult Details()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+            var user = userManager.FindById(User.Identity.GetUserId());
+
+            String id = user.Id;
+
             StockPortfolio stockPortfolio = db.StockPortfolios.Find(id);
             if (stockPortfolio == null)
             {
@@ -131,6 +133,7 @@ namespace bevo.Controllers
                 {
                     decimal stockVal = t.Amount;
                     portfolioInfo.StockMarketValue += stockVal;
+                    tickersInAccount.Add(t.Stock.StockTicker);
                 }
                 else if(t.TransType == TransType.Sell_Stock)
                 {
@@ -138,7 +141,7 @@ namespace bevo.Controllers
                     portfolioInfo.StockMarketValue -= stockMarketValueReduction;
                 }
 
-                tickersInAccount.Add(t.Stock.StockTicker);
+                
             }
 
 
