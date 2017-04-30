@@ -17,6 +17,7 @@ namespace bevo.Controllers
         // GET: Customer/Home
         public ActionResult Home()
         {
+            ViewBag.CurrentUser = db.Users.Find(User.Identity.GetUserId());
             ViewBag.CheckingAccounts = GetAllCheckingAccts();
             ViewBag.SavingAccounts = GetAllSavingAccts();
             ViewBag.IRAccount = GetIRAccount();
@@ -50,15 +51,17 @@ namespace bevo.Controllers
         }
 
         //GET: Customer/ManageAccount
-        public ActionResult ViewInfo()
+        public ActionResult ViewInfo(String Id)
         {
-            return View();
+            AppUser user = db.Users.Find(Id);
+            return View(user);
         }
 
         //GET: Customer/Edit
-        public ActionResult EditInfo()
+        public ActionResult EditInfo(String Id)
         {
-            return View();
+            AppUser user = db.Users.Find(Id);
+            return View(user);
         }
     }
 }

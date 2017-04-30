@@ -63,12 +63,7 @@
         </div>
         <div class="quick-action-button">
             <!--TODO: Move this somewhere else...-->
-            <p>@Html.ActionLink(
-              linkText: "View Account Info", 
-              actionName: "ViewInfo",
-              controllerName: "Customer", 
-              routeValues: null,
-              htmlAttributes: new { @class = "quick-actions" })
+            <p>@Html.ActionLink("View Account Info", "ViewInfo", new { id = ViewBag.CurrentUser.Id }, htmlAttributes: new { @class = "quick-actions" })
             </p>
         </div>
     </div>
