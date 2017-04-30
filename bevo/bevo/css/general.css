@@ -185,7 +185,6 @@ ____________________________________________________________________*/
     color: darkred;
     text-transform: uppercase;
     text-align: center;
-    margin-bottom: 100px;
     padding-top: 10px;
 }
 
@@ -205,7 +204,6 @@ ____________________________________________________________________*/
     letter-spacing: 0;
     color: black;
     text-transform: uppercase;
-    text-align: center;
     padding-bottom: 20px;
     text-align: center;
 }
@@ -226,7 +224,7 @@ ____________________________________________________________________*/
     width: 100%;
 }
 
-.portion-container h2 {
+.section-title {
     font-family: 'Helvetica Neue', sans-serif;
     font-size: 11px;
     font-weight: bold;
