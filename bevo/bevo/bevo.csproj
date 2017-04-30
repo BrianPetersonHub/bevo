@@ -422,6 +422,7 @@
     <Content Include="Views\PurchaseStock\Confirmation.cshtml" />
     <Content Include="Views\Dispute\Confirmation.cshtml" />
     <Content Include="Views\Customer\ViewInfo.cshtml" />
+    <Content Include="Views\Customer\EditInfo.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
