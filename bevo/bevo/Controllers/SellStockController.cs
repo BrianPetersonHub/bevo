@@ -99,7 +99,15 @@ namespace bevo.Controllers
             //And determine its value before you stubtract the number of shares down to one,
             //you fucking idiot 
             Transaction transToAdd = new Transaction();
+            transToAdd.StockPortfolios = new List<StockPortfolio>();
+            transToAdd.StockPortfolios.Add(db.StockPortfolios.Find(portfolio.StockPortfolioID));
             transToAdd.Amount = numShares * bevo.Utilities.GetQuote.GetStock(detailInQuestion.Stock.StockTicker).LastTradePrice;
+            transToAdd.FromAccount = portfolio.AccountNum;
+            transToAdd.Stock = detailInQuestion.Stock;
+            transToAdd.Description = "Sold " + numShares.ToString() + " shares of " + detailInQuestion.Stock.StockName +
+                                     " (" + detailInQuestion.Stock.StockTicker + ") stock for $" + transToAdd.Amount.ToString();
+            transToAdd.Date = dateEntered;
+            transToAdd.TransType = TransType.Sell_Stock;
 
 
             //Logic to get how much the original stock market value should decrease by
@@ -128,14 +136,7 @@ namespace bevo.Controllers
             //Assign all the remaining values to the transaction to be created
             //Assign the SMVRedux property on the transaction record  
             transToAdd.SMVRedux = stockMarketValueReduction;
-            transToAdd.Stock = detailInQuestion.Stock;
-            transToAdd.FromAccount = portfolio.AccountNum;
-            transToAdd.StockPortfolios = new List<StockPortfolio>();
-            transToAdd.StockPortfolios.Add(db.StockPortfolios.Find(portfolio.StockPortfolioID));
-            transToAdd.Description = "Sold " + numShares.ToString() + " shares of " + detailInQuestion.Stock.StockName +
-                                     " (" + detailInQuestion.Stock.StockTicker + ") stock for $" + transToAdd.Amount.ToString();
-            transToAdd.Date = dateEntered;
-            transToAdd.TransType = TransType.Sell_Stock;
+            
 
             //Save this to the DB
             db.Transactions.Add(transToAdd);
