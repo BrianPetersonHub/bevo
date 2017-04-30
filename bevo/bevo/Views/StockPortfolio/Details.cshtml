@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity
+@model bevo.Models.StockPortfolio
 
 @{
     ViewBag.Title = "my stock portfolio";
@@ -39,6 +40,16 @@
                 actionName: "Create",
                 controllerName: "Transfer",
                 routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
+                linkText: "Change Account Name",
+                actionName: "EditName",
+                controllerName: "StockPortfolio",
+                routeValues: new { id = Model.StockPortfolioID },
                 htmlAttributes: new { @class = "quick-actions" })
             </p>
         </div>

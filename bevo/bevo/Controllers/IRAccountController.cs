@@ -80,6 +80,42 @@ namespace bevo.Controllers
             return transactions;
         }
 
+        //GET: IRAccount/EditName/#
+        [HttpGet]
+        public ActionResult EditName(String id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            IRAccount irAccount = db.IRAccounts.Find(id);
+            if (irAccount == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.AccountID = id;
+            EditAccountNameViewModel editAccountNameVM = new EditAccountNameViewModel();
+            editAccountNameVM.AccountName = irAccount.AccountName;
+
+            return View(editAccountNameVM);
+        }
+
+        //POST: IRAccount/EditName/#
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditName([Bind(Include = "AccountName")] EditAccountNameViewModel vm, String id)
+        {
+            if (ModelState.IsValid)
+            {
+                IRAccount irAccount = db.IRAccounts.Find(id);
+                irAccount.AccountName = vm.AccountName;
+                db.SaveChanges();
+                return RedirectToAction("Details", new { id = id });
+            }
+            return View(vm);
+        }
+
         public ActionResult DepositAgeError()
         {
             return View();
