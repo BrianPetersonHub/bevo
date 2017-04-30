@@ -1,51 +1,47 @@
 ﻿@{
-    ViewBag.Title = "purchase stock";
+    ViewBag.Title = "sell stock";
 }
 
 <div class="row">
     <div class="homepage-top">
-        <h2>purchase a stock</h2>
+        <h2>sell a stock</h2>
     </div>
 </div>
 
-@using (Html.BeginForm("PurchaseStock", "PurchaseStock", FormMethod.Post))
+@using (Html.BeginForm("SellStock", "SellStock", FormMethod.Post))
 {
-    
+
     @Html.AntiForgeryToken()
     <div class="row">
         <div class="form-table-container col-lg-7">
-            <p>Available Accounts to purchase from</p>
+            <p>My Stocks</p>
             <div class="form-display-table">
-                <table class="table">
-                    <tr>
-                        <th>Account Name</th>
-                        <th>Balance</th>
-                    </tr>
-                    @foreach (var a in ViewBag.AllAccounts)
-                    {
-                        <tr>
-                            <td>@a.AccountName</td>
-                            <td>@a.Balance</td>
-                        </tr>
-                    }
-                </table>
-            </div>
-
-            <p>Available Stocks to purchase</p>
-            <div class="form-display-table">
-
                 <table class="table">
                     <tr>
                         <th>Stock</th>
-                        <th>Ticker</th>
+                        <th>Tickere</th>
+                        <th>Purchase Price</th>
                         <th>Current Price</th>
+                        <th>Transaction Fee</th>
+                        <th>Number of Shares</th>
+                        <th></th>
                     </tr>
-                    @foreach (var s in ViewBag.AvailableStocks)
+                    @foreach (var s in ViewBag.GetAcctStocks)
                     {
                         <tr>
                             <td>@s.Name</td>
                             <td>@s.Ticker</td>
+                            <td>@s.PurchasePrice</td>
                             <td>@s.CurrentPrice</td>
+                            <td>$10.00</td>
+                            <td>@s.NumInAccount</td>
+                            <td>@Html.ActionLink(
+                            linkText: "Details",
+                            actionName: "Details",
+                            controllerName: "Stock",
+                            routeValues: new { id = s.StockID },
+                            htmlAttributes: null)
+                            </td>
                         </tr>
                     }
                 </table>
@@ -53,8 +49,7 @@
         </div>
         <div class="form-container col-lg-4">
             <p class="form-group">
-                Date @Html.TextBox("enteredDate", null, new { @class = "form-control" }) <br />
-                Purchase with Account @Html.DropDownList("selectedAccount", (SelectList)ViewBag.SelectAccount, new { @class = "form-control" }) <br />
+                Date @Html.TextBox("dateEntered", null, new { @class = "form-control" }) <br />
                 Select Stock to Purchase @Html.DropDownList("selectedStock", (SelectList)ViewBag.SelectStock, new { @class = "form-control" }) <br />
                 Number of Shares @Html.TextBox("numShares", null, new { @class = "form-control" }) <br />
                 <input type="submit" value="Submit" class="btn btn-default color" />
@@ -68,4 +63,6 @@
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+
 

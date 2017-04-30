@@ -29,8 +29,10 @@ namespace bevo.Models
         //it checks the db if this is an existant ticker and only adds
         //if it isn't already there
         public String Ticker { get; set; }
+        public Decimal? PurchasePrice { get; set; }
 
         public Decimal CurrentPrice { get; set; }
+        public Int32? StockID { get; set; }
 
         public Int32 NumInAccount { get; set; }
     }
