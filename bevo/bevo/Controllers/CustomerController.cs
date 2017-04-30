@@ -25,6 +25,12 @@ namespace bevo.Controllers
             return View();
         }
 
+        public bool OverdraftStatus()
+        {
+            bool isOverdraft = true;
+            // add logic to check if checkings or savings is overdrafted 
+            return isOverdraft;
+        }
         public List<CheckingAccount> GetAllCheckingAccts()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());

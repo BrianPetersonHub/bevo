@@ -63,6 +63,46 @@
     </div>
     <div class="col-lg-9">
         <div class="table-container">
+            <h3 class="table-title">My Stocks</h3>
+            <div class="portion-container">
+                <table class="table">
+                    <tr>
+                        <th>
+                            Stock
+                        </th>
+                        <th>
+                            My Shares
+                        </th>
+                        <th>
+                            Current Price
+                        </th>
+                    </tr>
+                    @foreach (var s in ViewBag.StockViewModel)
+                    {
+                        <tr>
+                            <td>
+                                @s.Ticker
+                            </td>
+                            <td>
+                                @s.NumInAccount
+                            </td>
+                            <td>
+                                @s.CurrentPrice
+                            </td>
+                            <td>
+                                @Html.ActionLink(
+                                linkText: "Details",
+                                actionName: "Details",
+                                controllerName: "Stock",
+                                routeValues: new { id = s.StockID },
+                                htmlAttributes: null)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        <div class="table-container">
             <h3 class="table-title">Cash Value</h3>
             <div class="portion-container">
                 <h3 class="section-title">Overview</h3>
@@ -135,45 +175,6 @@
             </div>
         </div>
 
-        <div class="table-container">
-            <h3 class="table-title">My Stocks</h3>
-            <div class="portion-container">
-                <table class="table">
-                    <tr>
-                        <th>
-                            Stock
-                        </th>
-                        <th>
-                            My Shares
-                        </th>
-                        <th>
-                            Current Price 
-                        </th>
-                    </tr>
-                    @foreach (var s in ViewBag.StockViewModel)
-                    {
-                        <tr>
-                            <td>
-                                @s.Ticker
-                            </td>
-                            <td>
-                                @s.NumInAccount
-                            </td>
-                            <td>
-                                @s.CurrentPrice
-                            </td>
-                            <td>
-                                @Html.ActionLink(
-                                linkText: "Details",
-                                actionName: "Details",
-                                controllerName: "Stock",
-                                routeValues: new { id = s.StockID },
-                                htmlAttributes: null)
-                            </td>
-                        </tr>
-                    }
-                </table>
-            </div>
-        </div>
+        
     </div>
 </div>
