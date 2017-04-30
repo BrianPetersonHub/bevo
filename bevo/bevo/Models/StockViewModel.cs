@@ -32,6 +32,7 @@ namespace bevo.Models
         public Decimal? PurchasePrice { get; set; }
 
         public Decimal CurrentPrice { get; set; }
+        public Int32? StockID { get; set; }
 
         public Int32 NumInAccount { get; set; }
     }

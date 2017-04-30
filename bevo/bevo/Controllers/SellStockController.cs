@@ -15,7 +15,7 @@ namespace bevo.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: SellStock
-        public ActionResult Sellstock()
+        public ActionResult Index()
         {
             // get relevant information into view bags
             //Get list of stockviewmodel objects that are available to the user in their account
@@ -191,6 +191,7 @@ namespace bevo.Controllers
                 viewModel.NumInAccount = s.Quantity;
                 viewModel.Ticker = s.Stock.StockTicker;
                 viewModel.PurchasePrice = 10.00m;
+                viewModel.StockID = s.Stock.StockID;
                 listViewModels.Add(viewModel);
             }
 
