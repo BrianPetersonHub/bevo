@@ -17,6 +17,8 @@ namespace bevo.Controllers
         // GET: Customer/Home
         public ActionResult Home()
         {
+            ViewBag.OverdraftStatus = OverdraftStatus();
+            ViewBag.Name = GetUserName();
             ViewBag.CurrentUser = db.Users.Find(User.Identity.GetUserId());
             ViewBag.CheckingAccounts = GetAllCheckingAccts();
             ViewBag.SavingAccounts = GetAllSavingAccts();
@@ -25,12 +27,41 @@ namespace bevo.Controllers
             return View();
         }
 
-        public bool OverdraftStatus()
+        public String GetUserName()
         {
-            bool isOverdraft = true;
-            // add logic to check if checkings or savings is overdrafted 
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            return user.FirstName;
+        }
+
+        public bool OverdraftStatus()
+        {   
+            // get all accounts
+            // check if overdrafted 
+            bool isOverdraft = false;
+
+            List<CheckingAccount> checkingAccounts = GetAllCheckingAccts();
+            foreach (CheckingAccount c in checkingAccounts)
+            {
+                if (c.Balance < 0)
+                { isOverdraft = true;  }
+            }
+
+            List<SavingAccount> savingAccounts = GetAllSavingAccts();
+            foreach (SavingAccount s in savingAccounts)
+            {
+                if (s.Balance < 0)
+                { isOverdraft = true; }
+            }
+
+            IRAccount irAccount = GetIRAccount();
+            if (irAccount.Balance < 0)
+            {
+                isOverdraft = true;
+            }
+
             return isOverdraft;
         }
+
         public List<CheckingAccount> GetAllCheckingAccts()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
