@@ -270,6 +270,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IRAccountController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PayBillsController.cs" />
     <Compile Include="Controllers\PayeesController.cs" />
     <Compile Include="Controllers\PurchaseStockController.cs" />
     <Compile Include="Controllers\RoleAdminController.cs" />
@@ -365,6 +366,7 @@
     <Compile Include="Models\IRAccount.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Payee.cs" />
+    <Compile Include="Models\PayeeViewModels.cs" />
     <Compile Include="Models\RoleViewModels.cs" />
     <Compile Include="Models\SavingAccount.cs" />
     <Compile Include="Models\Stock.cs" />
@@ -444,6 +446,8 @@
     <Content Include="Views\SavingAccounts\EditName.cshtml" />
     <Content Include="Views\IRAccount\EditName.cshtml" />
     <Content Include="Views\StockPortfolio\EditName.cshtml" />
+    <Content Include="Views\PayBills\Index.cshtml" />
+    <Content Include="Views\PayBills\AddPayeeIndex.cshtml" />
     <Content Include="Views\Withdraw\CreateAutoCorrect.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

@@ -185,7 +185,6 @@ ____________________________________________________________________*/
     color: darkred;
     text-transform: uppercase;
     text-align: center;
-    margin-bottom: 100px;
     padding-top: 10px;
 }
 
@@ -205,9 +204,9 @@ ____________________________________________________________________*/
     letter-spacing: 0;
     color: black;
     text-transform: uppercase;
-    text-align: center;
     padding-bottom: 20px;
     text-align: center;
+    margin-bottom: 20px !important;
 }
 
 .table-container {
@@ -226,15 +225,15 @@ ____________________________________________________________________*/
     width: 100%;
 }
 
-.portion-container h2 {
-    font-family: 'Helvetica Neue', sans-serif;
-    font-size: 11px;
-    font-weight: bold;
+.section-title {
+    font-family: 'Helvetica Neue', sans-serif !important;
+    font-size: 12px !important;
+    font-weight: bold !important;
     letter-spacing: 0.5px;
     color: black;
-    text-transform: uppercase;
+    text-transform: uppercase !important;
     text-align: left;
-    margin: 0;
+    margin-bottom: 20px !important;
     padding-bottom: 10px;
 }
 
