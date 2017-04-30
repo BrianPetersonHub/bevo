@@ -37,7 +37,7 @@ namespace bevo.Controllers
         public ActionResult PurchaseStock(Int32 numShares, Int32 selectedAccount, Int32 selectedStock, DateTime enteredDate)
         {
             //If they tried to purchase a negative number of shares, boot them back to the page
-            if(numShares < 0)
+            if (numShares < 0)
             {
                 return View();
             }
@@ -73,71 +73,82 @@ namespace bevo.Controllers
 
 
 
+            // find account type and query for type
+            String accountType = GetAccountType(selectedAccount);
 
-
-            //Query the DB to get the checking account that matches the selected account number 
-            var caQuery = from ca in db.CheckingAccounts
-                          select ca;
-            caQuery = caQuery.Where(ca => ca.AccountNum == selectedAccount);
-            //Make a list even though it will only contain one object 
-            List<CheckingAccount> connectedCheckingAccount = caQuery.ToList();
-            //If a checking account was found, then add it to the transaction's nav property for checking accounts 
-            if (caQuery != null)
+            if (accountType == "CHECKING")
             {
-                trans.CheckingAccounts.Add(connectedCheckingAccount[0]);
-                //Assign the from account as that account's AccountNum
-                trans.FromAccount = connectedCheckingAccount[0].AccountNum;
-                //If there isn't enough money in the account, send them back to the purchase stock page
-                //Otherwise, subtract the cost of the transaction from the appropriate account balance 
-                if(connectedCheckingAccount[0].Balance < (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice))
+                var query = from a in db.CheckingAccounts
+                            where a.AccountNum == selectedAccount
+                            select a.CheckingAccountID;
+                Int32 accountID = query.First();
+                CheckingAccount fromAccount = db.CheckingAccounts.Find(accountID);
+
+                if (query != null)
                 {
-                    return View();
-                }
-                else
-                {
-                    connectedCheckingAccount[0].Balance -= (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice);
+                    fromAccount.Transactions.Add(trans);
+                    //Assign the from account as that account's AccountNum
+                    trans.FromAccount = fromAccount.AccountNum;
+                    //If there isn't enough money in the account, send them back to the purchase stock page
+                    //Otherwise, subtract the cost of the transaction from the appropriate account balance 
+                    if (fromAccount.Balance < (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice))
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        fromAccount.Balance -= (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice);
+                    }
                 }
             }
 
-            //Do the same as above but for the saving accounts 
-            var saQuery = from sa in db.SavingAccounts
-                          select sa;
-            saQuery = saQuery.Where(sa => sa.AccountNum == selectedAccount);
-            List<SavingAccount> connectedSavingsAccount = saQuery.ToList();
-            if (saQuery != null)
+            else if (accountType == "SAVING")
             {
-                trans.SavingAccounts.Add(connectedSavingsAccount[0]);
-                trans.FromAccount = connectedSavingsAccount[0].AccountNum;
-                if (connectedSavingsAccount[0].Balance < (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice))
+                //Do the same as above but for the saving accounts 
+                var query = from a in db.SavingAccounts
+                            where a.AccountNum == selectedAccount
+                            select a.SavingAccountID;
+                Int32 accountID = query.First();
+                SavingAccount fromAccount = db.SavingAccounts.Find(accountID);
+                if (query != null)
                 {
-                    return View();
+                    fromAccount.Transactions.Add(trans);
+                    trans.FromAccount = fromAccount.AccountNum;
+                    if (fromAccount.Balance < (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice))
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        fromAccount.Balance -= (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice);
+                    }
+
                 }
-                else
+            }
+            else if (accountType == "STOCKPORTFOLIO")
+            {
+                //Do the same as above but for the stock portfolio 
+                var query = from a in db.StockPortfolios
+                            where a.AccountNum == selectedAccount
+                            select a.StockPortfolioID;
+                //gets first (only) thing from query list
+                String accountID = query.First();
+                StockPortfolio fromAccount = db.StockPortfolios.Find(accountID);
+                if (query != null)
                 {
-                    connectedSavingsAccount[0].Balance -= (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice);
+                    fromAccount.Transactions.Add(trans);
+                    trans.FromAccount = fromAccount.AccountNum;
+                    if (fromAccount.Balance < (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice))
+                    {
+                        return View("Index");
+                    }
+                    else
+                    {
+                        fromAccount.Balance -= (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice);
+                    }
                 }
 
             }
-
-            //Do the same as above but for the stock portfolio 
-            var spQuery = from sp in db.StockPortfolios
-                          select sp;
-            spQuery = spQuery.Where(sp => sp.AccountNum == selectedAccount);
-            List<StockPortfolio> connectedStockPortfolio = spQuery.ToList();
-            if (spQuery != null)
-            {
-                trans.StockPortfolios.Add(connectedStockPortfolio[0]);
-                trans.FromAccount = connectedStockPortfolio[0].AccountNum;
-                if (connectedStockPortfolio[0].Balance < (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice))
-                {
-                    return View();
-                }
-                else
-                {
-                    connectedStockPortfolio[0].Balance -= (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice);
-                }
-            }
-
 
             //Set number of stocks purchased in this transaction
             trans.NumShares = numShares;
@@ -166,30 +177,47 @@ namespace bevo.Controllers
             StockPortfolio portfolio = user.StockPortfolio;
             //Get all the stock details attached to this user's stock portfolio
             var sdQuery = from sd in db.StockDetails
+                          where sd.StockPortfolio == portfolio
                           select sd;
-            sdQuery = sdQuery.Where(sd => sd.StockPortfolio == portfolio);
-            //Make a list of all of those stock detail tables 
-            List<StockDetail> stockDetails = sdQuery.ToList();
-            List<Int32> stockIDsInAccount = new List<Int32>();
-            foreach(StockDetail detail in stockDetails)
+
+            if (sdQuery != null)
             {
-                stockIDsInAccount.Add(detail.Stock.StockID);
-            }
-            //If the user already has that stock in their account, add numShares to their detail table
-            //Otherwise, make a new stock detail for them 
-            if (stockIDsInAccount.Contains(selectedStock))
-            {
+                //Make a list of all of those stock detail tables 
+                List<StockDetail> stockDetails = sdQuery.ToList();
+                List<Int32> stockIDsInAccount = new List<Int32>();
                 foreach (StockDetail detail in stockDetails)
                 {
-                    if (selectedStock == detail.Stock.StockID)
+                    stockIDsInAccount.Add(detail.Stock.StockID);
+                }
+
+                //If the user already has that stock in their account, add numShares to their detail table
+                //Otherwise, make a new stock detail for them 
+                if (stockIDsInAccount.Contains(selectedStock))
+                {
+                    foreach (StockDetail detail in stockDetails)
                     {
-                        detail.Quantity += numShares;
-                        //Save this change to the DB
-                        db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-                        db.SaveChanges();
+                        if (selectedStock == detail.Stock.StockID)
+                        {
+                            detail.Quantity += numShares;
+                            //Save this change to the DB
+                            db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
+                            db.SaveChanges();
+                        }
                     }
                 }
-            }    
+                else
+                {
+                    StockDetail detail = new StockDetail();
+                    detail.StockPortfolio = user.StockPortfolio;
+                    detail.Stock = db.Stocks.Find(selectedStock);
+                    detail.Quantity = numShares;
+                    detail.PurchasePrice = bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice;
+                    //Save this new stock detail in the DB
+                    db.StockDetails.Add(detail);
+                    db.SaveChanges();
+                }
+            }
+
             else
             {
                 StockDetail detail = new StockDetail();
@@ -201,6 +229,9 @@ namespace bevo.Controllers
                 db.StockDetails.Add(detail);
                 db.SaveChanges();
             }
+
+
+
 
 
             //TODO: Figure out if I need to add a transaction for the fee associated with stock purchase 
@@ -222,14 +253,14 @@ namespace bevo.Controllers
             List<Stock> stocksList = Query.ToList();
 
             //make an available stock viewmodel for each one of thsoe 
-            foreach(Stock s in stocksList)
+            foreach (Stock s in stocksList)
             {
                 AvailableStock avail = new AvailableStock();
                 avail.Name = s.StockName;
                 avail.Ticker = s.StockTicker;
                 avail.CurrentPrice = bevo.Utilities.GetQuote.GetStock(s.StockTicker).LastTradePrice;
+                allStocks.Add(avail);
             }
-
 
             return allStocks;
         }
@@ -242,7 +273,7 @@ namespace bevo.Controllers
             List<CheckingAccount> checkingAccounts = user.CheckingAccounts;
             List<SavingAccount> savingAccounts = user.SavingAccounts;
             StockPortfolio stockPortfolio = user.StockPortfolio;
-            
+
             // get checkings
             foreach (var c in checkingAccounts)
             {
@@ -273,7 +304,7 @@ namespace bevo.Controllers
 
             return allAccounts;
         }
-        
+
         //Create a select list of all the accoutns for the user  
         //BASED ON ACCOUNTSVIEWMODEL OBJECTS
         public IEnumerable<SelectListItem> SelectAccount()
@@ -297,6 +328,47 @@ namespace bevo.Controllers
             return selectStock;
         }
 
+        // get account type
+        public String GetAccountType(Int32? accountNum)
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            String accountType;
 
+            List<CheckingAccount> checkingAccounts = user.CheckingAccounts;
+            foreach (var c in checkingAccounts)
+            {
+                if (accountNum == c.AccountNum)
+                {
+                    accountType = "CHECKING";
+                    return accountType;
+                }
+            }
+
+            List<SavingAccount> savingAccounts = user.SavingAccounts;
+            foreach (var s in savingAccounts)
+            {
+                if (accountNum == s.AccountNum)
+                {
+                    accountType = "SAVING";
+                    return accountType;
+                }
+            }
+
+            IRAccount iraAccount = user.IRAccount;
+            if (accountNum == iraAccount.AccountNum)
+            {
+                accountType = "IRA";
+                return accountType;
+            }
+
+            StockPortfolio stockPortfolio = user.StockPortfolio;
+            if (accountNum == stockPortfolio.AccountNum)
+            {
+                accountType = "STOCKPORTFOLIO";
+                return accountType;
+            }
+
+            return "NOT FOUND";
+        }
     }
 }
