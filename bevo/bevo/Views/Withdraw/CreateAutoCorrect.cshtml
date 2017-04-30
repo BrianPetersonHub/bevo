@@ -1,20 +1,18 @@
-﻿@using System.Web.Optimization
-@model bevo.Models.Transaction
-
+﻿@model bevo.Models.Transaction
 @{
-    ViewBag.Title = "transfer between accounts";
+    ViewBag.Title = "Create";
 }
+<h2>Make a Withdraw</h2>
 
+You cannot withdraw more than @Model.Amount, becuase you cannot overdraft account under -$50.
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-
     <div class="form-horizontal">
         <h4>Transaction</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
         <div class="form-group">
             @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -22,23 +20,14 @@
                 @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        @*drop down boxes*@
+        @*TODO: make this a dropdown of all their accounts*@
         <div class="form-group">
             @Html.LabelFor(model => model.FromAccount, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("fromAccount1", (SelectList)ViewBag.allAccounts, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.FromAccount, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.FromAccount, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.ToAccount, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("toAccount1", (SelectList)ViewBag.allAccounts, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ToAccount, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -46,7 +35,6 @@
                 @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -54,7 +42,6 @@
                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Submit" class="btn btn-default" />
@@ -62,13 +49,12 @@
         </div>
     </div>
 }
-
 <div>
     @Html.ActionLink(
     linkText: "Home Page",
     actionName: "Home",
     controllerName: "Customer");
 </div>
-
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
