@@ -44,18 +44,16 @@
                 htmlAttributes: new { @class = "quick-actions" })
             </p>
         </div>
-    </div>
-
-    <div class="quick-action-button">
-        <p>
-            @Html.ActionLink(
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
                 linkText: "Change Account Name",
                 actionName: "EditName",
                 controllerName: "CheckingAccounts",
                 routeValues: new { id = Model.CheckingAccountID },
                 htmlAttributes: new { @class = "quick-actions" })
-        </p>
-    </div>
+            </p>
+        </div>
 </div>
     <div class="homepage-container col-lg-9">
         <h3>List of Transactions</h3>

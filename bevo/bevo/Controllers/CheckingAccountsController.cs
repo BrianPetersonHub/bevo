@@ -59,7 +59,7 @@ namespace bevo.Controllers
             return View(checkingAccount);
         }
 
-        //GET: CheckingAccounts/Edit/#
+        //GET: CheckingAccounts/EditName/#
         [HttpGet]
         public ActionResult EditName(int? id)
         {
@@ -80,6 +80,7 @@ namespace bevo.Controllers
             return View(editAccountNameVM);
         }
 
+        //POST: SavingAccounts/EditName/#
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditName([Bind(Include = "AccountName")] EditAccountNameViewModel vm, int? id)

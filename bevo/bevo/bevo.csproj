@@ -440,6 +440,8 @@
     <Content Include="Views\Payees\Details.cshtml" />
     <Content Include="Views\Payees\Edit.cshtml" />
     <Content Include="Views\Payees\Index.cshtml" />
+    <Content Include="Views\CheckingAccounts\EditName.cshtml" />
+    <Content Include="Views\SavingAccounts\EditName.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
