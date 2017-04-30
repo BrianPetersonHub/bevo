@@ -4,68 +4,58 @@
 
 @using (Html.BeginForm("PurchaseStock", "PurchaseStock", FormMethod.Get))
 {
-    <p class="form-group">
-        Date: @Html.TextBox("enteredDate", null, new { @class = "form-control"}) <br />
-        @Html.DropDownList("selectedAccount", (SelectList)ViewBag.SelectAccount, new { @class = "form-control" }) <br/>
-        @Html.DropDownList("selectStock", (SelectList)ViewBag.SelectStock, new { @class = "form-control" }) <br/>
-        Name: @Html.TextBox("numShares", null, new { @class="form-control" }) <br/>
-        <input type="submit" value="Submit" class="btn btn-default" />
-    </p>
 
-    <p>Available Accounts to purchase from</p>
-    <table class="table">
-        <tr>
-            <th>
-                Account Name
-            </th>
-            <th>
-                Balance
-            </th>
-        </tr>
-        @foreach (var a in ViewBag.AllAccounts)
-        {
-            <tr>
-                <td>
-                    @a.AccountName
-                </td>
-                <td>
-                    @a.Balance
-                </td>
-            </tr>
-        }
-    </table>
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="form-container col-lg-4">
+            <p class="form-group">
+                Date: @Html.TextBox("enteredDate", null, new { @class = "form-control" }) <br />
+                Purchase with Account: @Html.DropDownList("selectedAccount", (SelectList)ViewBag.SelectAccount, new { @class = "form-control" }) <br />
+                Select Stock to Purchase: @Html.DropDownList("selectStock", (SelectList)ViewBag.SelectStock, new { @class = "form-control" }) <br />
+                Number of Shares: @Html.TextBox("numShares", null, new { @class = "form-control" }) <br />
+                <input type="submit" value="Submit" class="btn btn-default" />
+            </p>
+        </div>
 
-    <p> Available Stocks for Purchasing </p>
-        <table class="table">
-        <tr>
-            <th>
-                Stock Name
-            </th>
-            <th>
-                Stock Ticker
-            </th>
-            <th>
-                Current Price
-            </th>
-        </tr>
-        @foreach (var s in ViewBag.AvailableStocks)
-            {
-                <tr>
-                    <td>
-                        @s.Name
-                    </td>
-                    <td>
-                        @s.Ticker
-                    </td>
-                    <td>
-                        @s.CurrentPrice
-                    </td>
-                </tr>
-            }
-        </table>
+        <div class="form-table-container col-lg-7">
+            <div class="form-display-table">
+                <p>Available Accounts to purchase from</p>
+                <table class="table">
+                    <tr>
+                        <th>Account Name</th>
+                        <th>Balance</th>
+                    </tr>
+                    @foreach (var a in ViewBag.AllAccounts)
+                    {
+                        <tr>
+                            <td>@a.AccountName</td>
+                            <td>@a.Balance</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            
+            <div class="form-display-table">
+                <p>Available Accounts to purchase from</p>
+                <table class="table">
+                    <tr>
+                        <th>Stock</th>
+                        <th>Ticker</th>
+                        <th>Current Price</th>
+                    </tr>
+                    @foreach (var s in ViewBag.AvailableStocks)
+                {
+                        <tr>
+                            <td>@s.Name</td>
+                            <td>@s.Ticker</td>
+                            <td>@s.CurrentPrice</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
 
-    
-
+    </div>
 }
 
 
