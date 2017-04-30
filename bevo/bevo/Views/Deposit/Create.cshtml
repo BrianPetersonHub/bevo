@@ -63,7 +63,10 @@
 }
 
 <div>
-    @Html.ActionLink("Choose another transaction type", "ChooseTransaction")
+    @Html.ActionLink(
+    linkText: "Home Page",
+    actionName: "Home",
+    controllerName: "Customer");
 </div>
 
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
