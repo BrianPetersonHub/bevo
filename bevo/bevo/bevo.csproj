@@ -448,6 +448,7 @@
     <Content Include="Views\StockPortfolio\EditName.cshtml" />
     <Content Include="Views\PayBills\Index.cshtml" />
     <Content Include="Views\PayBills\AddPayeeIndex.cshtml" />
+    <Content Include="Views\Withdraw\CreateAutoCorrect.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
