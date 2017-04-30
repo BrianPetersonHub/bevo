@@ -18,14 +18,19 @@ namespace bevo.Controllers
         // GET: Withdraw
         public ActionResult Create()
         {
+            // pass account numbers, names, and balances for dropdown list
+            List<AccountsViewModel> allAccounts = GetAccounts();
+            SelectList selectAccounts = new SelectList(allAccounts.OrderBy(q => q.AccountName), "AccountNum", "AccountName");
+            ViewBag.allAccounts = selectAccounts;
             return View();
         }
 
         //POST: Create/Withdraw
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description,Dispute")] Transaction transaction)
+        public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description,Dispute")] Transaction transaction, Int32 selectedAccount)
         {
+            transaction.FromAccount = selectedAccount;
             if (ModelState.IsValid)
             {
                 Int32? accountNum = transaction.FromAccount;
@@ -373,6 +378,59 @@ namespace bevo.Controllers
             }
 
         }
+        //find all accounts a user owns
+        public List<AccountsViewModel> GetAccounts()
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            List<AccountsViewModel> allAccounts = new List<AccountsViewModel>();
+            if (user.CheckingAccounts != null)
+            {
+                List<CheckingAccount> checkingAccounts = user.CheckingAccounts.ToList<CheckingAccount>();
+                // get checkings
+                foreach (var c in checkingAccounts)
+                {
+                    AccountsViewModel accountToAdd = new AccountsViewModel();
+                    accountToAdd.AccountNum = c.AccountNum;
+                    accountToAdd.AccountName = c.AccountName;
+                    accountToAdd.Balance = c.Balance;
+                    allAccounts.Add(accountToAdd);
+                }
+            }
+            if (user.SavingAccounts != null)
+            {
+                List<SavingAccount> savingAccounts = user.SavingAccounts.ToList<SavingAccount>();
+                // get savings
+                foreach (var s in savingAccounts)
+                {
+                    AccountsViewModel accountToAdd = new AccountsViewModel();
+                    accountToAdd.AccountNum = s.AccountNum;
+                    accountToAdd.AccountName = s.AccountName;
+                    accountToAdd.Balance = s.Balance;
+                    allAccounts.Add(accountToAdd);
+                }
+            }
+            if (user.StockPortfolio != null)
+            {
+                StockPortfolio stockPortfolio = user.StockPortfolio;
+                // get cash portion stock portfolio
+                AccountsViewModel p = new AccountsViewModel();
+                p.AccountNum = stockPortfolio.AccountNum;
+                p.AccountName = stockPortfolio.AccountName;
+                p.Balance = stockPortfolio.Balance;
+                allAccounts.Add(p);
+            }
 
+            if (user.IRAccount != null)
+            {
+                IRAccount iraAccount = user.IRAccount;
+                // get cash portion stock portfolio
+                AccountsViewModel p = new AccountsViewModel();
+                p.AccountNum = iraAccount.AccountNum;
+                p.AccountName = iraAccount.AccountName;
+                p.Balance = iraAccount.Balance;
+                allAccounts.Add(p);
+            }
+            return allAccounts;
+        }
     }
 }
