@@ -180,6 +180,7 @@ namespace bevo.Controllers
                           where sd.StockPortfolio == portfolio
                           select sd;
 
+
             if (sdQuery != null)
             {
                 //Make a list of all of those stock detail tables 

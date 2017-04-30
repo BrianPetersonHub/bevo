@@ -51,16 +51,30 @@ namespace bevo.Controllers
         }
 
         //GET: Customer/ManageAccount
-        public ActionResult ViewInfo(String Id)
+        public ActionResult ViewInfo()
         {
-            AppUser user = db.Users.Find(Id);
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
             return View(user);
         }
 
         //GET: Customer/Edit
-        public ActionResult EditInfo(String Id)
+        public ActionResult EditInfo()
         {
-            AppUser user = db.Users.Find(Id);
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            return View(user);
+        }
+
+        //GET: Customer/Edit
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditInfo([Bind(Include = "FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday")] AppUser user)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("ViewInfo");
+            }
             return View(user);
         }
     }
