@@ -44,6 +44,16 @@
                 htmlAttributes: new { @class = "quick-actions" })
             </p>
         </div>
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
+                linkText: "Change Account Name",
+                actionName: "EditName",
+                controllerName: "IRAccount",
+                routeValues: new { id = Model.IRAccountID },
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
     </div>
     <div class="homepage-container col-lg-9">
         <h3>List of Transactions</h3>

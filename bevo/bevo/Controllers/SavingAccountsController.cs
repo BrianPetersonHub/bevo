@@ -61,5 +61,41 @@ namespace bevo.Controllers
             List<Transaction> transactions = savingAccount.Transactions;
             return transactions;
         }
+
+        //GET: SavingAccounts/EditName/#
+        [HttpGet]
+        public ActionResult EditName(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            SavingAccount savingAccount = db.SavingAccounts.Find(id);
+            if (savingAccount == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.AccountID = id;
+            EditAccountNameViewModel editAccountNameVM = new EditAccountNameViewModel();
+            editAccountNameVM.AccountName = savingAccount.AccountName;
+
+            return View(editAccountNameVM);
+        }
+
+        //POST: SavingAccounts/EditName/#
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditName([Bind(Include = "AccountName")] EditAccountNameViewModel vm, int? id)
+        {
+            if (ModelState.IsValid)
+            {
+                SavingAccount savingAccount = db.SavingAccounts.Find(id);
+                savingAccount.AccountName = vm.AccountName;
+                db.SaveChanges();
+                return RedirectToAction("Details", new { id = id });
+            }
+            return View(vm);
+        }
     }
 }

@@ -61,21 +61,42 @@ namespace bevo.Controllers
         public ActionResult EditInfo()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
-            return View(user);
+            EditUserViewModel editUserVM = new EditUserViewModel();
+            editUserVM.FirstName = user.FirstName;
+            editUserVM.MiddleInitial = user.MiddleInitial;
+            editUserVM.LastName = user.LastName;
+            editUserVM.Street = user.Street;
+            editUserVM.City = user.City;
+            editUserVM.State = user.State;
+            editUserVM.ZipCode = user.ZipCode;
+            editUserVM.Birthday = user.Birthday;
+            editUserVM.Email = user.Email;
+            editUserVM.PhoneNumber = user.PhoneNumber;
+            return View(editUserVM);
         }
 
         //GET: Customer/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditInfo([Bind(Include = "FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday")] AppUser user)
+        public ActionResult EditInfo([Bind(Include = "FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Email,PhoneNumber")] EditUserViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(user).State = EntityState.Modified;
+                AppUser user = db.Users.Find(User.Identity.GetUserId());
+                user.FirstName = vm.FirstName;
+                user.MiddleInitial = vm.MiddleInitial;
+                user.LastName = vm.LastName;
+                user.Street = vm.Street;
+                user.City = vm.City;
+                user.State = vm.State;
+                user.ZipCode = vm.ZipCode;
+                user.Birthday = vm.Birthday;
+                user.Email = vm.Email;
+                user.PhoneNumber = vm.PhoneNumber;
                 db.SaveChanges();
                 return RedirectToAction("ViewInfo");
             }
-            return View(user);
+            return View(vm);
         }
     }
 }

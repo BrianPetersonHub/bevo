@@ -65,6 +65,43 @@ namespace bevo.Controllers
             return View(stockPortfolio);
         }
 
+        //GET: StockPortfolio/EditName/#
+        [HttpGet]
+        public ActionResult EditName(String id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            StockPortfolio stockPortfolio = db.StockPortfolios.Find(id);
+            if (stockPortfolio == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.AccountID = id;
+            EditAccountNameViewModel editAccountNameVM = new EditAccountNameViewModel();
+            editAccountNameVM.AccountName = stockPortfolio.AccountName;
+
+            return View(editAccountNameVM);
+        }
+
+        //POST: StockPortfolio/EditName/#
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditName([Bind(Include = "AccountName")] EditAccountNameViewModel vm, String id)
+        {
+            if (ModelState.IsValid)
+            {
+                StockPortfolio stockPortfolio = db.StockPortfolios.Find(id);
+                stockPortfolio.AccountName = vm.AccountName;
+                db.SaveChanges();
+                return RedirectToAction("Details", new { id = id });
+            }
+            return View(vm);
+        }
+
+
         //Get all stocks into stockviewmodel
         public List<StockViewModel> GetStocks()
         {
