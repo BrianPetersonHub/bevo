@@ -161,7 +161,7 @@ namespace bevo.Controllers
                 {
                     portfolioInfo.CashAvailable += tr.Amount;
                 }
-                else if(tr.TransType == bevo.Models.TransType.Purchase_Stock && tr.FromAccount == user.StockPortfolio.AccountNum)
+                else if(tr.TransType == bevo.Models.TransType.Purchase_Stock && GetAccountNumbers().Contains(tr.FromAccount))
                 {
                     portfolioInfo.CashAvailable -= tr.Amount;
                 }
@@ -216,6 +216,7 @@ namespace bevo.Controllers
 
             //Define how much is in the GAINS PORTION of the portfolio
             decimal currentMarketValue = new decimal();
+            currentMarketValue = 0;
             foreach(StockViewModel s in PortfolioSnapshot())
             {
                 currentMarketValue += (s.CurrentPrice * s.NumInAccount);
@@ -367,6 +368,57 @@ namespace bevo.Controllers
 
             //Return the list with a quote for each stock that is in the account 
             return Quotes;
+        }
+
+        //Get a list of the account numbers for each of the user's accountis 
+        public List<AccountsViewModel> GetAccounts()
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            List<AccountsViewModel> allAccounts = new List<AccountsViewModel>();
+            List<CheckingAccount> checkingAccounts = user.CheckingAccounts;
+            List<SavingAccount> savingAccounts = user.SavingAccounts;
+            StockPortfolio stockPortfolio = user.StockPortfolio;
+
+            // get checkings
+            foreach (var c in checkingAccounts)
+            {
+                AccountsViewModel accountToAdd = new AccountsViewModel();
+                accountToAdd.AccountNum = c.AccountNum;
+                accountToAdd.AccountName = c.AccountName;
+                accountToAdd.Balance = c.Balance;
+                allAccounts.Add(accountToAdd);
+            }
+
+            // get savings
+            foreach (var s in checkingAccounts)
+            {
+                AccountsViewModel accountToAdd = new AccountsViewModel();
+                accountToAdd.AccountNum = s.AccountNum;
+                accountToAdd.AccountName = s.AccountName;
+                accountToAdd.Balance = s.Balance;
+                allAccounts.Add(accountToAdd);
+            }
+
+
+            // get cash portion stock portfolio
+            AccountsViewModel p = new AccountsViewModel();
+            p.AccountNum = stockPortfolio.AccountNum;
+            p.AccountName = stockPortfolio.AccountName;
+            p.Balance = stockPortfolio.Balance;
+            allAccounts.Add(p);
+
+            return allAccounts;
+        }
+
+        public List<Int32?> GetAccountNumbers()
+        {
+            List<Int32?> AcctNums = new List<Int32?>();
+            foreach(AccountsViewModel avm in GetAccounts())
+            {
+                AcctNums.Add(avm.AccountNum);
+            }
+
+            return AcctNums;
         }
     }
 }
