@@ -86,6 +86,12 @@ namespace bevo.Controllers
             return listTransactions;
         }
 
+        // Get list of transactions to view
+        public List<Transaction> GetTransactions()
+        {
+            List<Transaction> allTransactions = new List<Transaction>();
+            return allTransactions;
+        }
 
         // Search Results
         public ActionResult SearchTransactions( String description,
@@ -95,11 +101,10 @@ namespace bevo.Controllers
                                                 Date selectedDate )
         {
 
-            //DONE: start query
             var query = from t in db.Transactions
                         select t;
-
-            //DONE: Description textbox search
+            
+            //DONE: description textbox search
             if (description != null && description != "")
             {
                 query = query.Where(t => t.Description.Contains(description));
