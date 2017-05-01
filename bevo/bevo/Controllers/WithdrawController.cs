@@ -28,9 +28,13 @@ namespace bevo.Controllers
         //POST: Create/Withdraw
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description,Dispute")] Transaction transaction, Int32 selectedAccount)
+        public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description,Dispute")] Transaction transaction, int? selectedAccount)
         {
-            transaction.FromAccount = selectedAccount;
+            if (selectedAccount != null)
+            {
+                transaction.FromAccount = selectedAccount;
+            }
+
             if (ModelState.IsValid)
             {
                 Int32? accountNum = transaction.FromAccount;
@@ -47,7 +51,7 @@ namespace bevo.Controllers
                     CheckingAccount account = db.CheckingAccounts.Find(accountID);
                     if (account.Balance - transaction.Amount < -50)
                     {
-                        transaction.Amount = 51 + account.Balance;
+                        transaction.Amount = 49 + account.Balance;
                         ModelState.Clear();
                         return View("CreateAutoCorrect", transaction);
                     }

@@ -116,11 +116,16 @@ namespace bevo.Controllers
             db.Entry(detailInQuestion).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
+            //Add the amount of money made from selling the stock back into the portfolio's balance
+            portfolio.Balance += transToAdd.Amount;
+            db.Entry(portfolio).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+
             //Logic to get how much the original stock market value should decrease by
             //Based on incrementally determining how many transactions need to be negated to
             //sell as many stocks as the user wants to sell 
             Int32 listIndex = 0;
-            while (numShares > 1)
+            while (numShares > 0)
             {
                 //Take one away from the stocks in that purchase 
                 transViewModels[listIndex].NumPurchased -= 1;
@@ -132,8 +137,6 @@ namespace bevo.Controllers
                 {
                     listIndex += 1;
                 }
-                //Reduce the number of stocks on the stockdetail by one 
-                detailInQuestion.Quantity -= 1;
                 //Reduce the number of shares still to be sold by one
                 numShares -= 1;
             }
@@ -169,7 +172,6 @@ namespace bevo.Controllers
 
             //Subtract the ten dollars from the stock portfolio cash section as a result of the fee for selling stock
             //Assume here that they have at least ten bucks in their account 
-            portfolio.Balance -= sellStockFee;
             db.Entry(portfolio).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
