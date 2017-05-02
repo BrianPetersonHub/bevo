@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using bevo.Models;
+using System.Collections.Generic;
 
 namespace bevo.Controllers
 {
@@ -72,6 +73,15 @@ namespace bevo.Controllers
                 Logins = await UserManager.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
+
+            //Put useful information in the viewbag
+            ViewBag.TransactionMasterList = GetTrMasterList();
+            ViewBag.TransactionToApprove = GetTrToApprove();
+            ViewBag.UnresolvedDisputes = GetUnresolvedDisputes();
+            ViewBag.AllDisputes = GetAllDisputes();
+            
+
+
             return View(model);
         }
 
@@ -151,6 +161,78 @@ namespace bevo.Controllers
             }
 
             base.Dispose(disposing);
+        }
+
+
+
+
+
+
+
+
+
+
+
+        //Get a list of all transactions 
+        public List<Transaction> GetTrMasterList()
+        {
+            AppDbContext db = new AppDbContext();
+
+            List<Transaction> returnList = db.Transactions.ToList();
+
+            return returnList;
+        }
+
+        //Get a list of all transactions requiring manager approval
+        public List<Transaction> GetTrToApprove()
+        {
+            AppDbContext db = new AppDbContext();
+
+            List<Transaction> returnList = new List<Transaction>();
+            var query = from t in db.Transactions
+                        select t;
+            query = query.Where(t => t.NeedsApproval == true);
+            returnList = query.ToList();
+
+            return returnList;
+        }
+
+        public List<DisputeViewModel> GetUnresolvedDisputes()
+        {
+            AppDbContext db = new AppDbContext();
+
+            List<Dispute> disputeList = new List<Dispute>();
+            var query = from d in db.Disputes
+                        select d;
+            query = query.Where(d => d.DisputeStatus == DisputeStatus.Submitted);
+            disputeList = query.ToList();
+
+            List<DisputeViewModel> dvmList = new List<DisputeViewModel>();
+            foreach(Dispute d in disputeList)
+            {
+                DisputeViewModel dvm = new DisputeViewModel();
+                dvm.CorrectAmount = d.DisputedAmount;
+                dvm.FirstName = d.AppUser.FirstName;
+                dvm.LastName = d.AppUser.LastName;
+                dvm.TransAmount = d.Transaction.Amount;
+                dvm.Message = d.Message;
+                dvm.CustNum = d.AppUser.Id;
+                dvm.TransName = d.Transaction.TransactionID;
+
+                dvmList.Add(dvm);
+            }
+
+
+            return dvmList;
+        }
+
+        public List<Dispute> GetAllDisputes()
+        {
+            AppDbContext db = new AppDbContext();
+
+            List<Dispute> returnList = db.Disputes.ToList();
+
+            return returnList;
         }
 
 #region Helpers

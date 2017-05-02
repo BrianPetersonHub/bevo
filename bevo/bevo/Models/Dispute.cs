@@ -31,5 +31,6 @@ namespace bevo.Models
 
         //Nav properties 
         public virtual Transaction Transaction { get; set; }
+        public virtual AppUser AppUser { get; set; }
     }
 }

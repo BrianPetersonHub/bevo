@@ -14,12 +14,14 @@ namespace bevo.Models
         [Display(Name = "Account Name")]
         public String AccountName { get; set; }
         public Decimal Balance { get; set; }
+        public Boolean Active { get; set; }
 
         public SavingAccount()
         {
             AccountNum = GetAcctNum();
             AccountName = "Longhorn Saving";
             Balance = 0;
+            Active = true;
         }
 
         //SavingAccount can have many Persons

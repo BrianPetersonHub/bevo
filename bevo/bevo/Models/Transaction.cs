@@ -60,6 +60,11 @@ namespace bevo.Models
         //By the sell stocks controller 
         public Decimal? SMVRedux { get; set; }
 
+        //This property is to record whether the transaction still needs to be addressed by a manager
+        //It is nullable so we don't have to go through and add this property evrywhere
+        //It will be true only if the manager STILL NEEDS TO approve the transaction 
+        public Boolean? NeedsApproval { get; set; }
+
 
         // Navigational
         public virtual List<CheckingAccount> CheckingAccounts { get; set; }

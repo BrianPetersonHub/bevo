@@ -20,10 +20,13 @@ namespace bevo.Models
         public String AccountName { get; set; }
         public Decimal Balance { get; set; }
 
+        public Boolean Active { get; set; }
+
         public StockPortfolio()
         {
             AccountNum = GetAcctNum();
             Balance = 0;
+            Active = true;
         }
 
         //Stock portfolio can have many Persons

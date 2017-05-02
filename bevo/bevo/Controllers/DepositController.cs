@@ -51,7 +51,16 @@ namespace bevo.Controllers
                     Int32 accountID = query.First();
                     CheckingAccount account = db.CheckingAccounts.Find(accountID);
                     account.Transactions.Add(transaction);
-                    account.Balance = account.Balance + transaction.Amount;
+                    //Add the deposit to the account if it's less than 5000
+                    //Otherwise, mark it for approval from a manager 
+                    if (transaction.Amount >= 5000)
+                    {
+                        transaction.NeedsApproval = true;
+                    }
+                    else
+                    {
+                        account.Balance = account.Balance + transaction.Amount;
+                    }
                 }
 
                 else if (accountType == "SAVING")
@@ -63,7 +72,15 @@ namespace bevo.Controllers
                     Int32 accountID = query.First();
                     SavingAccount account = db.SavingAccounts.Find(accountID);
                     account.Transactions.Add(transaction);
-                    account.Balance = account.Balance + transaction.Amount;
+                    //Check if transaction needs approval 
+                    if(transaction.Amount >= 5000)
+                    {
+                        transaction.NeedsApproval = true;
+                    }
+                    else
+                    {
+                        account.Balance = account.Balance + transaction.Amount;
+                    }
                 }
 
                 else if (accountType == "IRA")
@@ -113,7 +130,14 @@ namespace bevo.Controllers
                     String accountID = query.First();
                     StockPortfolio account = db.StockPortfolios.Find(accountID);
                     account.Transactions.Add(transaction);
-                    account.Balance = account.Balance + transaction.Amount;
+                    if(transaction.Amount >= 5000)
+                    {
+                        transaction.NeedsApproval = true;
+                    }
+                    else
+                    {
+                        account.Balance = account.Balance + transaction.Amount;
+                    }
                 }
 
                 db.SaveChanges();

@@ -30,8 +30,8 @@ namespace bevo.Controllers
         public ActionResult CheckAccounts()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
-            List<CheckingAccount> checkingAccounts = user.CheckingAccounts;
-            List<SavingAccount> savingAccounts = user.SavingAccounts;
+            List<CheckingAccount> checkingAccounts = user.CheckingAccounts.ToList();
+            List<SavingAccount> savingAccounts = user.SavingAccounts.ToList();
             IRAccount irAccount = user.IRAccount;
             StockPortfolio stockPortfolio = user.StockPortfolio;
 

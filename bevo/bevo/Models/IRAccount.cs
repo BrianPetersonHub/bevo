@@ -20,11 +20,14 @@ namespace bevo.Models
         public String AccountName { get; set; }
         public Decimal Balance { get; set; }
 
+        public Boolean Active { get; set; }
+
         public IRAccount()
         {
             AccountNum = GetAcctNum();
             AccountName = "";
             Balance = 0;
+            Active = true;
         }
 
         //IRAccount can have many Persons

@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using bevo.Models;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace bevo.Controllers
 {
@@ -39,6 +40,9 @@ namespace bevo.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Message,DisputedAmount,TransactionID")] DisputeTransactionViewModel dt)
         {
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+            var user = userManager.FindById(User.Identity.GetUserId());
+
             if (ModelState.IsValid)
             {
                 Transaction transaction = db.Transactions.Find(dt.TransactionID);
@@ -47,6 +51,7 @@ namespace bevo.Controllers
                 dispute.DisputedAmount = dt.DisputedAmount;
                 dispute.DisputeStatus = DisputeStatus.Submitted;
                 dispute.Transaction = transaction;
+                dispute.AppUser = user;
                 db.Disputes.Add(dispute);
                 db.SaveChanges();
 

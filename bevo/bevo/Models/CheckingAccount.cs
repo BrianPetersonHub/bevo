@@ -14,11 +14,14 @@ namespace bevo.Models
         [Display(Name = "Account Name")]
         public String AccountName { get; set; }
         public Decimal Balance { get; set; }
+        public Boolean Active { get; set; }
+
         public CheckingAccount()
         {
             AccountNum = GetAcctNum();
             AccountName = "Longhorn Checking";
             Balance = 0;
+            Active = true;
         }
 
         //CheckingAccount can have many Persons
