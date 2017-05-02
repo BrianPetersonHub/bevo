@@ -1,14 +1,16 @@
 ﻿@model bevo.Models.Transaction
 
 @{
-    ViewBag.Title = "Transaction Detail";
+    ViewBag.Title = "transaction detail";
 }
 
-<h2>@ViewBag.Title</h2>
+<div class="row">
+    <div class="homepage-top">
+        <h2>@ViewBag.Title</h2>
+    </div>
+</div>
 
 <div>
-    <h4>Transaction</h4>
-    <hr />
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.TransactionNum)
