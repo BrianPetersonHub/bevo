@@ -28,9 +28,12 @@ namespace bevo.Controllers
         //POST: Create/Deposit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description")] Transaction transaction, Int32 toAccount)
+        public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description")] Transaction transaction, int? toAccount)
         {
-            transaction.ToAccount = toAccount;
+            if (toAccount != null)
+            {
+                transaction.ToAccount = toAccount;
+            }
             if (transaction.Amount < 0)
             {
                 ViewBag.Error = "putting in positive values for what you want to deposit";
@@ -41,6 +44,7 @@ namespace bevo.Controllers
                 Int32? accountNum = transaction.ToAccount;
                 String accountType = GetAccountType(accountNum);
                 transaction.TransType = TransType.Deposit;
+                transaction.Description = "Deposit " + transaction.Amount.ToString() + "into " + accountNum.ToString().Substring(accountNum.ToString().Length - 4);
 
                 if (accountType == "CHECKING")
                 {
@@ -145,6 +149,9 @@ namespace bevo.Controllers
                 return RedirectToAction("Home", "Customer");
             }
 
+            List<AccountsViewModel> allAccounts = GetAccounts();
+            SelectList selectAccounts = new SelectList(allAccounts.OrderBy(q => q.AccountName), "AccountNum", "AccountName");
+            ViewBag.allAccounts = selectAccounts;
             return View(transaction);
         }
 
