@@ -323,6 +323,9 @@ namespace bevo.Controllers
                 return RedirectToAction("Home", "Customer");
             }
 
+            List<AccountsViewModel> allAccounts = GetAccounts();
+            SelectList selectAccounts = new SelectList(allAccounts.OrderBy(q => q.AccountName), "AccountNum", "AccountName");
+            ViewBag.allAccounts = selectAccounts;
             return View(transaction);
         }
 
