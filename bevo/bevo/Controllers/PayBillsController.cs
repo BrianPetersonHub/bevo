@@ -207,7 +207,7 @@ namespace bevo.Controllers
                     // if payment causes overdraft, 
                     if (fromAccount.Balance - paymentAmount < -50)
                     {
-                        return Content("<script language'javascript' type = 'text/javascript'> alert('Hello world!');</script>");
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot overdraft more than $50!'); window.location='Index';</script>");
                     }
                     else if (fromAccount.Balance - paymentAmount <= 0 && fromAccount.Balance - paymentAmount >= -50)
                     {
@@ -267,7 +267,7 @@ namespace bevo.Controllers
                         db.SaveChanges();
                     }
 
-                    return RedirectToAction("Confirmation");
+                    return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully paid bill!'); window.location='../Customer/Home';</script>");
                 }
             }
 
@@ -284,7 +284,7 @@ namespace bevo.Controllers
                     // if payment causes overdraft, 
                     if (fromAccount.Balance - paymentAmount < -50)
                     {
-                        return RedirectToAction("Error");
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot overdraft more than $50!'); window.location='Index';</script>"); // to go to other controller method, ../Customer/Home
                     }
                     else if (fromAccount.Balance - paymentAmount <= 0 && fromAccount.Balance - paymentAmount >= -50)
                     {
@@ -349,7 +349,7 @@ namespace bevo.Controllers
                         db.SaveChanges();
                     }
 
-                    return RedirectToAction("Confirmation");
+                    return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully paid bill!'); window.location='../Customer/Home';</script>");
                 }
             }
             return RedirectToAction("Index");
