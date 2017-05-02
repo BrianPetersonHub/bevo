@@ -8,6 +8,16 @@
     <div class="homepage-top">
         <h2>Hello @ViewBag.Name !</h2>
     </div>
+    @{ if (ViewBag.OverdraftStatus == true)
+            {
+                ViewBag.DisplayError = "One or more of your accounts has been overdrafted";
+            <div class="row">
+                <div class="homepage-error">
+                    <h2>@ViewBag.DisplayError</h2>
+                </div>
+            </div>
+        }
+    }
 </div>
 
 
@@ -68,17 +78,6 @@
         </div>
     </div>
     <div class="homepage-container col-lg-9">
-        
-        @{ if (ViewBag.OverdraftStatus == true)
-            {
-                ViewBag.DisplayError = "One or more of your accounts has been overdrafted";
-                <div class="row">
-                    <div class="homepage-error">
-                        <h2>@ViewBag.DisplayError</h2>
-                    </div>
-                </div>
-            }
-        }
         <h3>Account Overview</h3>
         
         <table class="table">

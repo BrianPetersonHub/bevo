@@ -45,6 +45,14 @@
                         <tr>
                             <td>@a.PayeeName</td>
                             <td>@a.Type</td>
+                            <td>
+                                @Html.ActionLink(
+                                linkText: "Details",
+                                actionName: "Details",
+                                controllerName: "Payees",
+                                routeValues: new { id = a.PayeeID },
+                                htmlAttributes: null) 
+                            </td>
                         </tr>
                     }
                 </table>
