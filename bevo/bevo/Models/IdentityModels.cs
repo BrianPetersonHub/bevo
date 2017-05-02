@@ -55,6 +55,9 @@ namespace bevo.Models
         [DataType(DataType.Date)]
         public String Birthday { get; set; }
 
+        //Variable to determine whether the user's account is disabled or not
+        public Boolean? Active { get; set; }
+
 
         // Navigational 
         public virtual List<CheckingAccount> CheckingAccounts { get; set; }
