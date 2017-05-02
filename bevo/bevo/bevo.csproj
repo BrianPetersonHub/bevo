@@ -250,6 +250,12 @@
     <EmbeddedResource Include="Migrations\201705022129186_Updating enabled vs disabled variables.resx">
       <DependentUpon>201705022129186_Updating enabled vs disabled variables.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705022152439_Updating role relationship.resx">
+      <DependentUpon>201705022152439_Updating role relationship.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705022156150_Fixing what I just broke.resx">
+      <DependentUpon>201705022156150_Fixing what I just broke.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SeedData\Payee.csv" />
     <EmbeddedResource Include="SeedData\CheckingAccount.csv" />
     <EmbeddedResource Include="SeedData\IRAccount.csv" />
@@ -389,6 +395,14 @@
     <Compile Include="Migrations\201705022129186_Updating enabled vs disabled variables.cs" />
     <Compile Include="Migrations\201705022129186_Updating enabled vs disabled variables.Designer.cs">
       <DependentUpon>201705022129186_Updating enabled vs disabled variables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705022152439_Updating role relationship.cs" />
+    <Compile Include="Migrations\201705022152439_Updating role relationship.Designer.cs">
+      <DependentUpon>201705022152439_Updating role relationship.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705022156150_Fixing what I just broke.cs" />
+    <Compile Include="Migrations\201705022156150_Fixing what I just broke.Designer.cs">
+      <DependentUpon>201705022156150_Fixing what I just broke.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedIdentity.cs" />

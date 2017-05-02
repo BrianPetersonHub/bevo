@@ -274,7 +274,40 @@ namespace bevo.Controllers
         }
 
 
-        //public ActionResult PromoteEmployee
+
+
+        //Get method for chanign employee to a manager 
+        public ActionResult PromoteEmployee()
+        {
+            ViewBag.AllEmployees = GetEmployees();
+            return View();
+        }
+
+        //Post method for changing employee to a manager 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PromoteEmployee(String id)
+        {
+            AppDbContext db = new AppDbContext();
+
+            //Get the user we want 
+            var query = from user in db.Users
+                        select user;
+            query = query.Where(user => user.Id == id);
+            List<AppUser> queryList = query.ToList();
+            AppUser userInQuestion = queryList[0];
+
+            //Remove user from employee role and add them to manager role 
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+            userManager.RemoveFromRole(userInQuestion.Id, "Employee");
+            userManager.AddToRole(userInQuestion.Id, "Manager");
+
+            //Save Changes
+            db.Entry(userInQuestion).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return RedirectToAction("Home");
+        }
 
 
 
@@ -287,7 +320,7 @@ namespace bevo.Controllers
 
 
 
-        
+
 
 
         //Get a list of all transactions 
@@ -370,16 +403,33 @@ namespace bevo.Controllers
             return dvmList;
         }
 
-        //public List<AppUser> GetEmployees()
-        //{
-        //    AppDbContext db = new AppDbContext();
+        //get a list of all the user objects for employees 
+        public List<AppUser> GetEmployees()
+        {
+            AppDbContext db = new AppDbContext();
 
-        //    var query = from e in db.Users
-        //                select e;
-        //    query = query.Where(e => e.Roles == );
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+            List<AppUser> employeeList = new List<AppUser>();
 
+            foreach(AppUser user in db.Users)
+            {
+                if(userManager.GetRoles(user.Id).Contains("Employee"))
+                {
+                    employeeList.Add(user);
+                }
+            }
 
-        //}
+            
+            return employeeList;
+        }
+
+        //Make a select list for all of the employees a manager could choose to promote 
+        public IEnumerable<SelectListItem> SelectEmployee()
+        {
+            List<AppUser> employees = GetEmployees();
+            SelectList selectEmployee = new SelectList(employees, "Id", "Email");
+            return selectEmployee;
+        } 
 
 
     }
