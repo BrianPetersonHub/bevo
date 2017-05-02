@@ -280,6 +280,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IRAccountController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Controllers\PayBillsController.cs" />
     <Compile Include="Controllers\PayeesController.cs" />
     <Compile Include="Controllers\PurchaseStockController.cs" />
