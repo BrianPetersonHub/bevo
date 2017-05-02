@@ -256,6 +256,9 @@
     <EmbeddedResource Include="Migrations\201705022156150_Fixing what I just broke.resx">
       <DependentUpon>201705022156150_Fixing what I just broke.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705022300338_Adding disputes on appuser.resx">
+      <DependentUpon>201705022300338_Adding disputes on appuser.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SeedData\Payee.csv" />
     <EmbeddedResource Include="SeedData\CheckingAccount.csv" />
     <EmbeddedResource Include="SeedData\IRAccount.csv" />
@@ -403,6 +406,10 @@
     <Compile Include="Migrations\201705022156150_Fixing what I just broke.cs" />
     <Compile Include="Migrations\201705022156150_Fixing what I just broke.Designer.cs">
       <DependentUpon>201705022156150_Fixing what I just broke.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705022300338_Adding disputes on appuser.cs" />
+    <Compile Include="Migrations\201705022300338_Adding disputes on appuser.Designer.cs">
+      <DependentUpon>201705022300338_Adding disputes on appuser.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedIdentity.cs" />

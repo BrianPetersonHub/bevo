@@ -65,6 +65,7 @@ namespace bevo.Models
         public virtual IRAccount IRAccount { get; set; }
         public virtual StockPortfolio StockPortfolio { get; set; }
         public virtual List<Payee> Payees { get; set; }
+        public virtual List<Dispute> Disputes { get; set; }
 
 
         //This method allows you to create a new user
