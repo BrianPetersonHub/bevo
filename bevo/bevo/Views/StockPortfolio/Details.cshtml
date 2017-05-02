@@ -159,7 +159,9 @@
                     @foreach (var t in ViewBag.Transactions)
                     {
                         <tr>
-                            <td>@t.Date</td>
+                            <td>
+                                @(t.Date.ToShortDateString())
+                            </td>
                             <td>
                                 @t.TransType
                             </td>

@@ -9,28 +9,56 @@
 
 <link rel="stylesheet" href="../css/ChooseAccount.css" />
 
-<h2>@ViewBag.Title</h2>
+<div class="row">
+    <div class="homepage-top">
+        <h2>@ViewBag.Title</h2>
+    </div>
+</div>
 
-<div class="container">
+<div class="container choose-account-container">
     <div class="row">
-        <div class="col">
-            <div class="item">
-                @Html.ActionLink("Checkings Account", "Create", "CheckingAccounts")
+        <div class="col-lg-12">
+            <div class="item-button">
+                <p>
+                @Html.ActionLink(
+                linkText: "Checkings Account",
+                actionName: "Create",
+                controllerName: "CheckingAccounts",
+                routeValues: null,
+                htmlAttributes: new { @class = "item" })
+                </p>
             </div>
-        </div>
-        <div class="col">
-            <div class="item">
-                @Html.ActionLink("Savings Account", "Create", "SavingAccounts")
+            <div class="item-button">
+                <p>
+                @Html.ActionLink(
+                linkText: "Savings Account",
+                actionName: "Create",
+                controllerName: "SavingAccounts",
+                routeValues: null,
+                htmlAttributes: new { @class = "item" })
+                </p>
             </div>
-        </div>
-        <div class="col">
-            <div class="item">
-                @Html.ActionLink("IRA", "Create", "IRAccount")
+
+            <div class="item-button">
+                <p>
+                    @Html.ActionLink(
+                linkText: "IRA Account",
+                actionName: "Create",
+                controllerName: "IRAccount",
+                routeValues: null,
+                htmlAttributes: new { @class = "item" })
+                </p>
             </div>
-        </div>
-        <div class="col">
-            <div class="item">
-                @Html.ActionLink("Stock Portfolio", "Create", "StockPortfolio")
+            
+            <div class="item-button">
+                <p>
+                    @Html.ActionLink(
+                linkText: "Stock Portfolio",
+                actionName: "Create",
+                controllerName: "StockPortfolio",
+                routeValues: null,
+                htmlAttributes: new { @class = "item" })
+                </p>
             </div>
         </div>
     </div>

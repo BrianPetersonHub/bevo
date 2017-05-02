@@ -7,6 +7,7 @@ NAVIGATION
     4. HERO
     5. HOME PAGES
     6. STOCK PORTFOLIO
+    7. SELECT ACCOUNT
 
 */
 
@@ -160,16 +161,6 @@ ____________________________________________________________________*/
     display: block;
 }
 
-.quick-actions-b {
-    width: 100%;
-    background-color: #6497D1;
-    border-radius: 5px;
-    height: 40px;
-    margin-bottom: 10px;
-    text-align: center;
-    display: block;
-}
-
 .quick-action-button a {
     padding-top: 8px;
     color: white;
@@ -284,5 +275,43 @@ ____________________________________________________________________*/
 .table th {
     border: 0px !important;
     font-family: 'Open Sans', sans-serif;
+}
+
+/* 6. CHOOSE ACCOUNT
+____________________________________________________________________*/
+
+.choose-account-container {
+    height: 500px;
+}
+
+.item-button{
+    display: inline-block;
+    height: 50px;
+    margin-bottom: 10px;
+    width: 200px;
+    background-color: #6497D1;
+    text-align: center;
+    border-radius: 5px;
+    padding-top: 15px;
+    margin-right: 5px;
+}
+
+.item-button a {
+    padding-top: 8px;
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.item-button a:hover {
+    color: white;
+    text-decoration: none;
+}
+.item-button:hover {
+    background-color:#3F6187;
 }
 
