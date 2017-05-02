@@ -20,13 +20,16 @@ namespace bevo.Controllers
         {
             ViewBag.CustomerPayees = GetCustomerPayees();
             ViewBag.AllAccounts = GetAccounts();
+            ViewBag.SelectAccount = SelectAccount();
+            ViewBag.SelectPayee = SelectPayee();
             return View();
         }
 
         // Go to Add Payee page 
         public ActionResult AddPayeeIndex()
         {
-            ViewBag.AllPayees = GetPayees();
+            ViewBag.AvailablePayees = GetPayees();
+            ViewBag.CustomerPayees = GetCustomerPayees();
             ViewBag.SelectPayee = SelectPayee();
             return View();
         }
@@ -57,14 +60,18 @@ namespace bevo.Controllers
         public List<PayeeViewModel> GetPayees()
         {
             List<PayeeViewModel> allPayees = new List<PayeeViewModel>();
+            List<PayeeViewModel> customerPayees = GetCustomerPayees();
             foreach(Payee p in db.Payees)
             {
                 PayeeViewModel payee = new PayeeViewModel();
                 payee.PayeeName = p.Name;
                 payee.PayeeID = p.PayeeID;
                 payee.Type = p.PayeeType;
-                allPayees.Add(payee);
 
+                if (!customerPayees.Contains(payee))
+                {
+                    allPayees.Add(payee);
+                } 
             }
 
             return allPayees;
@@ -156,12 +163,6 @@ namespace bevo.Controllers
             SelectList selectAccount = new SelectList(allAccounts.OrderBy(p => p.AccountNum), "AccountNum", "AccountName");
             return selectAccount;
         }
-
-
-
-
-
-
 
 
         // POST: Pay bill, make payment 

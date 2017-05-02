@@ -1,7 +1,82 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "pay bills";
 }
 
-<h2>Index</h2>
+
+<div class="row">
+    <div class="homepage-top">
+        <h2>pay a bill</h2>
+    </div>
+</div>
+
+@using (Html.BeginForm("PayBill", "PayBills", FormMethod.Post))
+{
+
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="form-table-container col-lg-7">
+            <p>Accounts to Pay Bill</p>
+            <div class="form-display-table">
+                <table class="table">
+                    <tr>
+                        <th>Account Name</th>
+                        <th>Balance</th>
+                    </tr>
+                    @foreach (var a in ViewBag.AllAccounts)
+                    {
+                        <tr>
+                            <td>@a.AccountName</td>
+                            <td>@a.Ticker</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            
+            <p>My payees</p>
+            <div class="form-display-table">
+                <table class="table">
+                    <tr>
+                        <th>Payee Name</th>
+                        <th>Type</th>
+                    </tr>
+                    @foreach (var a in ViewBag.CustomerPayees)
+                    {
+                        <tr>
+                            <td>@a.PayeeName</td>
+                            <td>@a.Type</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+
+            <div class="quick-action-button">
+                <p>
+                @Html.ActionLink(
+                linkText: "Add an Existing Payee",
+                actionName: "AddPayeeIndex",
+                controllerName: "PayBills",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+                </p>
+            </div>
+        </div>
+
+        <div class="form-container col-lg-4">
+            <p class="form-group">
+                Date @Html.TextBox("dateEntered", null, new { @class = "form-control" }) <br />
+                Amount to Pay @Html.TextBox("paymentAmount", null, new { @class = "form-control" }) <br />
+                Purchase with Account @Html.DropDownList("selectedAccount", (SelectList)ViewBag.SelectAccount, new { @class = "form-control" }) <br />
+                Pay To @Html.DropDownList("selectedPayee", (SelectList)ViewBag.SelectPayee, new { @class = "form-control" }) <br />
+                <input type="submit" value="Submit" class="btn btn-default color" />
+            </p>
+        </div>
+
+    </div>
+}
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 
