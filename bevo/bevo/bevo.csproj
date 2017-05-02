@@ -447,12 +447,7 @@
     <Content Include="Views\Stocks\Details.cshtml" />
     <Content Include="Views\Stocks\Edit.cshtml" />
     <Content Include="Views\Stocks\Index.cshtml" />
-    <Content Include="Views\IRAccount\DepositAgeError.cshtml" />
-    <Content Include="Views\IRAccount\WithdrawAgeAmountError.cshtml" />
-    <Content Include="Views\IRAccount\TransferAgeAmountError.cshtml" />
     <Content Include="Views\Dispute\Create.cshtml" />
-    <Content Include="Views\IRAccount\TransferAgeError.cshtml" />
-    <Content Include="Views\IRAccount\TransferLimitError.cshtml" />
     <Content Include="Views\Deposit\CreateAutoCorrect.cshtml" />
     <Content Include="Views\Employee\Home.cshtml" />
     <Content Include="Views\Manager\Home.cshtml" />
