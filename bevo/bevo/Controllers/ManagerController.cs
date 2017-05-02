@@ -274,6 +274,7 @@ namespace bevo.Controllers
         }
 
 
+        //public ActionResult PromoteEmployee
 
 
 
@@ -282,6 +283,11 @@ namespace bevo.Controllers
 
 
 
+
+
+
+
+        
 
 
         //Get a list of all transactions 
@@ -363,5 +369,18 @@ namespace bevo.Controllers
 
             return dvmList;
         }
+
+        //public List<AppUser> GetEmployees()
+        //{
+        //    AppDbContext db = new AppDbContext();
+
+        //    var query = from e in db.Users
+        //                select e;
+        //    query = query.Where(e => e.Roles == );
+
+
+        //}
+
+
     }
 }

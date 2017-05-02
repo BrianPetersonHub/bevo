@@ -247,6 +247,9 @@
     <EmbeddedResource Include="Migrations\201705021732044_Fixed Dispute ID.resx">
       <DependentUpon>201705021732044_Fixed Dispute ID.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705022129186_Updating enabled vs disabled variables.resx">
+      <DependentUpon>201705022129186_Updating enabled vs disabled variables.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SeedData\Payee.csv" />
     <EmbeddedResource Include="SeedData\CheckingAccount.csv" />
     <EmbeddedResource Include="SeedData\IRAccount.csv" />
@@ -382,6 +385,10 @@
     <Compile Include="Migrations\201705021732044_Fixed Dispute ID.cs" />
     <Compile Include="Migrations\201705021732044_Fixed Dispute ID.Designer.cs">
       <DependentUpon>201705021732044_Fixed Dispute ID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705022129186_Updating enabled vs disabled variables.cs" />
+    <Compile Include="Migrations\201705022129186_Updating enabled vs disabled variables.Designer.cs">
+      <DependentUpon>201705022129186_Updating enabled vs disabled variables.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedIdentity.cs" />

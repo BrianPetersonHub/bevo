@@ -56,7 +56,7 @@ namespace bevo.Models
         public String Birthday { get; set; }
 
         //Variable to determine whether the user's account is disabled or not
-        public Boolean? Active { get; set; }
+        public Boolean? Disabled { get; set; }
 
 
         // Navigational 
