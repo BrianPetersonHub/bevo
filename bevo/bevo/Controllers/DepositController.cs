@@ -44,7 +44,7 @@ namespace bevo.Controllers
                 Int32? accountNum = transaction.ToAccount;
                 String accountType = GetAccountType(accountNum);
                 transaction.TransType = TransType.Deposit;
-                transaction.Description = "Deposit" + transaction.Amount.ToString() + "into" + accountNum.ToString();
+                transaction.Description = "Deposit " + transaction.Amount.ToString() + "into " + accountNum.ToString().Substring(accountNum.ToString().Length - 4);
 
                 if (accountType == "CHECKING")
                 {

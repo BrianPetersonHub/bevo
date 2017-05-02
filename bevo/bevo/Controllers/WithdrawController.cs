@@ -40,7 +40,7 @@ namespace bevo.Controllers
                 Int32? accountNum = transaction.FromAccount;
                 String accountType = GetAccountType(accountNum);
                 transaction.TransType = TransType.Withdrawal;
-                transaction.Description = "Withdraw" + transaction.Amount.ToString() + "from" + accountNum.ToString();
+                transaction.Description = "Withdraw " + transaction.Amount.ToString() + "from " + accountNum.ToString().Substring(accountNum.ToString().Length - 4);
 
                 //FOR CHECKING
                 if (accountType == "CHECKING")
