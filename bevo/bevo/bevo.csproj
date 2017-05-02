@@ -244,6 +244,9 @@
     <EmbeddedResource Include="Migrations\201705021614496_Updated appuser model.resx">
       <DependentUpon>201705021614496_Updated appuser model.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705021732044_Fixed Dispute ID.resx">
+      <DependentUpon>201705021732044_Fixed Dispute ID.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SeedData\Payee.csv" />
     <EmbeddedResource Include="SeedData\CheckingAccount.csv" />
     <EmbeddedResource Include="SeedData\IRAccount.csv" />
@@ -375,6 +378,10 @@
     <Compile Include="Migrations\201705021614496_Updated appuser model.cs" />
     <Compile Include="Migrations\201705021614496_Updated appuser model.Designer.cs">
       <DependentUpon>201705021614496_Updated appuser model.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705021732044_Fixed Dispute ID.cs" />
+    <Compile Include="Migrations\201705021732044_Fixed Dispute ID.Designer.cs">
+      <DependentUpon>201705021732044_Fixed Dispute ID.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedIdentity.cs" />

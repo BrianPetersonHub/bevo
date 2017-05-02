@@ -9,6 +9,8 @@ using Microsoft.Owin.Security;
 using bevo.Models;
 using System.Collections.Generic;
 using System.Net;
+using System.Data.Entity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace bevo.Controllers
 {
@@ -17,16 +19,15 @@ namespace bevo.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: Manager
-        public ActionResult IndexHome()
+        public ActionResult Home()
         {
-            var appUsers = db.AppUsers.Include(a => a.IRAccount).Include(a => a.StockPortfolio);
-            return View(appUsers.ToList());
-
             //Put useful information in the viewbag
             ViewBag.TransactionMasterList = GetTrMasterList();
             ViewBag.TransactionToApprove = GetTrToApprove();
             ViewBag.UnresolvedDisputes = GetUnresolvedDisputes();
             ViewBag.AllDisputes = GetAllDisputes();
+
+            return View();
         }
 
         // GET: Manager/Details/5
@@ -36,7 +37,7 @@ namespace bevo.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AppUser appUser = db.AppUsers.Find(id);
+            AppUser appUser = db.Users.Find(id);
             if (appUser == null)
             {
                 return HttpNotFound();
@@ -61,7 +62,7 @@ namespace bevo.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.AppUsers.Add(appUser);
+                db.Users.Add(appUser);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -78,7 +79,7 @@ namespace bevo.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AppUser appUser = db.AppUsers.Find(id);
+            AppUser appUser = db.Users.Find(id);
             if (appUser == null)
             {
                 return HttpNotFound();
@@ -113,7 +114,7 @@ namespace bevo.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AppUser appUser = db.AppUsers.Find(id);
+            AppUser appUser = db.Users.Find(id);
             if (appUser == null)
             {
                 return HttpNotFound();
@@ -126,8 +127,8 @@ namespace bevo.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            AppUser appUser = db.AppUsers.Find(id);
-            db.AppUsers.Remove(appUser);
+            AppUser appUser = db.Users.Find(id);
+            db.Users.Remove(appUser);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -162,7 +163,7 @@ namespace bevo.Controllers
             //Get the dispute object we're concerned with 
             var query = from d in db.Disputes
                         select d;
-            query = query.Where(d => d.DisputeId == id);
+            query = query.Where(d => d.DisputeID == id);
 
             if (query == null)
             {
@@ -183,7 +184,7 @@ namespace bevo.Controllers
                 dvm.Status = theDispute.DisputeStatus;
                 dvm.TransName = theDispute.Transaction.TransactionID;
                 dvm.TransAmount = theDispute.Transaction.Amount;
-                dvm.DisputeID = theDispute.DisputeId;
+                dvm.DisputeID = theDispute.DisputeID;
 
                 return View(dvm);
             }
@@ -192,7 +193,7 @@ namespace bevo.Controllers
         //Make a post method for editing disputes 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditDispute([Bind(Include = "CorrectAmount,CustEmail,FirstName,LastName,Message,Status,TransName,TransAmount")] DisputeViewModel dvm)
+        public ActionResult EditDispute([Bind(Include = "CorrectAmount,CustEmail,FirstName,LastName,Message,Status,TransName,TransAmount,DisputeID")] DisputeViewModel dvm, Decimal? adjustedAmount)
         {
             AppDbContext db = new AppDbContext();
 
@@ -201,9 +202,75 @@ namespace bevo.Controllers
                 Dispute disToChange = db.Disputes.Find(dvm.DisputeID);
                 Transaction transToChange = db.Transactions.Find(dvm.TransName);
 
-                disToChange.DisputeStatus = dvm.Status;
-                disToChange.Message = disToChange.Message + "\n" +
+                //get user currently logged in 
+                UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+                var user = userManager.FindById(User.Identity.GetUserId());
+
+                //Make appropriate changes to the dispute and transaction in quetion 
+                //based on whether the dispute was accepted, rejected, or adjusted
+                if (dvm.Status == DisputeStatus.Accepted)
+                {
+                    disToChange.DisputeStatus = dvm.Status;
+                    if(dvm.Message != null)
+                    {
+                        disToChange.Message = disToChange.Message + "\n" + dvm.Message;
+                    }
+                    transToChange.Amount = dvm.CorrectAmount;
+                    transToChange.Description = "Dispute [Accepted] " + transToChange.Description;
+                    disToChange.ManResolvedEmail = user.Email;
+
+                    db.Entry(disToChange).State = EntityState.Modified;
+                    db.Entry(transToChange).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return RedirectToAction("Home");
+                }
+                if(dvm.Status == DisputeStatus.Rejected)
+                {
+                    //Send an email to the user in question 
+                    String bodyForEmail = null;
+                    if(dvm.Message != null)
+                    {
+                        bodyForEmail = "Your dispute on transaction number " + transToChange.TransactionID + " has been rejected."
+                       + "Additional messages from the manager who resolved your dispute: " + "\n" + dvm.Message;
+                    }
+                    else
+                    {
+                        bodyForEmail = "Your dispute on transaction number " + transToChange.TransactionID + " has been rejected.";
+                    }
+
+                    bevo.Messaging.EmailMessaging.SendEmail(disToChange.AppUser.Email, "Dispute Rejected", bodyForEmail);
+
+                    //Change the appropriate information and save it to the DB
+                    disToChange.DisputeStatus = dvm.Status;
+                    transToChange.Description = "Dispute [Rejected] " + transToChange.Description;
+                    db.Entry(disToChange).State = EntityState.Modified;
+                    db.Entry(transToChange).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return RedirectToAction("Home");
+                }
+                if(dvm.Status == DisputeStatus.Adjusted)
+                {
+                    disToChange.DisputeStatus = dvm.Status;
+                    if (dvm.Message != null)
+                    {
+                        disToChange.Message = disToChange.Message + "\n" + dvm.Message;
+                    }
+                    transToChange.Amount = (decimal)adjustedAmount;
+                    transToChange.Description = "Dispute [Accepted] " + transToChange.Description;
+                    disToChange.ManResolvedEmail = user.Email;
+
+                    db.Entry(disToChange).State = EntityState.Modified;
+                    db.Entry(transToChange).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return RedirectToAction("Home");
+                }
+
+
             }
+            return View(dvm);
         }
 
 
@@ -262,7 +329,7 @@ namespace bevo.Controllers
                 dvm.Message = d.Message;
                 dvm.CustEmail = d.AppUser.Email;
                 dvm.TransName = d.Transaction.TransactionID;
-                dvm.DisputeID = d.DisputeId;
+                dvm.DisputeID = d.DisputeID;
                 dvm.Status = DisputeStatus.Submitted;
 
                 dvmList.Add(dvm);
@@ -289,7 +356,7 @@ namespace bevo.Controllers
                 dvm.Message = d.Message;
                 dvm.CustEmail = d.AppUser.Email;
                 dvm.TransName = d.Transaction.TransactionID;
-                dvm.DisputeID = d.DisputeId;
+                dvm.DisputeID = d.DisputeID;
                 dvm.Status = d.DisputeStatus;
 
                 dvmList.Add(dvm);
