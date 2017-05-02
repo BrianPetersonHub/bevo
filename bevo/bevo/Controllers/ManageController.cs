@@ -226,13 +226,28 @@ namespace bevo.Controllers
             return dvmList;
         }
 
-        public List<Dispute> GetAllDisputes()
+        public List<DisputeViewModel> GetAllDisputes()
         {
             AppDbContext db = new AppDbContext();
 
-            List<Dispute> returnList = db.Disputes.ToList();
+            List<Dispute> disputeList = db.Disputes.ToList();
 
-            return returnList;
+            List<DisputeViewModel> dvmList = new List<DisputeViewModel>();
+            foreach(Dispute d in disputeList)
+            {
+                DisputeViewModel dvm = new DisputeViewModel();
+                dvm.CorrectAmount = d.DisputedAmount;
+                dvm.FirstName = d.AppUser.FirstName;
+                dvm.LastName = d.AppUser.LastName;
+                dvm.TransAmount = d.Transaction.Amount;
+                dvm.Message = d.Message;
+                dvm.CustNum = d.AppUser.Id;
+                dvm.TransName = d.Transaction.TransactionID;
+
+                dvmList.Add(dvm);
+            }
+
+            return dvmList;
         }
 
 #region Helpers

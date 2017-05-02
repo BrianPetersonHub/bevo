@@ -238,6 +238,9 @@
     <EmbeddedResource Include="Migrations\201705021422404_Added activation variables to account models.resx">
       <DependentUpon>201705021422404_Added activation variables to account models.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705021537524_Continuing identity setup.resx">
+      <DependentUpon>201705021537524_Continuing identity setup.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SeedData\Payee.csv" />
     <EmbeddedResource Include="SeedData\CheckingAccount.csv" />
     <EmbeddedResource Include="SeedData\IRAccount.csv" />
@@ -360,6 +363,10 @@
     <Compile Include="Migrations\201705021422404_Added activation variables to account models.cs" />
     <Compile Include="Migrations\201705021422404_Added activation variables to account models.Designer.cs">
       <DependentUpon>201705021422404_Added activation variables to account models.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705021537524_Continuing identity setup.cs" />
+    <Compile Include="Migrations\201705021537524_Continuing identity setup.Designer.cs">
+      <DependentUpon>201705021537524_Continuing identity setup.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedIdentity.cs" />
