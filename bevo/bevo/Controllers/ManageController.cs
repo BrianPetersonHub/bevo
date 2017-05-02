@@ -216,7 +216,7 @@ namespace bevo.Controllers
                 dvm.LastName = d.AppUser.LastName;
                 dvm.TransAmount = d.Transaction.Amount;
                 dvm.Message = d.Message;
-                dvm.CustNum = d.AppUser.Id;
+                dvm.CustNum = d.AppUser.Email;
                 dvm.TransName = d.Transaction.TransactionID;
 
                 dvmList.Add(dvm);
@@ -241,7 +241,7 @@ namespace bevo.Controllers
                 dvm.LastName = d.AppUser.LastName;
                 dvm.TransAmount = d.Transaction.Amount;
                 dvm.Message = d.Message;
-                dvm.CustNum = d.AppUser.Id;
+                dvm.CustNum = d.AppUser.Email;
                 dvm.TransName = d.Transaction.TransactionID;
 
                 dvmList.Add(dvm);

@@ -27,6 +27,8 @@ namespace bevo.Models
         [Display(Name = "Correct amount")]
         public Decimal DisputedAmount { get; set; }
 
+        public String ManResolvedEmail { get; set; }
+
 
 
         //Nav properties 
