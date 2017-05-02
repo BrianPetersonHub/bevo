@@ -14,5 +14,8 @@ namespace bevo.Models
         public Int32? TransName { get; set; }
         public Decimal? CorrectAmount { get; set; }
         public String Message { get; set; }
+        public String ManEmail { get; set; }
+
+
     }
 }
