@@ -1,4 +1,5 @@
 ﻿@model bevo.Models.AppUser
+@using Microsoft.VisualBasic;
 
 @{
     ViewBag.Title = "home";
@@ -109,10 +110,9 @@
                         Checking
                     </td>
                     <td>
-                        @c.AccountNum
+                        @((c.AccountNum.ToString()).Substring(c.AccountNum.ToString().Length - 4))
                     </td>
                     <td>
-                        @*TODO: only display last 4 digits*@
                         $@c.Balance
                     </td>
                     <td>
@@ -135,8 +135,7 @@
                         Saving
                     </td>
                     <td>
-                        @*TODO: only display last 4 digits*@
-                        @s.AccountNum
+                        @((s.AccountNum.ToString()).Substring(s.AccountNum.ToString().Length - 4))
                     </td>
                     <td>
                         $@s.Balance 
@@ -161,7 +160,7 @@
                         IRA
                     </td>
                     <td>
-                        @ViewBag.IRAccount.AccountNum
+                        @((ViewBag.IRAccount.AccountNum.ToString()).Substring(@ViewBag.IRAccount.AccountNum.ToString().Length - 4))
                     </td>
                     <td>
                         $@ViewBag.IRAccount.Balance
@@ -185,8 +184,8 @@
                     <td>
                         Stock Portfolio
                     </td>
-                    <td>
-                        @ViewBag.StockPortfolio.AccountNum
+                    <td>                       
+                        @((ViewBag.StockPortfolio.AccountNum.ToString()).Substring(@ViewBag.StockPortfolio.AccountNum.ToString().Length - 4))
                     </td>
                     <td>
                         $@ViewBag.StockPortfolio.Balance
