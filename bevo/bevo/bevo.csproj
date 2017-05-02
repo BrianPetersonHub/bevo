@@ -451,6 +451,7 @@
     <Content Include="Views\PayBills\AddPayeeIndex.cshtml" />
     <Content Include="Views\Withdraw\CreateAutoCorrect.cshtml" />
     <Content Include="Views\PayBills\Confirmation.cshtml" />
+    <Content Include="Views\PayBills\Error.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

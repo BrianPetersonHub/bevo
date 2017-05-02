@@ -40,6 +40,11 @@ namespace bevo.Controllers
             return View();
         }
 
+        //Go to error page
+        public ActionResult Error()
+        {
+            return View();
+        }
         // Add payee to customer from list of payees 
         public ActionResult AddPayee(Int32 selectedPayee)
         {
@@ -63,23 +68,25 @@ namespace bevo.Controllers
             return RedirectToAction("Index");
         }
 
-        //Get ALL AVAILABLE payees in db (those the customer does not have)
+        //Get ALL payees in db
         public List<PayeeViewModel> GetPayees()
         {
             List<PayeeViewModel> allPayees = new List<PayeeViewModel>();
             List<PayeeViewModel> customerPayees = GetCustomerPayees();
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+            var user = userManager.FindById(User.Identity.GetUserId());
+
             foreach (Payee p in db.Payees)
             {
-                PayeeViewModel payee = new PayeeViewModel();
-                foreach (PayeeViewModel cp in customerPayees)
+                if (user.Payees.Contains(p))
+                { }
+                else
                 {
-                    if (cp.PayeeID != p.PayeeID)
-                    {
-                        payee.PayeeName = p.Name;
-                        payee.PayeeID = p.PayeeID;
-                        payee.Type = p.PayeeType;
-                        allPayees.Add(payee);
-                    }
+                    PayeeViewModel payee = new PayeeViewModel();
+                    payee.PayeeName = p.Name;
+                    payee.PayeeID = p.PayeeID;
+                    payee.Type = p.PayeeType;
+                    allPayees.Add(payee);
                 }
             }
 
@@ -158,16 +165,6 @@ namespace bevo.Controllers
                     allAccounts.Add(accountToAdd);
                 }
             }
-            if (user.StockPortfolio != null)
-            {
-                StockPortfolio stockPortfolio = user.StockPortfolio;
-                // get cash portion stock portfolio
-                AccountsViewModel p = new AccountsViewModel();
-                p.AccountNum = stockPortfolio.AccountNum;
-                p.AccountName = stockPortfolio.AccountName;
-                p.Balance = stockPortfolio.Balance;
-                allAccounts.Add(p);
-            }
             return allAccounts;
         }
 
@@ -224,7 +221,7 @@ namespace bevo.Controllers
                             if (payee.PayeeID == selectedPayee)
                             {
                                 payeeName = payee.PayeeName;
-                                trans.Description = "Payment of" + paymentAmount + "to" + payeeName;
+                                trans.Description = "Payment of " + "$" + paymentAmount + " to " + payeeName;
                             }
                         }
                         
@@ -262,7 +259,7 @@ namespace bevo.Controllers
                             if (payee.PayeeID == selectedPayee)
                             {
                                 payeeName = payee.PayeeName;
-                                trans.Description = "Payment of" + paymentAmount + "to" + payeeName;
+                                trans.Description = "Payment of " + "$" + paymentAmount + " to " + payeeName;
                             }
                         }
 

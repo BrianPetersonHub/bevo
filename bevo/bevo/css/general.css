@@ -159,6 +159,16 @@ ____________________________________________________________________*/
     display: block;
 }
 
+.quick-actions-b {
+    width: 100%;
+    background-color: #6497D1;
+    border-radius: 5px;
+    height: 40px;
+    margin-bottom: 10px;
+    text-align: center;
+    display: block;
+}
+
 .quick-action-button a {
     padding-top: 8px;
     color: white;
