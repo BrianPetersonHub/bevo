@@ -56,8 +56,8 @@
                 <p>
                     @Html.ActionLink(
                 linkText: "Add a New Payee",
-                actionName: "AddPayeeIndex",
-                controllerName: "PayBills",
+                actionName: "Create",
+                controllerName: "Payee",
                 routeValues: null,
                 htmlAttributes: new { @class = "quick-actions" })
                 </p>
@@ -65,7 +65,7 @@
         </div>
         <div class="form-container col-lg-4">
             <p class="form-group">
-                Select Payee to Add @Html.DropDownList("selectedAccount", (SelectList)ViewBag.SelectAccount, new { @class = "form-control" }) <br />
+                Select Payee to Add @Html.DropDownList("selectedPayee", (SelectList)ViewBag.SelectPayee, new { @class = "form-control" }) <br />
                 <input type="submit" value="Submit" class="btn btn-default color" />
             </p>
         </div>

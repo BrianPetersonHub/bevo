@@ -30,7 +30,13 @@ namespace bevo.Controllers
         {
             ViewBag.AvailablePayees = GetPayees();
             ViewBag.CustomerPayees = GetCustomerPayees();
-            ViewBag.SelectPayee = SelectPayee();
+            ViewBag.SelectPayee = SelectAvailablePayees();
+            return View();
+        }
+
+        //Go to confimration page
+        public ActionResult Confirmation()
+        {
             return View();
         }
 
@@ -51,27 +57,30 @@ namespace bevo.Controllers
             foreach(Payee p in qList)
             {
                 user.Payees.Add(p);
+                db.SaveChanges();
             }
 
             return RedirectToAction("Index");
         }
 
-        //Get ALL payees in db
+        //Get ALL AVAILABLE payees in db (those the customer does not have)
         public List<PayeeViewModel> GetPayees()
         {
             List<PayeeViewModel> allPayees = new List<PayeeViewModel>();
             List<PayeeViewModel> customerPayees = GetCustomerPayees();
-            foreach(Payee p in db.Payees)
+            foreach (Payee p in db.Payees)
             {
                 PayeeViewModel payee = new PayeeViewModel();
-                payee.PayeeName = p.Name;
-                payee.PayeeID = p.PayeeID;
-                payee.Type = p.PayeeType;
-
-                if (!customerPayees.Contains(payee))
+                foreach (PayeeViewModel cp in customerPayees)
                 {
-                    allPayees.Add(payee);
-                } 
+                    if (cp.PayeeID != p.PayeeID)
+                    {
+                        payee.PayeeName = p.Name;
+                        payee.PayeeID = p.PayeeID;
+                        payee.Type = p.PayeeType;
+                        allPayees.Add(payee);
+                    }
+                }
             }
 
             return allPayees;
@@ -112,6 +121,12 @@ namespace bevo.Controllers
             return selectPayee;
         }
 
+        public IEnumerable<SelectListItem> SelectAvailablePayees()
+        {
+            List<PayeeViewModel> allPayees = GetPayees();
+            SelectList selectPayee = new SelectList(allPayees.OrderBy(p => p.PayeeID), "PayeeID", "PayeeName");
+            return selectPayee;
+        }
         // Get all checkings and savings accounts
         public List<AccountsViewModel> GetAccounts()
         {
@@ -169,22 +184,227 @@ namespace bevo.Controllers
         public ActionResult PayBill(Int32 selectedPayee, Int32 selectedAccount, Decimal paymentAmount, DateTime dateEntered)
         {
 
-            // create transaction with type Pay_Payee
+            //Make a transaction to store this info
+            Transaction trans = new Transaction();
+            if (paymentAmount >= 0)
+            {
+                trans.Amount = paymentAmount;
+            }
+            trans.TransType = TransType.Pay_Payee;
+            trans.Date = dateEntered;
 
-            // logic for overdrafting rules
-            // if paymentAmount causes overdraft
-                // if payment would cause selectedAccount > $50 under
-                    // error message
-                // else
-                    // $30 transaction fee Type: "Fee", Description: "Overdraft Fee"
-            // return RedirectToAction("Confirmation");
+
+            // find account type and query for type
+            String accountType = GetAccountType(selectedAccount);
+
+            if (accountType == "CHECKING")
+            {
+                var query = from a in db.CheckingAccounts
+                            where a.AccountNum == selectedAccount
+                            select a.CheckingAccountID;
+                Int32 accountID = query.First();
+                CheckingAccount fromAccount = db.CheckingAccounts.Find(accountID);
+
+                if (query != null)
+                {
+                    // if payment causes overdraft, 
+                    if (fromAccount.Balance - paymentAmount < -50)
+                    {
+                        return RedirectToAction("Error");
+                    }
+                    else if (fromAccount.Balance - paymentAmount <= 0 && fromAccount.Balance - paymentAmount >= -50)
+                    {
+                        trans.FromAccount = fromAccount.AccountNum;
+
+                        String payeeName;
+                        //find payee name
+                        List<PayeeViewModel> allPayees = GetPayees();
+                        foreach (var payee in allPayees)
+                        {
+                            if (payee.PayeeID == selectedPayee)
+                            {
+                                payeeName = payee.PayeeName;
+                                trans.Description = "Payment of" + paymentAmount + "to" + payeeName;
+                            }
+                        }
+                        
+                        fromAccount.Transactions.Add(trans);
+
+                        
+
+                        Transaction feeTransaction = new Transaction();
+                        feeTransaction.TransType = TransType.Fee;
+                        feeTransaction.Amount = 30;
+                        feeTransaction.Date = DateTime.Today;
+                        feeTransaction.FromAccount = fromAccount.AccountNum;
+                        feeTransaction.Description = "$30 fee from overdrafting";
+
+                        fromAccount.Transactions.Add(feeTransaction);
+
+                        fromAccount.Balance = fromAccount.Balance - trans.Amount - feeTransaction.Amount;
+                        db.Transactions.Add(trans);
+                        db.Transactions.Add(feeTransaction);
+                        db.SaveChanges();
+
+                    }
+                    else
+                    {
+                        fromAccount.Transactions.Add(trans);
+                        //Assign the from account as that account's AccountNum
+                        fromAccount.Transactions.Add(trans);
+                        fromAccount.Balance = fromAccount.Balance - trans.Amount;
+
+                        String payeeName;
+                        //find payee name
+                        List<PayeeViewModel> allPayees = GetPayees();
+                        foreach (var payee in allPayees)
+                        {
+                            if (payee.PayeeID == selectedPayee)
+                            {
+                                payeeName = payee.PayeeName;
+                                trans.Description = "Payment of" + paymentAmount + "to" + payeeName;
+                            }
+                        }
+
+                        db.Transactions.Add(trans);
+                        db.SaveChanges();
+                    }
+
+                    return RedirectToAction("Confirmation");
+                }
+            }
+
+            else if (accountType == "SAVING")
+            {
+                var query = from a in db.SavingAccounts
+                            where a.AccountNum == selectedAccount
+                            select a.SavingAccountID;
+                Int32 accountID = query.First();
+                SavingAccount fromAccount = db.SavingAccounts.Find(accountID);
+
+                if (query != null)
+                {
+                    // if payment causes overdraft, 
+                    if (fromAccount.Balance - paymentAmount < -50)
+                    {
+                        return RedirectToAction("Error");
+                    }
+                    else if (fromAccount.Balance - paymentAmount <= 0 && fromAccount.Balance - paymentAmount >= -50)
+                    {
+                        fromAccount.Transactions.Add(trans);
+
+                        String payeeName;
+                        //find payee name
+                        List<PayeeViewModel> allPayees = GetPayees();
+                        foreach (var payee in allPayees)
+                        {
+                            if (payee.PayeeID == selectedPayee)
+                            {
+                                payeeName = payee.PayeeName;
+                                trans.Description = "Payment of" + paymentAmount + "to" + payeeName;
+                            }
+                        }
+
+                        Transaction feeTransaction = new Transaction();
+                        feeTransaction.TransType = TransType.Fee;
+                        feeTransaction.Amount = 30;
+                        feeTransaction.Date = DateTime.Today;
+                        feeTransaction.FromAccount = fromAccount.AccountNum;
+                        feeTransaction.Description = "$30 fee from overdrafting";
+
+                        fromAccount.Transactions.Add(feeTransaction);
+
+                        fromAccount.Balance = fromAccount.Balance - trans.Amount - feeTransaction.Amount;
+                        db.Transactions.Add(trans);
+                        db.Transactions.Add(feeTransaction);
+                        db.SaveChanges();
+
+                    }
+                    else
+                    {
+                        fromAccount.Transactions.Add(trans);
+
+                        String payeeName;
+                        //find payee name
+                        List<PayeeViewModel> allPayees = GetPayees();
+                        foreach (var payee in allPayees)
+                        {
+                            if (payee.PayeeID == selectedPayee)
+                            {
+                                payeeName = payee.PayeeName;
+                                trans.Description = "Payment of" + paymentAmount + "to" + payeeName;
+                            }
+                        }
+
+                        //Assign the from account as that account's AccountNum
+                        trans.FromAccount = fromAccount.AccountNum;
+                        if (paymentAmount >= 0)
+                        {
+                            trans.Amount = paymentAmount;
+                        }
+                        trans.TransType = TransType.Pay_Payee;
+                        trans.Date = dateEntered;
+
+                        fromAccount.Transactions.Add(trans);
+                        fromAccount.Balance = fromAccount.Balance - trans.Amount;
+
+                        db.Transactions.Add(trans);
+                        db.SaveChanges();
+                    }
+
+                    return RedirectToAction("Confirmation");
+                }
+            }
             return RedirectToAction("Index");
 
         }
 
+        // get account type
+        public String GetAccountType(Int32? accountNum)
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            String accountType;
+
+            List<CheckingAccount> checkingAccounts = user.CheckingAccounts;
+            foreach (var c in checkingAccounts)
+            {
+                if (accountNum == c.AccountNum)
+                {
+                    accountType = "CHECKING";
+                    return accountType;
+                }
+            }
+
+            List<SavingAccount> savingAccounts = user.SavingAccounts;
+            foreach (var s in savingAccounts)
+            {
+                if (accountNum == s.AccountNum)
+                {
+                    accountType = "SAVING";
+                    return accountType;
+                }
+            }
+
+            IRAccount iraAccount = user.IRAccount;
+            if (user.IRAccount != null)
+            {
+                if (accountNum == iraAccount.AccountNum)
+                {
+                    accountType = "IRA";
+                    return accountType;
+                }
+            }
 
 
+            StockPortfolio stockPortfolio = user.StockPortfolio;
+            if (accountNum == stockPortfolio.AccountNum)
+            {
+                accountType = "STOCKPORTFOLIO";
+                return accountType;
+            }
 
+            return "NOT FOUND";
+        }
 
 
     }
