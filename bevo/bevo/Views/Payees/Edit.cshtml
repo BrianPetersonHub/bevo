@@ -67,8 +67,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.PayeeType, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EnumDropDownListFor(model => model.PayeeType, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.PayeeType, "", new { @class = "text-danger" })
+                @ViewBag.PayeeType
             </div>
         </div>
 

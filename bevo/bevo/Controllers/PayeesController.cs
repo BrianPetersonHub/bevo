@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using bevo.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace bevo.Controllers
 {
@@ -50,9 +52,12 @@ namespace bevo.Controllers
         {
             if (ModelState.IsValid)
             {
+                UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+                var user = userManager.FindById(User.Identity.GetUserId());
+                user.Payees.Add(payee);
                 db.Payees.Add(payee);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return View("Confirmation");
             }
 
             return View(payee);
@@ -70,8 +75,11 @@ namespace bevo.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.PayeeType = payee.PayeeType;
             return View(payee);
         }
+
 
         // POST: Payees/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 

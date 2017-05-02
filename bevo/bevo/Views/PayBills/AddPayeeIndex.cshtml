@@ -1,7 +1,79 @@
 ﻿
 @{
-    ViewBag.Title = "AddPayeeIndex";
+    ViewBag.Title = "add a payee";
 }
 
-<h2>AddPayeeIndex</h2>
+
+<div class="row">
+    <div class="homepage-top">
+        <h2>add a payee</h2>
+    </div>
+</div>
+
+@using (Html.BeginForm("AddPayee", "PayBills", FormMethod.Post))
+{
+
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="form-table-container col-lg-7">
+            <p>My Payees</p>
+            <div class="form-display-table">
+                <table class="table">
+                    <tr>
+                        <th>Payee</th>
+                        <th>Type</th>
+                    </tr>
+                    @foreach (var a in ViewBag.CustomerPayees)
+                    {
+                        <tr>
+                            <td>@a.PayeeName</td>
+                            <td>@a.Type</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+
+            <p>Available Payees to Add</p>
+            <div class="form-display-table">
+
+                <table class="table">
+                    <tr>
+                        <th>Payee</th>
+                        <th>Type</th>
+                    </tr>
+                    @foreach (var s in ViewBag.AvailablePayees)
+                    {
+                        <tr>
+                            <td>@s.PayeeName</td>
+                            <td>@s.Type</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+
+            <div class="quick-action-button">
+                <p>
+                    @Html.ActionLink(
+                linkText: "Add a New Payee",
+                actionName: "Create",
+                controllerName: "Payees",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+                </p>
+            </div>
+        </div>
+        <div class="form-container col-lg-4">
+            <p class="form-group">
+                Select Payee to Add @Html.DropDownList("selectedPayee", (SelectList)ViewBag.SelectPayee, new { @class = "form-control" }) <br />
+                <input type="submit" value="Submit" class="btn btn-default color" />
+            </p>
+        </div>
+
+    </div>
+}
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 
