@@ -1,7 +1,46 @@
-﻿
+﻿@model bevo.Models.AppUser
+@using Microsoft.VisualBasic;
+
 @{
     ViewBag.Title = "employee home";
 }
 
+<div class="row">
+    <div class="homepage-top">
+        <h2>Employee Home</h2>
+    </div>
+</div>
 
 
+<div class="homepage row">
+    <div class="quick-action-container col-lg-3">
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
+                linkText: "View Transactions",
+                actionName: "Index",
+                controllerName: "Transactions",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
+              linkText: "Manage Customers",
+              actionName: "Index",
+              controllerName: "Customers",
+              routeValues: null,
+              htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <!--TODO: Move this somewhere else...-->
+            <p>
+                @Html.ActionLink(linkText: "View Account Info", actionName: "ViewInfo", routeValues: null, htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+    </div>
+    
+
+</div>

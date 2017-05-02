@@ -18,7 +18,7 @@
             <p>
                 @Html.ActionLink(
                 linkText: "Process Portfolios",
-                actionName: "Balance",
+                actionName: "Process",
                 controllerName: "StockPortfolio",
                 routeValues: null,
                 htmlAttributes: new { @class = "quick-actions" })
@@ -39,21 +39,31 @@
                 @Html.ActionLink(
                 linkText: "Add Stocks",
                 actionName: "Create",
-                controllerName: "Withdraw",
+                controllerName: "Stocks",
                 routeValues: null,
                 htmlAttributes: new { @class = "quick-actions" })
             </p>
         </div>
         <div class="quick-action-button">
             <p>
-                @Html.ActionLink(
+              @Html.ActionLink(
               linkText: "Manage Employees",
               actionName: "Index",
-              controllerName: "PayBills",
+              controllerName: "Employees",
               routeValues: null,
               htmlAttributes: new { @class = "quick-actions" })
-        </p>
-    </div>
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <p>
+              @Html.ActionLink(
+              linkText: "Manage Customers",
+              actionName: "Index",
+              controllerName: "Customers",
+              routeValues: null,
+              htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
     <div class="quick-action-button">
         <!--TODO: Move this somewhere else...-->
         <p>
@@ -66,6 +76,9 @@
 
     <table class="table">
         <tr>
+            <th>
+                Date
+            </th>
             <th>
                 Transaction
             </th>
@@ -80,9 +93,12 @@
             </th>
 
         </tr>
-        @foreach (var d in ViewBag.Disputes)
+        @foreach (var d in ViewBag.UnresolvedDisputes)
             {
             <tr>
+                <td>
+                    @d.Date
+                </td>
                 <td>
                     @d.TransName
                 </td>
@@ -102,20 +118,20 @@
                 </td>
             </tr>
         }
-        @foreach (var t in ViewBag.Transactions)
+        @foreach (var t in ViewBag.TransactionToApprove)
             {
             <tr>
                 <td>
-                    @t.TransNum
+                    @t.Date
                 </td>
                 <td>
-                    @t.
+                    @t.TransactionNum
                 </td>
                 <td>
-                    @t.
+                    @t.Amount
                 </td>
                 <td>
-                    @t.
+                    UserID
                 </td>
                 <td>
                     @Html.ActionLink(
