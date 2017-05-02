@@ -207,7 +207,7 @@ namespace bevo.Controllers
                     // if payment causes overdraft, 
                     if (fromAccount.Balance - paymentAmount < -50)
                     {
-                        return RedirectToAction("Error");
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Hello world!');</script>");
                     }
                     else if (fromAccount.Balance - paymentAmount <= 0 && fromAccount.Balance - paymentAmount >= -50)
                     {
