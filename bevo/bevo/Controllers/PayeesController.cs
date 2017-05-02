@@ -57,7 +57,7 @@ namespace bevo.Controllers
                 user.Payees.Add(payee);
                 db.Payees.Add(payee);
                 db.SaveChanges();
-                return View("Confirmation");
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully added payee!'); window.location='../PayBills/Index';</script>");
             }
 
             return View(payee);
