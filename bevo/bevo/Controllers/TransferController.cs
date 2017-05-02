@@ -28,8 +28,14 @@ namespace bevo.Controllers
         //POST: Create/Transfer
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description,Dispute")] Transaction transaction, Int32 toAccount1, Int32 fromAccount1)
+        public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description,Dispute")] Transaction transaction, int? toAccount1, int? fromAccount1)
         {
+
+            if (fromAccount1 != null)
+            {
+                transaction.FromAccount = fromAccount1;
+            }
+
             transaction.ToAccount = toAccount1;
             transaction.FromAccount = fromAccount1;
             if (ModelState.IsValid)
@@ -103,6 +109,7 @@ namespace bevo.Controllers
                     toAccount.Balance = toAccount.Balance + transaction.Amount;
                 }
 
+
                 if (fromAccountType == "CHECKING")
                 {
                     var query = from a in db.CheckingAccounts
@@ -111,8 +118,39 @@ namespace bevo.Controllers
                     //gets first (only) thing from query list
                     Int32 accountID = query.First();
                     CheckingAccount fromAccount = db.CheckingAccounts.Find(accountID);
-                    fromAccount.Transactions.Add(transaction);
-                    fromAccount.Balance = fromAccount.Balance - transaction.Amount;
+                    //check if account is already overdrafted
+                    if (fromAccount.Balance <= -50)
+                    {
+                        return View("MaxOverdraftError");
+                    }
+                    //check for overdraft strarts. if transaction will make balance <-50, return new view with error and autofilled max transaction
+                    if (fromAccount.Balance - transaction.Amount < -50)
+                    {
+                        transaction.Amount = 50 + fromAccount.Balance;
+                        ModelState.Clear();
+                        return View("CreateAutoCorrect", transaction);
+                    }
+                    //if transaction makes balance between 0 and -50, add transaction, make new fee transaction of $30 on top of overdraft
+                    else if (fromAccount.Balance - transaction.Amount < 0 && fromAccount.Balance - transaction.Amount >= -50)
+                    {
+                        fromAccount.Transactions.Add(transaction);
+
+                        Transaction feeTransaction = new Transaction();
+                        feeTransaction.TransType = TransType.Fee;
+                        feeTransaction.Amount = 30;
+                        feeTransaction.Date = DateTime.Today;
+                        feeTransaction.FromAccount = fromAccount.AccountNum;
+                        feeTransaction.Description = "$30 fee from overdrafting";
+
+                        fromAccount.Transactions.Add(feeTransaction);
+
+                        fromAccount.Balance = fromAccount.Balance - transaction.Amount - feeTransaction.Amount;
+                    }
+                    else
+                    {
+                        fromAccount.Transactions.Add(transaction);
+                        fromAccount.Balance = fromAccount.Balance - transaction.Amount;
+                    }
                 }
                 else if (fromAccountType == "SAVING")
                 {
@@ -122,9 +160,41 @@ namespace bevo.Controllers
                     //gets first (only) thing from query list
                     Int32 accountID = query.First();
                     SavingAccount fromAccount = db.SavingAccounts.Find(accountID);
-                    fromAccount.Transactions.Add(transaction);
-                    fromAccount.Balance = fromAccount.Balance - transaction.Amount;
+                    //check if account is already overdrafted
+                    if (fromAccount.Balance <= -50)
+                    {
+                        return View("MaxOverdraftError");
+                    }
+                    //check for overdraft strarts. if transaction will make balance <-50, return new view with error and autofilled max transaction
+                    if (fromAccount.Balance - transaction.Amount < -50)
+                    {
+                        transaction.Amount = 50 + fromAccount.Balance;
+                        ModelState.Clear();
+                        return View("CreateAutoCorrect", transaction);
+                    }
+                    //if transaction makes balance between 0 and -50, add transaction, make new fee transaction of $30 on top of overdraft
+                    else if (fromAccount.Balance - transaction.Amount < 0 && fromAccount.Balance - transaction.Amount >= -50)
+                    {
+                        fromAccount.Transactions.Add(transaction);
+
+                        Transaction feeTransaction = new Transaction();
+                        feeTransaction.TransType = TransType.Fee;
+                        feeTransaction.Amount = 30;
+                        feeTransaction.Date = DateTime.Today;
+                        feeTransaction.FromAccount = fromAccount.AccountNum;
+                        feeTransaction.Description = "$30 fee from overdrafting";
+
+                        fromAccount.Transactions.Add(feeTransaction);
+
+                        fromAccount.Balance = fromAccount.Balance - transaction.Amount - feeTransaction.Amount;
+                    }
+                    else
+                    {
+                        fromAccount.Transactions.Add(transaction);
+                        fromAccount.Balance = fromAccount.Balance - transaction.Amount;
+                    }
                 }
+
                 else if (fromAccountType == "IRA")
                 {
                     var query = from a in db.IRAccounts
@@ -139,27 +209,72 @@ namespace bevo.Controllers
                     {
                         if (transaction.Amount > 3000)
                         {
-                            return RedirectToAction("TransferAgeAmountError", "IRAccount");
+                            return RedirectToAction("WithdrawAgeAmountError", "IRAccount");
                         }
                         else
                         {
-                            fromAccount.Transactions.Add(transaction);
-                            Transaction feeTransaction = new Transaction();
-                            feeTransaction.TransType = TransType.Fee;
-                            feeTransaction.Date = DateTime.Now;
-                            feeTransaction.FromAccount = transaction.FromAccount;
-                            feeTransaction.Amount = 30;
-                            feeTransaction.Description = "Fee for transfering funds out of IRA when under 65 years old";
-                            fromAccount.Transactions.Add(feeTransaction);
+                            if (fromAccount.Balance - transaction.Amount < -50)
+                            {
+                                transaction.Amount = 50 + fromAccount.Balance;
+                                ModelState.Clear();
+                                return View("CreateAutoCorrect", transaction);
+                            }
+                            else if (fromAccount.Balance - transaction.Amount < 0 && fromAccount.Balance - transaction.Amount >= -50)
+                            {
+                                fromAccount.Transactions.Add(transaction);
+
+                                Transaction ODfeeTransaction = new Transaction();
+                                ODfeeTransaction.TransType = TransType.Fee;
+                                ODfeeTransaction.Amount = 30;
+                                ODfeeTransaction.Date = DateTime.Today;
+                                ODfeeTransaction.FromAccount = fromAccount.AccountNum;
+                                ODfeeTransaction.Description = "$30 fee from overdrafting";
+                                fromAccount.Transactions.Add(ODfeeTransaction);
+
+                                Transaction feeTransaction = new Transaction();
+                                feeTransaction.TransType = TransType.Fee;
+                                feeTransaction.Date = DateTime.Now;
+                                feeTransaction.FromAccount = transaction.FromAccount;
+                                feeTransaction.Amount = 30;
+                                feeTransaction.Description = "$30 Fee for transfering funds out of IRA when under 65 years old";
+                                fromAccount.Transactions.Add(feeTransaction);
+
+                                fromAccount.Balance = fromAccount.Balance - transaction.Amount - ODfeeTransaction.Amount - feeTransaction.Amount;
+                            }
                         }
                     }
                     else
                     {
-                         fromAccount.Transactions.Add(transaction);
-                         fromAccount.Balance = fromAccount.Balance - transaction.Amount;
+                        if (fromAccount.Balance - transaction.Amount <= -50)
+                        {
+                            transaction.Amount = 50 + fromAccount.Balance;
+                            ModelState.Clear();
+                            return View("CreateAutoCorrect", transaction);
+                        }
+                        else if (fromAccount.Balance - transaction.Amount < 0 && fromAccount.Balance - transaction.Amount >= -50)
+                        {
+                            fromAccount.Transactions.Add(transaction);
+
+                            Transaction feeTransaction = new Transaction();
+                            feeTransaction.TransType = TransType.Fee;
+                            feeTransaction.Amount = 30;
+                            feeTransaction.Date = DateTime.Today;
+                            feeTransaction.FromAccount = fromAccount.AccountNum;
+                            feeTransaction.Description = "$30 fee from overdrafting";
+
+                            fromAccount.Transactions.Add(feeTransaction);
+
+                            fromAccount.Balance = fromAccount.Balance - transaction.Amount - feeTransaction.Amount;
+                        }
+                        else
+                        {
+                            fromAccount.Transactions.Add(transaction);
+                            fromAccount.Balance = fromAccount.Balance - transaction.Amount;
+                        }
+
                     }
-                   
                 }
+
                 else if (fromAccountType == "STOCKPORTFOLIO")
                 {
                     var query = from a in db.StockPortfolios
@@ -168,8 +283,39 @@ namespace bevo.Controllers
                     //gets first (only) thing from query list
                     String accountID = query.First();
                     StockPortfolio fromAccount = db.StockPortfolios.Find(accountID);
-                    fromAccount.Transactions.Add(transaction);
-                    fromAccount.Balance = fromAccount.Balance - transaction.Amount;
+                    //check if account is already overdrafted
+                    if (fromAccount.Balance <= -50)
+                    {
+                        return View("MaxOverdraftError");
+                    }
+                    //check for overdraft strarts. if transaction will make balance <-50, return new view with error and autofilled max transaction
+                    if (fromAccount.Balance - transaction.Amount < -50)
+                    {
+                        transaction.Amount = 50 + fromAccount.Balance;
+                        ModelState.Clear();
+                        return View("CreateAutoCorrect", transaction);
+                    }
+                    //if transaction makes balance between 0 and -50, add transaction, make new fee transaction of $30 on top of overdraft
+                    else if (fromAccount.Balance - transaction.Amount < 0 && fromAccount.Balance - transaction.Amount >= -50)
+                    {
+                        fromAccount.Transactions.Add(transaction);
+
+                        Transaction feeTransaction = new Transaction();
+                        feeTransaction.TransType = TransType.Fee;
+                        feeTransaction.Amount = 30;
+                        feeTransaction.Date = DateTime.Today;
+                        feeTransaction.FromAccount = fromAccount.AccountNum;
+                        feeTransaction.Description = "$30 fee from overdrafting";
+
+                        fromAccount.Transactions.Add(feeTransaction);
+
+                        fromAccount.Balance = fromAccount.Balance - transaction.Amount - feeTransaction.Amount;
+                    }
+                    else
+                    {
+                        fromAccount.Transactions.Add(transaction);
+                        fromAccount.Balance = fromAccount.Balance - transaction.Amount;
+                    }
                 }
 
                 db.SaveChanges();
@@ -180,6 +326,16 @@ namespace bevo.Controllers
             return View(transaction);
         }
 
+
+        public ActionResult CreateAutoCorrect()
+        {
+            return View();
+        }
+
+        public ActionResult MaxOverdrafError()
+        {
+            return View();
+        }
 
         //method returns string (CHECKING, SAVING, IRA, STOCK PORTFOLIO) depending on what type of account 
         public String GetAccountType(Int32? accountNum)

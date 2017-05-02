@@ -41,6 +41,7 @@ namespace bevo.Controllers
                 String accountType = GetAccountType(accountNum);
                 transaction.TransType = TransType.Withdrawal;
 
+                //FOR CHECKING
                 if (accountType == "CHECKING")
                 {
                     var query = from a in db.CheckingAccounts
@@ -49,13 +50,20 @@ namespace bevo.Controllers
                     //gets first (only) thing from query list
                     Int32 accountID = query.First();
                     CheckingAccount account = db.CheckingAccounts.Find(accountID);
+                    //check if account is already overdrafted
+                    if (account.Balance <= -50)
+                    {
+                        return View("MaxOverdraftError");
+                    }
+                    //check for overdraft strarts. if transaction will make balance <-50, return new view with error and autofilled max transaction
                     if (account.Balance - transaction.Amount < -50)
                     {
-                        transaction.Amount = 49 + account.Balance;
+                        transaction.Amount = 50 + account.Balance;
                         ModelState.Clear();
                         return View("CreateAutoCorrect", transaction);
                     }
-                    else if (account.Balance - transaction.Amount <= 0 && account.Balance - transaction.Amount >= -50)
+                    //if transaction makes balance between 0 and -50, add transaction, make new fee transaction of $30 on top of overdraft
+                    else if (account.Balance - transaction.Amount < 0 && account.Balance - transaction.Amount >= -50)
                     {
                         account.Transactions.Add(transaction);
 
@@ -78,6 +86,7 @@ namespace bevo.Controllers
                     
                 }
 
+                //FOR SAVING
                 else if (accountType == "SAVING")
                 {
                     var query = from a in db.SavingAccounts
@@ -87,13 +96,20 @@ namespace bevo.Controllers
                     Int32 accountID = query.First();
                     SavingAccount account = db.SavingAccounts.Find(accountID);
 
+                    //check if account is already overdrafted
+                    if (account.Balance <= -50)
+                    {
+                        return View("MaxOverdraftError");
+                    }
+                    //check for overdraft strarts. if transaction will make balance <-50, return new view with error and autofilled max transaction
                     if (account.Balance - transaction.Amount < -50)
                     {
-                        transaction.Amount = 49 + account.Balance;
+                        transaction.Amount = 50 + account.Balance;
                         ModelState.Clear();
                         return View("CreateAutoCorrect", transaction);
                     }
-                    else if (account.Balance - transaction.Amount <= 0 && account.Balance - transaction.Amount >= -50)
+                    //if transaction makes balance between 0 and -50, add transaction, make new fee transaction of $30 on top of overdraft
+                    else if (account.Balance - transaction.Amount < 0 && account.Balance - transaction.Amount >= -50)
                     {
                         account.Transactions.Add(transaction);
 
@@ -113,6 +129,7 @@ namespace bevo.Controllers
                         account.Transactions.Add(transaction);
                         account.Balance = account.Balance - transaction.Amount;
                     }
+
                 }
 
                 else if (accountType == "IRA")
@@ -135,11 +152,11 @@ namespace bevo.Controllers
                         {
                             if (account.Balance - transaction.Amount < -50)
                             {
-                                transaction.Amount = 49 + account.Balance;
+                                transaction.Amount = 50 + account.Balance;
                                 ModelState.Clear();
                                 return View("CreateAutoCorrect", transaction);
                             }
-                            else if (account.Balance - transaction.Amount <= 0 && account.Balance - transaction.Amount >= -50)
+                            else if (account.Balance - transaction.Amount < 0 && account.Balance - transaction.Amount >= -50)
                             {
                                 account.Transactions.Add(transaction);
 
@@ -165,13 +182,13 @@ namespace bevo.Controllers
                     }
                     else
                     {
-                        if (account.Balance - transaction.Amount < -50)
+                        if (account.Balance - transaction.Amount <= -50)
                         {
-                            transaction.Amount = 49 + account.Balance;
+                            transaction.Amount = 50 + account.Balance;
                             ModelState.Clear();
                             return View("CreateAutoCorrect", transaction);
                         }
-                        else if (account.Balance - transaction.Amount <= 0 && account.Balance - transaction.Amount >= -50)
+                        else if (account.Balance - transaction.Amount < 0 && account.Balance - transaction.Amount >= -50)
                         {
                             account.Transactions.Add(transaction);
 
@@ -206,11 +223,11 @@ namespace bevo.Controllers
 
                     if (account.Balance - transaction.Amount < -50)
                     {
-                        transaction.Amount = 49 + account.Balance;
+                        transaction.Amount = 50 + account.Balance;
                         ModelState.Clear();
                         return View("CreateAutoCorrect", transaction);
                     }
-                    else if (account.Balance - transaction.Amount <= 0 && account.Balance - transaction.Amount >= -50)
+                    else if (account.Balance - transaction.Amount < 0 && account.Balance - transaction.Amount >= -50)
                     {
                         account.Transactions.Add(transaction);
 
@@ -240,6 +257,11 @@ namespace bevo.Controllers
             return View(transaction);
         }
 
+
+        public ActionResult MaxOverdraftError()
+        {
+            return View();
+        }
 
         //method returns string (CHECKING, SAVING, IRA, STOCK PORTFOLIO) depending on what type of account 
         public String GetAccountType(Int32? accountNum)

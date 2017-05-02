@@ -449,6 +449,9 @@
     <Content Include="Views\PayBills\Index.cshtml" />
     <Content Include="Views\PayBills\AddPayeeIndex.cshtml" />
     <Content Include="Views\Withdraw\CreateAutoCorrect.cshtml" />
+    <Content Include="Views\Withdraw\MaxOverdraftError.cshtml" />
+    <Content Include="Views\Transfer\CreateAutoCorrect.cshtml" />
+    <Content Include="Views\Transfer\MaxOverdrafError.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
