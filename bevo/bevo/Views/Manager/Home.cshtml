@@ -77,9 +77,6 @@
     <table class="table">
         <tr>
             <th>
-                Date
-            </th>
-            <th>
                 Transaction
             </th>
             <th>
@@ -97,21 +94,18 @@
             {
             <tr>
                 <td>
-                    @d.Date
-                </td>
-                <td>
                     @d.TransName
                 </td>
                 <td>
                     @d.TransAmount
                 </td>
                 <td>
-                    @d.CustNum
+                    @d.CustEmail
                 </td>
                 <td>
                     @Html.ActionLink(
-                        linkText: "Details",
-                        actionName: "Details",
+                        linkText: "Resolve",
+                        actionName: "EditDispute",
                         controllerName: "Dispute",
                         routeValues: new { id = d.DisputeID },
                         htmlAttributes: null)
@@ -121,9 +115,6 @@
         @foreach (var t in ViewBag.TransactionToApprove)
             {
             <tr>
-                <td>
-                    @t.Date
-                </td>
                 <td>
                     @t.TransactionNum
                 </td>

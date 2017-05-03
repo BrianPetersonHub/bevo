@@ -84,7 +84,7 @@
             {
                 <tr>
                     <td>
-                        @t.Date
+                        @(t.Date.ToShortDateString())
                     </td>
                     <td>
                         @t.FromAccount
@@ -104,7 +104,7 @@
                     <td>
                         @Html.ActionLink(
                         linkText: "Details",
-                        actionName: "Details",
+                        actionName: "Detail",
                         controllerName: "Transactions",
                         routeValues: new { id = t.TransactionID },
                         htmlAttributes: null)

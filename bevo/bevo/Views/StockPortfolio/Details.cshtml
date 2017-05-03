@@ -155,6 +155,9 @@
                         <th>
                             Description
                         </th>
+                        <th>
+
+                        </th>
                     </tr>
                     @foreach (var t in ViewBag.Transactions)
                     {
@@ -170,6 +173,16 @@
                             </td>
                             <td>
                                 @t.Description
+                            </td>
+                            <td>
+                            <td>
+                                @Html.ActionLink(
+                linkText: "Details",
+                actionName: "Detail",
+                controllerName: "Transactions",
+                routeValues: new { id = t.TransactionID },
+                htmlAttributes: null)
+                            </td>
                             </td>
                         </tr>
                     }
