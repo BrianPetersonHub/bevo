@@ -151,29 +151,32 @@ namespace bevo.Controllers
             db.Transactions.Add(transToAdd);
             db.SaveChanges();
 
+            if(detailInQuestion.Stock.feeAmount != null)
+            {
+                //FEE TRANSACTION
+                //create a transaction to reflect the fee
+                Int32 sellStockFee = (Int32)detailInQuestion.Stock.feeAmount;
+                Transaction feeTransaction = new Transaction();
+                feeTransaction.FromAccount = portfolio.AccountNum;
+                feeTransaction.Date = dateEntered;
+                feeTransaction.TransType = TransType.Fee;
+                feeTransaction.Amount = sellStockFee;
+                feeTransaction.Description = "Fee incurred from selling " + numShares.ToString() + " shares of " +
+                                             detailInQuestion.Stock.StockName + " (" + detailInQuestion.Stock.StockTicker +
+                                             ") stock on " + dateEntered.ToString();
+                feeTransaction.StockPortfolios = new List<StockPortfolio>();
+                feeTransaction.StockPortfolios.Add(portfolio);
 
-            //FEE TRANSACTION
-            //create a transaction to reflect the fee
-            Int32 sellStockFee = 10;
-            Transaction feeTransaction = new Transaction();
-            feeTransaction.FromAccount = portfolio.AccountNum;
-            feeTransaction.Date = dateEntered;
-            feeTransaction.TransType = TransType.Fee;
-            feeTransaction.Amount = sellStockFee;
-            feeTransaction.Description = "Fee incurred from selling " + numShares.ToString() + " shares of " +
-                                         detailInQuestion.Stock.StockName + " (" + detailInQuestion.Stock.StockTicker +
-                                         ") stock on " + dateEntered.ToString();
-            feeTransaction.StockPortfolios = new List<StockPortfolio>();
-            feeTransaction.StockPortfolios.Add(portfolio);
+                db.Transactions.Add(feeTransaction);
+                db.SaveChanges();
 
-            db.Transactions.Add(feeTransaction);
-            db.SaveChanges();
+
+                //Subtract the ten dollars from the stock portfolio cash section as a result of the fee for selling stock
+                //Assume here that they have at least ten bucks in their account 
+                db.Entry(portfolio).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
             
-
-            //Subtract the ten dollars from the stock portfolio cash section as a result of the fee for selling stock
-            //Assume here that they have at least ten bucks in their account 
-            db.Entry(portfolio).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
 
 
             //Redirect to the details page

@@ -14,9 +14,15 @@ namespace bevo.Controllers
     {
         private AppDbContext db = new AppDbContext();
 
+        public ActionResult Index()
+        {
+            return RedirectToAction("CheckAccounts");
+        }
+
         // GET: Customer/Home
         public ActionResult Home()
         {
+
             ViewBag.OverdraftStatus = OverdraftStatus();
             ViewBag.Name = GetUserName();
             ViewBag.CurrentUser = db.Users.Find(User.Identity.GetUserId());

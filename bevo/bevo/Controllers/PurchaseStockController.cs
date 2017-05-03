@@ -93,7 +93,8 @@ namespace bevo.Controllers
                     //Otherwise, subtract the cost of the transaction from the appropriate account balance 
                     if (fromAccount.Balance < (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice))
                     {
-                        return RedirectToAction("Index");
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: The checking account you selected does not have enough funds'); window.location='Index';</script>");
+
                     }
                     else
                     {
@@ -116,7 +117,8 @@ namespace bevo.Controllers
                     trans.FromAccount = fromAccount.AccountNum;
                     if (fromAccount.Balance < (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice))
                     {
-                        return RedirectToAction("Index");
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: The saving account you selected does not have enough funds!'); window.location='Index';</script>");
+
                     }
                     else
                     {
@@ -140,7 +142,8 @@ namespace bevo.Controllers
                     trans.FromAccount = fromAccount.AccountNum;
                     if (fromAccount.Balance < (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice))
                     {
-                        return View("Index");
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You do not have enough funds in your stock portfolio'); window.location='Index';</script>");
+
                     }
                     else
                     {
@@ -241,22 +244,26 @@ namespace bevo.Controllers
 
 
             //Add a transaction for the fee associated with stock purchase 
-            decimal FeeToPay = 10m;
-            Transaction newFee = new Transaction();
-            newFee.TransType = TransType.Fee;
-            newFee.Date = enteredDate;
-            newFee.FromAccount = portfolio.AccountNum;
-            newFee.Amount = FeeToPay;
-            newFee.Description = "$10 fee for purchasing " + numShares.ToString() + " shares of " + stockInQuestion.StockTicker.ToString();
-            newFee.StockPortfolios = new List<StockPortfolio>();
-            newFee.StockPortfolios.Add(portfolio);
-            db.Transactions.Add(newFee);
-            db.SaveChanges();
-
+            if(stockInQuestion.feeAmount != null)
+            {
+                decimal FeeToPay = (Int32)stockInQuestion.feeAmount;
+                Transaction newFee = new Transaction();
+                newFee.TransType = TransType.Fee;
+                newFee.Date = enteredDate;
+                newFee.FromAccount = portfolio.AccountNum;
+                newFee.Amount = FeeToPay;
+                newFee.Description = "$10 fee for purchasing " + numShares.ToString() + " shares of " + stockInQuestion.StockTicker.ToString();
+                newFee.StockPortfolios = new List<StockPortfolio>();
+                newFee.StockPortfolios.Add(portfolio);
+                db.Transactions.Add(newFee);
+                db.SaveChanges();
+            }
+            
 
 
             //Redirect the user to the details page on the stockportfoliocontroller
-            return RedirectToAction("Details", "StockPortfolio");
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully purchased a stock!'); window.location='../../StockPortfolio/Details';</script>");
+
         }
 
 

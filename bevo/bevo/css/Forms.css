@@ -65,8 +65,7 @@ ____________________________________________________________________*/
 
 .login-container {
     height: 600px;
-    padding: 20px;
-    text-align: center;
+    padding: 10px;
 }
 
 .login-top {
@@ -75,17 +74,17 @@ ____________________________________________________________________*/
 
 #loginForm {
     display: block;
-    margin-left: 300px;
+    padding-left: 100px;
+}
+
+#loginForm p {
+    margin-left: 150px;
 }
 
 .submit-btn {
-    width: 90% !important;
+    width: 80% !important;
 }
 
-.login-buttons {
-    text-align: center;
-    padding-left: 20px;
-}
 
 .login-buttons p {
     font-family: 'Helvetica Neue', sans-serif;
