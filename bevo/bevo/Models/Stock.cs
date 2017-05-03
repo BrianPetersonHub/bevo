@@ -11,9 +11,18 @@ namespace bevo.Models
     public class Stock
     {
         public Int32 StockID { get; set; }
+
+        [Required(ErrorMessage = "Stock name is a Required field.")]
         public String StockName { get; set; }
+
+        [Required(ErrorMessage = "Ticker symbol is a Required field.")]
         public String StockTicker { get; set; }
+
+        [Required(ErrorMessage = "Type of stock is a Required field.")]
         public StockType TypeOfStock { get; set; }
+
+        [Display(Name = "Fee Amount")]
+        public int? feeAmount { get; set; }
 
 
         //Stock can have one stock detail

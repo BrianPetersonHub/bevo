@@ -18,8 +18,8 @@
             <p>
                 @Html.ActionLink(
                 linkText: "Process Portfolios",
-                actionName: "Process",
-                controllerName: "StockPortfolio",
+                actionName: "ProcessBalancedPortfolios",
+                controllerName: "Manager",
                 routeValues: null,
                 htmlAttributes: new { @class = "quick-actions" })
             </p>
@@ -97,7 +97,7 @@
             {
             <tr>
                 <td>
-                    @d.Date
+                    @*@d.Date*@
                 </td>
                 <td>
                     @d.TransName
@@ -106,7 +106,7 @@
                     @d.TransAmount
                 </td>
                 <td>
-                    @d.CustNum
+                    @*@d.CustNum*@
                 </td>
                 <td>
                     @Html.ActionLink(

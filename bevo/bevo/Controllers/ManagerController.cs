@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using bevo.Utilities;
 
 namespace bevo.Controllers
 {
@@ -309,19 +310,53 @@ namespace bevo.Controllers
             return RedirectToAction("Home");
         }
 
+        public ActionResult ProcessBalancedPortfolios()
+        {
+            List<StockPortfolio> stockPortfolios = GetStockPortfolios();
+            foreach (var sp in stockPortfolios)
+            {
+                if (BalanceCheck(sp) == true)
+                {
+                    Decimal value = sp.Balance;
+                    //add bonus transaction 
+                    foreach (StockDetail sd in sp.StockDetails)
+                    {
+                        //get current price of stock
+                        StockQuote quote = GetQuote.GetStock(sd.Stock.StockTicker);
+                        value = value + (quote.LastTradePrice * quote.Volume);
+                    }
 
+                    //make new bonus transaction
+                    Transaction t = new Transaction();
+                    t.TransType = TransType.Bonus;
+                    t.Amount = value * .1m;
+                    t.Date = DateTime.Today;
+                    t.ToAccount = sp.AccountNum;
+                    t.Description = "Balanced Portfolio Bonus";
+                    db.Transactions.Add(t);
+                }
+            }
+            db.SaveChanges();
+            return Content("<script language'javascript' type = 'text/javascript'> alert('You have successfully added bonuses to Customers with balanced stock portfolios!'); window.location='../Manager/Home';</script>");
+        }
 
+        public ActionResult CreateStock()
+        {
+            return View();
+        }
 
-
-
-
-
-
-
-
-
-
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "StockName,StockTicker,TypeOfStock,FeeAmount")] Stock stock)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Stocks.Add(stock);
+                db.SaveChanges();
+                return Content("<script language'javascript' type = 'text/javascript'> alert('You have successfully added a new stock!'); window.location='../Manager/Home';</script>");
+            }
+            return View(stock);
+        }
 
         //Get a list of all transactions 
         public List<Transaction> GetTrMasterList()
@@ -429,7 +464,58 @@ namespace bevo.Controllers
             List<AppUser> employees = GetEmployees();
             SelectList selectEmployee = new SelectList(employees, "Id", "Email");
             return selectEmployee;
-        } 
+        }
+
+        //get a list of all stock portfolios
+        public List<StockPortfolio> GetStockPortfolios()
+        {
+            List<StockPortfolio> stockPortfolios = db.StockPortfolios.ToList();
+            return stockPortfolios;
+        }
+
+        //returns true if portfolio is balanced
+        public Boolean BalanceCheck(StockPortfolio sp)
+        {
+            //Get a list of all the stocks in the account 
+            List<Stock> stockList = new List<Stock>();
+
+            foreach (StockDetail s in sp.StockDetails)
+            {
+                stockList.Add(s.Stock);
+            }
+
+            //Counts to keep track of each stock type in the account 
+            Int32 numOrdinary = new Int32();
+            Int32 numIndex = new Int32();
+            Int32 numMutual = new Int32();
+
+            foreach (Stock stock in stockList)
+            {
+                if (stock.TypeOfStock == StockType.Ordinary)
+                {
+                    numOrdinary += 1;
+                }
+                else if (stock.TypeOfStock == StockType.Index_Fund)
+                {
+                    numIndex += 1;
+                }
+                else if (stock.TypeOfStock == StockType.Mutual_Fund)
+                {
+                    numMutual += 1;
+                }
+            }
+
+            //Check if the account qualifies 
+            if (numOrdinary >= 2 && numIndex >= 1 && numMutual >= 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
 
 
     }
