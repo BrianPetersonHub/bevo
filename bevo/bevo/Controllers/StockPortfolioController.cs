@@ -211,8 +211,6 @@ namespace bevo.Controllers
             {
                 portfolioInfo.Balanced = true;
                 portfolioInfo.TotalBonuses = 0;
-                portfolioInfo.TotalBonuses += (portfolioInfo.CashAvailable - portfolioInfo.TotalFees) * .1m;
-                portfolioInfo.TotalBonuses += portfolioInfo.StockMarketValue * .1m;
             }
 
             //Define how much is in the GAINS PORTION of the portfolio
