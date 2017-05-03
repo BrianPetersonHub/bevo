@@ -9,8 +9,9 @@ namespace bevo.Models
 {
     public class DisputeTransactionViewModel
     {
+        [Required(ErrorMessage = "Message is a Required field.")]
         public String Message { get; set; }
-
+        [Required(ErrorMessage = "Disputed amount is a Required field.")]
         [Display(Name = "Correct amount")]
         public Decimal DisputedAmount { get; set; }
         public Int32 TransactionID { get; set; }
