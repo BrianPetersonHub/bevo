@@ -55,6 +55,7 @@ namespace bevo.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Balance = GetValue(id);
             ViewBag.Transactions = GetAllTransactions(id);
             return View(checkingAccount);
         }
@@ -101,6 +102,12 @@ namespace bevo.Controllers
             CheckingAccount checkingAccount = db.CheckingAccounts.Find(id);
             List<Transaction> transactions = checkingAccount.Transactions;
             return transactions;
+        }
+
+        public Decimal GetValue(int? id)
+        {
+            CheckingAccount checkingAccount = db.CheckingAccounts.Find(id);
+            return checkingAccount.Balance;
         }
 
 

@@ -517,6 +517,10 @@
     <Content Include="Views\PayBills\Confirmation.cshtml" />
     <Content Include="Views\PayBills\Error.cshtml" />
     <Content Include="Views\Payees\Confirmation.cshtml" />
+    <Content Include="Views\Dispute\Index.cshtml" />
+    <Content Include="Views\Manager\EditDispute.cshtml" />
+    <Content Include="Views\Manager\CurrentDisputes.cshtml" />
+    <Content Include="Views\Manager\AllDisputes.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

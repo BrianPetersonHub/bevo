@@ -8,6 +8,7 @@ NAVIGATION
     5. HOME PAGES
     6. STOCK PORTFOLIO
     7. SELECT ACCOUNT
+    8. DETAIL PAGES
 
 */
 
@@ -31,12 +32,16 @@ body {
 }
 
 .container {
-    padding-right: 10%;
-    padding-left: 10%;
+    padding-right: 8%;
+    padding-left: 8%;
 }
 
 a:hover {
     text-decoration: none;
+}
+
+.center {
+    margin: auto;
 }
 
 
@@ -133,6 +138,7 @@ ____________________________________________________________________*/
 .homepage-container {
     background-color: #F3F3F3;
     padding: 20px;
+    display: block;
 }
 
 .homepage-container h3 {
@@ -267,6 +273,14 @@ ____________________________________________________________________*/
     margin: 0;
     padding-bottom: 10px;
 }
+
+.table tr {
+    transition: background 0.2s ease-in;
+}
+
+.table tr:nth-child(even) {
+    background: white;
+}
 .table td {
     border: 0px !important;
     font-family: 'Open Sans', sans-serif;
@@ -315,3 +329,96 @@ ____________________________________________________________________*/
     background-color:#3F6187;
 }
 
+
+
+/* 7. DETAIL PAGES
+____________________________________________________________________*/
+
+.details {
+    background-color: #F3F3F3; 
+    padding: 20px;
+    margin: 10px 0;
+}
+
+.details dt {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: black;
+    text-transform: uppercase;
+    text-align: right;
+    display: block;
+    padding: 5px;
+    
+}
+
+.details dd {
+    font-size: 12px;
+    display: block;
+    padding: 5px;
+    padding-left: 30px;
+}
+
+
+.transaction-container {
+    margin: auto;
+}
+
+.middle-button {
+    width: 250px;
+    background-color: #6497D1;
+    border-radius: 5px;
+    height: 40px;
+    margin: 10px;
+    text-align: center;
+    display: block;
+}
+
+.middle-button-container {
+    margin: 30px 0;
+}
+
+.middle-button-container a {
+    padding-top: 9px;
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: normal;
+}
+
+.middle-button-container a:hover {
+    background-color:#3F6187;
+}
+
+.homepage-top p {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: black;
+    text-transform: uppercase;
+    margin-left: 3px;
+}
+
+.nav-footer {
+    display: block;
+    height: 100px;
+    padding: 50px;
+}
+
+.nav-footer p {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: black;
+    text-transform: uppercase;
+}
+
+.nav-footer a {
+    text-decoration: none;
+    color: #666;
+}

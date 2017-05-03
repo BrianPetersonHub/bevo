@@ -69,10 +69,16 @@ namespace bevo.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Balance = GetValue(id);
             ViewBag.Transactions = GetAllTransactions(id);
             return View(irAccount);
         }
 
+        public Decimal GetValue(String id)
+        {
+            IRAccount irAccount = db.IRAccounts.Find(id);
+            return irAccount.Balance;
+        }
         public List<Transaction> GetAllTransactions(String id)
         {
             IRAccount irAccount = db.IRAccounts.Find(id);

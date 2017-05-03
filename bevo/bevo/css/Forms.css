@@ -2,6 +2,7 @@
 NAVIGATION
 
     1. STOCK PORTFOLIO
+    2. LOGIN
 
 */
 
@@ -57,4 +58,45 @@ ____________________________________________________________________*/
 
 .form-control {
     margin-top: 5px;
+}
+
+/* 2. LOGIN PAGE
+____________________________________________________________________*/
+
+.login-container {
+    height: 600px;
+    padding: 20px;
+    text-align: center;
+}
+
+.login-top {
+    text-align: center !important;
+}
+
+#loginForm {
+    display: block;
+    margin-left: 300px;
+}
+
+.submit-btn {
+    width: 90% !important;
+}
+
+.login-buttons {
+    text-align: center;
+    padding-left: 20px;
+}
+
+.login-buttons p {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 10px;
+    font-weight: normal;
+    letter-spacing: 0.5px;
+    color: #333;
+    text-transform: uppercase;
+}
+
+.login-buttons a {
+    color: #666;
+    text-transform: uppercase;
 }

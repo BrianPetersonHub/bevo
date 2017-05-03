@@ -27,9 +27,19 @@
         <div class="quick-action-button">
             <p>
                 @Html.ActionLink(
+                linkText: "Current Disputes",
+                actionName: "CurrentDisputes",
+                controllerName: "Manager",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
                 linkText: "All Disputes",
-                actionName: "Index",
-                controllerName: "Dispute",
+                actionName: "AllDisputes",
+                controllerName: "Manager",
                 routeValues: null,
                 htmlAttributes: new { @class = "quick-actions" })
             </p>
@@ -77,9 +87,6 @@
     <table class="table">
         <tr>
             <th>
-                Date
-            </th>
-            <th>
                 Transaction
             </th>
             <th>
@@ -97,22 +104,19 @@
             {
             <tr>
                 <td>
-                    @*@d.Date*@
-                </td>
-                <td>
                     @d.TransName
                 </td>
                 <td>
                     @d.TransAmount
                 </td>
                 <td>
-                    @*@d.CustNum*@
+                    @d.CustEmail
                 </td>
                 <td>
                     @Html.ActionLink(
-                        linkText: "Details",
-                        actionName: "Details",
-                        controllerName: "Dispute",
+                        linkText: "Resolve",
+                        actionName: "EditDispute",
+                        controllerName: "Manager",
                         routeValues: new { id = d.DisputeID },
                         htmlAttributes: null)
                 </td>
@@ -121,9 +125,6 @@
         @foreach (var t in ViewBag.TransactionToApprove)
             {
             <tr>
-                <td>
-                    @t.Date
-                </td>
                 <td>
                     @t.TransactionNum
                 </td>

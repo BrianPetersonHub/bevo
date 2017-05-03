@@ -52,17 +52,15 @@ namespace bevo.Controllers
                 dispute.DisputeStatus = DisputeStatus.Submitted;
                 dispute.Transaction = transaction;
                 dispute.AppUser = user;
+                user.Disputes.Add(dispute);
                 db.Disputes.Add(dispute);
                 db.SaveChanges();
 
-                return RedirectToAction("Confirmation");
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully disputed transaction!'); window.location='../../Customer/Home';</script>");
+
             }
             return View(dt);
         }
 
-        public ActionResult Confirmation()
-        {
-            return View();
-        }
     }
 }

@@ -146,137 +146,6 @@ namespace bevo.Controllers
 
 
 
-
-
-
-
-        //Make a get method for editing the dispute
-        //The view for this method should be bound to the disputeviewmodel class 
-        public ActionResult EditDispute(Int32 id)
-        {
-            AppDbContext db = new AppDbContext();
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            //Get the dispute object we're concerned with 
-            var query = from d in db.Disputes
-                        select d;
-            query = query.Where(d => d.DisputeID == id);
-
-            if (query == null)
-            {
-                return HttpNotFound();
-            }
-            else
-            {
-                Dispute theDispute = query.ToList()[0];
-                //Apply this dispute's information to a dispute viewmodel which will then be passed
-                //to the edit object view 
-
-                DisputeViewModel dvm = new DisputeViewModel();
-                dvm.CorrectAmount = theDispute.DisputedAmount;
-                dvm.CustEmail = theDispute.AppUser.Email;
-                dvm.FirstName = theDispute.AppUser.FirstName;
-                dvm.LastName = theDispute.AppUser.LastName;
-                dvm.Message = theDispute.Message;
-                dvm.Status = theDispute.DisputeStatus;
-                dvm.TransName = theDispute.Transaction.TransactionID;
-                dvm.TransAmount = theDispute.Transaction.Amount;
-                dvm.DisputeID = theDispute.DisputeID;
-
-                return View(dvm);
-            }
-        }
-
-        //Make a post method for editing disputes 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult EditDispute([Bind(Include = "CorrectAmount,CustEmail,FirstName,LastName,Message,Status,TransName,TransAmount,DisputeID")] DisputeViewModel dvm, Decimal? adjustedAmount)
-        {
-            AppDbContext db = new AppDbContext();
-
-            if (ModelState.IsValid)
-            {
-                Dispute disToChange = db.Disputes.Find(dvm.DisputeID);
-                Transaction transToChange = db.Transactions.Find(dvm.TransName);
-
-                //get user currently logged in 
-                UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
-                var user = userManager.FindById(User.Identity.GetUserId());
-
-                //Make appropriate changes to the dispute and transaction in quetion 
-                //based on whether the dispute was accepted, rejected, or adjusted
-                if (dvm.Status == DisputeStatus.Accepted)
-                {
-                    disToChange.DisputeStatus = dvm.Status;
-                    if(dvm.Message != null)
-                    {
-                        disToChange.Message = disToChange.Message + "\n" + dvm.Message;
-                    }
-                    transToChange.Amount = dvm.CorrectAmount;
-                    transToChange.Description = "Dispute [Accepted] " + transToChange.Description;
-                    disToChange.ManResolvedEmail = user.Email;
-
-                    db.Entry(disToChange).State = EntityState.Modified;
-                    db.Entry(transToChange).State = EntityState.Modified;
-                    db.SaveChanges();
-
-                    return RedirectToAction("Home");
-                }
-                if(dvm.Status == DisputeStatus.Rejected)
-                {
-                    //Send an email to the user in question 
-                    String bodyForEmail = null;
-                    if(dvm.Message != null)
-                    {
-                        bodyForEmail = "Your dispute on transaction number " + transToChange.TransactionID + " has been rejected."
-                       + "Additional messages from the manager who resolved your dispute: " + "\n" + dvm.Message;
-                    }
-                    else
-                    {
-                        bodyForEmail = "Your dispute on transaction number " + transToChange.TransactionID + " has been rejected.";
-                    }
-
-                    bevo.Messaging.EmailMessaging.SendEmail(disToChange.AppUser.Email, "Dispute Rejected", bodyForEmail);
-
-                    //Change the appropriate information and save it to the DB
-                    disToChange.DisputeStatus = dvm.Status;
-                    transToChange.Description = "Dispute [Rejected] " + transToChange.Description;
-                    db.Entry(disToChange).State = EntityState.Modified;
-                    db.Entry(transToChange).State = EntityState.Modified;
-                    db.SaveChanges();
-
-                    return RedirectToAction("Home");
-                }
-                if(dvm.Status == DisputeStatus.Adjusted)
-                {
-                    disToChange.DisputeStatus = dvm.Status;
-                    if (dvm.Message != null)
-                    {
-                        disToChange.Message = disToChange.Message + "\n" + dvm.Message;
-                    }
-                    transToChange.Amount = (decimal)adjustedAmount;
-                    transToChange.Description = "Dispute [Accepted] " + transToChange.Description;
-                    disToChange.ManResolvedEmail = user.Email;
-
-                    db.Entry(disToChange).State = EntityState.Modified;
-                    db.Entry(transToChange).State = EntityState.Modified;
-                    db.SaveChanges();
-
-                    return RedirectToAction("Home");
-                }
-
-
-            }
-            return View(dvm);
-        }
-
-
-
-
         //Get method for chanign employee to a manager 
         public ActionResult PromoteEmployee()
         {
@@ -382,6 +251,12 @@ namespace bevo.Controllers
             return returnList;
         }
 
+        public ActionResult CurrentDisputes()
+        {
+            List<DisputeViewModel> currentDisputes = GetUnresolvedDisputes();
+            return View(currentDisputes);
+        }
+
         public List<DisputeViewModel> GetUnresolvedDisputes()
         {
             AppDbContext db = new AppDbContext();
@@ -412,6 +287,12 @@ namespace bevo.Controllers
             return dvmList;
         }
 
+        public ActionResult AllDisputes()
+        {
+            List<DisputeViewModel> allDisputes = GetAllDisputes();
+            return View(allDisputes);
+        }
+
         public List<DisputeViewModel> GetAllDisputes()
         {
             AppDbContext db = new AppDbContext();
@@ -438,8 +319,135 @@ namespace bevo.Controllers
             return dvmList;
         }
 
-        //get a list of all the user objects for employees 
-        public List<AppUser> GetEmployees()
+        //Make a get method for editing the dispute
+        //The view for this method should be bound to the disputeviewmodel class 
+        public ActionResult EditDispute(int? id)
+        {
+            AppDbContext db = new AppDbContext();
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            //Get the dispute object we're concerned with 
+            var query = from d in db.Disputes
+                        select d;
+            query = query.Where(d => d.DisputeID == id);
+
+            if (query == null)
+            {
+                return HttpNotFound();
+            }
+
+            else
+            {
+                Dispute theDispute = query.ToList()[0];
+                //Apply this dispute's information to a dispute viewmodel which will then be passed
+                //to the edit object view 
+
+                DisputeViewModel dvm = new DisputeViewModel();
+                dvm.CorrectAmount = theDispute.DisputedAmount;
+                dvm.CustEmail = theDispute.AppUser.Email;
+                dvm.FirstName = theDispute.AppUser.FirstName;
+                dvm.LastName = theDispute.AppUser.LastName;
+                dvm.Message = theDispute.Message;
+                dvm.Status = theDispute.DisputeStatus;
+                dvm.TransName = theDispute.Transaction.TransactionID;
+                dvm.TransAmount = theDispute.Transaction.Amount;
+                dvm.DisputeID = theDispute.DisputeID;
+
+                return View(dvm);
+            }
+        }
+
+        //Make a post method for editing disputes 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditDispute([Bind(Include = "CorrectAmount,CustEmail,FirstName,LastName,Message,Status,TransName,TransAmount,DisputeID")] DisputeViewModel dvm, Decimal? adjustedAmount, String comment)
+        {
+            AppDbContext db = new AppDbContext();
+
+            if (ModelState.IsValid)
+            {
+                Dispute disToChange = db.Disputes.Find(dvm.DisputeID);
+                Transaction transToChange = db.Transactions.Find(dvm.TransName);
+
+                //get user currently logged in 
+                UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+                var user = userManager.FindById(User.Identity.GetUserId());
+
+                //Make appropriate changes to the dispute and transaction in quetion 
+                //based on whether the dispute was accepted, rejected, or adjusted
+                if (dvm.Status == DisputeStatus.Accepted)
+                {
+                    disToChange.DisputeStatus = dvm.Status;
+                    if (dvm.Message != null)
+                    {
+                        disToChange.Message = disToChange.Message + "\n" + comment;
+                    }
+                    transToChange.Amount = dvm.CorrectAmount;
+                    transToChange.Description = "Dispute [Accepted] " + transToChange.Description;
+                    disToChange.ManResolvedEmail = user.Email;
+
+                    db.Entry(disToChange).State = EntityState.Modified;
+                    db.Entry(transToChange).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: You have successfully accepted the dispute!'); window.location='../../Manager/Home';</script>");
+
+                }
+                if (dvm.Status == DisputeStatus.Rejected)
+                {
+                    //Send an email to the user in question 
+                    String bodyForEmail = null;
+                    if (dvm.Message != null)
+                    {
+                        bodyForEmail = "Your dispute on transaction number " + transToChange.TransactionID + " has been rejected."
+                       + "Additional messages from the manager who resolved your dispute: " + "\n" + comment;
+                    }
+                    else
+                    {
+                        bodyForEmail = "Your dispute on transaction number " + transToChange.TransactionID + " has been rejected.";
+                    }
+
+                    bevo.Messaging.EmailMessaging.SendEmail(disToChange.AppUser.Email, "Dispute Rejected", bodyForEmail);
+
+                    //Change the appropriate information and save it to the DB
+                    disToChange.DisputeStatus = dvm.Status;
+                    transToChange.Description = "Dispute [Rejected] " + transToChange.Description + comment;
+                    db.Entry(disToChange).State = EntityState.Modified;
+                    db.Entry(transToChange).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: You have successfuly rejected the dispute!'); window.location='../../Manager/Home';</script>");
+                }
+                if (dvm.Status == DisputeStatus.Adjusted)
+                {
+                    disToChange.DisputeStatus = dvm.Status;
+                    if (dvm.Message != null)
+                    {
+                        disToChange.Message = disToChange.Message + "\n" + comment;
+                    }
+                    transToChange.Amount = (decimal)adjustedAmount;
+                    transToChange.Description = "Dispute [Accepted] " + transToChange.Description + comment;
+                    disToChange.ManResolvedEmail = user.Email;
+
+                    db.Entry(disToChange).State = EntityState.Modified;
+                    db.Entry(transToChange).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return Content("<script language'javascript' type = 'text/javascript'> alert('You have successfuly adjusted the dispute!'); window.location='../../Manager/Home';</script>");
+                }
+
+
+            }
+            return View(dvm);
+        }
+
+
+    //get a list of all the user objects for employees 
+    public List<AppUser> GetEmployees()
         {
             AppDbContext db = new AppDbContext();
 
