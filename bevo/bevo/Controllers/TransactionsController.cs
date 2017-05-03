@@ -44,63 +44,42 @@ namespace bevo.Controllers
 
         Custom
     }
+
+    //TRANSACTION CONTROLLER
     public class TransactionsController : Controller
     {
         private AppDbContext db = new AppDbContext();
 
-        // GET: All transactions
+        // GET: Transactions/Home  (this has a simple search box for search by description)
         // For employees and managers 
-        public ActionResult Index()
+        public ActionResult Home(String SearchString)
         {
+            ViewBag.CountAllTransactions = GetAllTransactions().Count();
+
+            if (SearchString == null)
+            {
+                return View(GetAllTransactions());
+            }
+            else
+            {
+                return View(GetSelectedTransactions(SearchString));
+            }
+        }
+
+        public ActionResult DetailedSearch()
+        {
+            ViewBag.TransTypeSelectList = GetAllTransTypesSL();
             return View();
         }
 
-        // GET: Transactions/Detail/#
-        public ActionResult Detail(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            Transaction transaction = db.Transactions.Find(id);
-            if (transaction == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.SimilarTransactions = Get5SimilarTransactions(transaction);
-            return View(transaction);
-        }
-
-        //returns a list of 5 most recent similar transactions
-        public List<Transaction> Get5SimilarTransactions(Transaction transaction)
-        {
-            AppUser user = db.Users.Find(User.Identity.GetUserId());
-            var query = (from t in db.Transactions
-                         where t.TransType == transaction.TransType
-                         where (t.FromAccount == transaction.FromAccount && transaction.FromAccount != 0) || (t.ToAccount == transaction.ToAccount && transaction.ToAccount != 0)
-                        orderby t.Date descending
-                        select t).Take(5);
-
-            List<Transaction> listTransactions = query.ToList();
-            return listTransactions;
-        }
-
-        // Get list of transactions to view
-        public List<Transaction> GetTransactions()
-        {
-            List<Transaction> allTransactions = new List<Transaction>();
-            return allTransactions;
-        }
 
         // Search Results
-        public ActionResult SearchTransactions( String description,
-                                                int selectedTransType,
-                                                Range selectedRange,
-                                                String transactionNumber,
-                                                Date selectedDate )
+        public ActionResult SearchResults (String description,
+                                            int? selectedTransType,
+                                            Range selectedRange,
+                                            int? transactionNumber,
+                                            Date selectedDate )
         {
-
             var query = from t in db.Transactions
                         select t;
             
@@ -113,9 +92,10 @@ namespace bevo.Controllers
             //DONE: Dropdown selected transaction type
             var transTypeList = EnumHelper.GetSelectList(typeof(TransType));
 
-            if (selectedTransType == 4)
+            if (selectedTransType == 8)
             {
-                // all 
+                // all
+                ; 
             }
             else
             {
@@ -150,36 +130,35 @@ namespace bevo.Controllers
             }
 
             //DONE: Transaction number textbox search
-            if (transactionNumber != null && transactionNumber != "")
+            if (transactionNumber != null)
             {
-                Int32 intTransactionNum;
-                try
-                {
-                    intTransactionNum = Convert.ToInt32(transactionNumber);
-                }
+                //Int32 intTransactionNum;
+                //try
+                //{
+                //    intTransactionNum = Convert.ToInt32(transactionNumber);
+                //}
 
-                catch
-                {
-                    return View();
-                }
+                //catch
+                //{
+                //    return Content("<script language'javascript' type = 'text/javascript'> alert('Error: Please enter a number for transaction number.'); window.location='../Transaction/DetailedSearch';</script>");
+                //}
 
-                query = query.Where(t => t.TransactionNum == intTransactionNum);
+                query = query.Where(t => t.TransactionNum == transactionNumber);
             }
 
             //TODO: Radio buttons selected date
             switch (selectedDate)
             {
                 case Date.One:
-                    // query
+                    query = query.Where(t => t.Date >= t.Date.AddDays(-15));
                     break;
                 case Date.Two:
-                    // query
+                    query = query.Where(t => t.Date >= t.Date.AddDays(-30));
                     break;
                 case Date.Three:
-                    // query
+                    query = query.Where(t => t.Date >= t.Date.AddDays(-60));
                     break;
                 case Date.All:
-                    // query
                     break;
                 case Date.Custom:
                     //query
@@ -191,8 +170,108 @@ namespace bevo.Controllers
             //TODO: query orderby
 
             List<Transaction> SelectedTransactions = query.ToList();
-            return View("Index", SelectedTransactions);
+            ViewBag.TransTypeSelectList = GetAllTransTypesSL();
+            return View("SearchResults", SelectedTransactions);
 
         } // end of SearchTransaction
+
+
+
+        //returns select list of drop down options for trans type
+        public SelectList GetAllTransTypesSL()
+        {
+            //making a list of all Frequencies
+            List<TransType> transTypes = new List<TransType>();
+            transTypes.Add(TransType.Bonus);
+            transTypes.Add(TransType.Deposit);
+            transTypes.Add(TransType.Fee);
+            transTypes.Add(TransType.Pay_Payee);
+            transTypes.Add(TransType.Purchase_Stock);
+            transTypes.Add(TransType.Sell_Stock);
+            transTypes.Add(TransType.Transfer);
+            transTypes.Add(TransType.Withdrawal);
+            transTypes.Add(TransType.All);
+
+            SelectList allTransTypes = new SelectList(transTypes);
+            return allTransTypes;
+        }
+
+        // Get list of all transactions to view
+        public List<Transaction> GetAllTransactions()
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            //initialize list and add all transactions in the user's IRA
+            List<Transaction> allTransactions = user.IRAccount.Transactions;
+
+            //add all checking account transactions
+            foreach (CheckingAccount c in user.CheckingAccounts)
+            {
+                foreach (Transaction t in c.Transactions)
+                {
+                    allTransactions.Add(t);
+                }
+            }
+
+            //add all saving account transactions
+            foreach (SavingAccount s in user.SavingAccounts)
+            {
+                foreach (Transaction t in s.Transactions)
+                {
+                    allTransactions.Add(t);
+                }
+            }
+
+            //add all stock portfolio transactions
+            foreach (Transaction t in user.StockPortfolio.Transactions)
+            {
+                allTransactions.Add(t);
+            }
+
+            return allTransactions;
+        }
+
+        //Get list of selcted transactions to view
+        public List<Transaction> GetSelectedTransactions(String SearchString)
+        {
+            List<Transaction> allTransactions = GetAllTransactions();
+            var query = from t in allTransactions
+                        where t.Description != null
+                        where t.Description.Contains(SearchString)
+                        select t;
+
+            List<Transaction> selectedTransactions = query.ToList();
+            return selectedTransactions;
+        }
+
+        // GET: Transactions/Detail/#
+        public ActionResult Detail(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Transaction transaction = db.Transactions.Find(id);
+            if (transaction == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.SimilarTransactions = Get5SimilarTransactions(transaction);
+            return View(transaction);
+        }
+
+        //returns a list of 5 most recent similar transactions
+        public List<Transaction> Get5SimilarTransactions(Transaction transaction)
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            var query = (from t in db.Transactions
+                         where t.TransType == transaction.TransType
+                         where (t.FromAccount == transaction.FromAccount && transaction.FromAccount != 0) || (t.ToAccount == transaction.ToAccount && transaction.ToAccount != 0)
+                         orderby t.Date descending
+                         select t).Take(5);
+
+            List<Transaction> listTransactions = query.ToList();
+            return listTransactions;
+        }
     }
 }

@@ -1,0 +1,109 @@
+﻿@using bevo.Controllers
+@model IEnumerable<bevo.Models.Transaction>
+@using Microsoft.VisualBasic;
+
+
+@{
+    ViewBag.Title = "all transactions";
+}
+
+<h2>All Transactions</h2>
+
+@{
+    ViewBag.Title = "Detailed Search";
+}
+
+<h3>Transactions</h3>
+
+@using (Html.BeginForm())
+{
+    <p class="form-group">
+        Search: @Html.TextBox("SearchString", null, new { @class = "form-control" }) <br />
+        <input type="submit" value="Search" class="btn btn-default" />
+        @Html.ActionLink("Detailed Search", "DetailedSearch", null, new { @class = "btn btn-default" })
+        @Html.ActionLink("Show All", "Home", null, new { @class = "btn btn-default" })
+    </p>
+
+    <p>
+        Showing @(Model.Count()) out of @ViewBag.CountAllTransactions
+    </p>
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TransType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FromAccount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ToAccount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dispute)
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TransType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @if (item.FromAccount == null || item.FromAccount == 0)
+                    {
+                        @("n/a")
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.FromAccount)
+                        //@Html.DisplayFor(modelItem => item.FromAccount.ToString().Substring(item.FromAccount.ToString().Length - 4))
+                        //@item.FromAccount.ToString().Substring(item.FromAccount.ToString().Length - 4))
+                    }
+                </td>
+                <td>
+                    @if (item.ToAccount == null || item.ToAccount == 0)
+                    {
+                        @("n/a")
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.ToAccount)
+                        //@Html.DisplayFor(modelItem => item.ToAccount.ToString().Substring(item.ToAccount.ToString().Length - 4))
+                        //@item.ToAccount.ToString().Substring(item.ToAccount.ToString().Length - 4))
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.ActionLink(
+                linkText: "Dispute",
+                actionName: "Create",
+                controllerName: "Dispute",
+                routeValues: new { id = item.TransactionID },
+                htmlAttributes: null)
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+
+
+
+
+

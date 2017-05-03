@@ -142,7 +142,7 @@ namespace bevo.Controllers
 
                 db.SaveChanges();
 
-                return RedirectToAction("Home", "Customer");
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Deposit successfull!'); window.location='../PayBills/Index';</script>");
             }
 
             List<AccountsViewModel> allAccounts = GetAccounts();

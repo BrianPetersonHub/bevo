@@ -25,7 +25,7 @@ namespace bevo.Controllers
             }
             else
             {
-                return View("CannotCreate");
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You can only have one IRA.'); window.location='../Customer/Home';</script>");
             }
 
         }
@@ -52,7 +52,7 @@ namespace bevo.Controllers
                 //irAccount.Transactions.Add(t);
 
                 db.SaveChanges();
-                return RedirectToAction("Home", "Customer");
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: You have successfully created an IRA!'); window.location='../Customer/Home';</script>");
             }
             return View(irAccount);
         }
@@ -117,42 +117,9 @@ namespace bevo.Controllers
                 IRAccount irAccount = db.IRAccounts.Find(id);
                 irAccount.AccountName = vm.AccountName;
                 db.SaveChanges();
-                return RedirectToAction("Details", new { id = id });
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: IRA name updated.'); window.location='../Customer/Home';</script>");
             }
             return View(vm);
         }
-
-        public ActionResult DepositAgeError()
-        {
-            return View();
-        }
-        public ActionResult TransferAgeError()
-        {
-            return View();
-        }
-
-        public ActionResult MaxDepositError()
-        {
-            return View();
-        }
-
-        //for transfers going into account
-        public ActionResult TransferLimitError()
-        {
-            return View();
-        }
-
-        public ActionResult WithdrawAgeAmountError()
-        {
-            return View();
-        }
-
-        //for transfers going out of account
-        public ActionResult TransferAgeAmountError()
-        {
-            return View();
-        }
-
-
     }
 }

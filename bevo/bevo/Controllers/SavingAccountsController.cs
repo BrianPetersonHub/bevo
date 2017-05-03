@@ -34,7 +34,7 @@ namespace bevo.Controllers
                 }
                 user.SavingAccounts.Add(savingAccount);
                 db.SaveChanges();
-                return RedirectToAction("Home", "Customer");
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully added new Savings Account!'); window.location='../Cusomer/Home';</script>");
             }
             return View(savingAccount);
         }
@@ -99,7 +99,7 @@ namespace bevo.Controllers
                 SavingAccount savingAccount = db.SavingAccounts.Find(id);
                 savingAccount.AccountName = vm.AccountName;
                 db.SaveChanges();
-                return RedirectToAction("Details", new { id = id });
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully upadated savings account name!'); window.location='../Customer/Home';</script>");
             }
             return View(vm);
         }

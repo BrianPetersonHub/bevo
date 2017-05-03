@@ -65,7 +65,7 @@ namespace bevo.Controllers
                 db.SaveChanges();
             }
 
-            return RedirectToAction("Index");
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Succussfully added new payee!'); window.location='../PayBills/Index';</script>");
         }
 
         //Get ALL payees in db
@@ -209,7 +209,7 @@ namespace bevo.Controllers
                     {
                         return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot overdraft more than $50!'); window.location='Index';</script>");
                     }
-                    else if (fromAccount.Balance - paymentAmount <= 0 && fromAccount.Balance - paymentAmount >= -50)
+                    else if (fromAccount.Balance - paymentAmount < 0 && fromAccount.Balance - paymentAmount >= -50)
                     {
                         trans.FromAccount = fromAccount.AccountNum;
 
