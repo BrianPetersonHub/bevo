@@ -53,6 +53,10 @@ namespace bevo.Controllers
                     account.Transactions.Add(transaction);
                     //Add the deposit to the account if it's less than 5000
                     //Otherwise, mark it for approval from a manager 
+                    if (transaction.Amount <= 0)
+                    {
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot deposit a negative amount.'); window.location='../Deposit/Create';</script>");
+                    }
                     if (transaction.Amount >= 5000)
                     {
                         transaction.NeedsApproval = true;
@@ -73,7 +77,11 @@ namespace bevo.Controllers
                     SavingAccount account = db.SavingAccounts.Find(accountID);
                     account.Transactions.Add(transaction);
                     //Check if transaction needs approval 
-                    if(transaction.Amount >= 5000)
+                    if (transaction.Amount <= 0)
+                    {
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot deposit a negative amount.'); window.location='../Deposit/Create';</script>");
+                    }
+                    if (transaction.Amount >= 5000)
                     {
                         transaction.NeedsApproval = true;
                     }
@@ -93,6 +101,10 @@ namespace bevo.Controllers
                     IRAccount account = db.IRAccounts.Find(accountID);
 
                     //if user is over 70, they cannot deposit
+                    if (transaction.Amount <= 0)
+                    {
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot deposit a negative amount.'); window.location='../Deposit/Create';</script>");
+                    }
                     if (UnderAgeLimt() == false)
                     {
                         return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot deposit if you are over 70 years old.'); window.location='../Customer/Home';</script>");
@@ -130,7 +142,11 @@ namespace bevo.Controllers
                     String accountID = query.First();
                     StockPortfolio account = db.StockPortfolios.Find(accountID);
                     account.Transactions.Add(transaction);
-                    if(transaction.Amount >= 5000)
+                    if (transaction.Amount <= 0)
+                    {
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot deposit a negative amount.'); window.location='../Deposit/Create';</script>");
+                    }
+                    if (transaction.Amount >= 5000)
                     {
                         transaction.NeedsApproval = true;
                     }
