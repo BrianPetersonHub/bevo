@@ -93,7 +93,8 @@ namespace bevo.Controllers
                     //Otherwise, subtract the cost of the transaction from the appropriate account balance 
                     if (fromAccount.Balance < (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice))
                     {
-                        return RedirectToAction("Index");
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: The checking account you selected does not have enough funds'); window.location='Index';</script>");
+
                     }
                     else
                     {
@@ -116,7 +117,8 @@ namespace bevo.Controllers
                     trans.FromAccount = fromAccount.AccountNum;
                     if (fromAccount.Balance < (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice))
                     {
-                        return RedirectToAction("Index");
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: The saving account you selected does not have enough funds!'); window.location='Index';</script>");
+
                     }
                     else
                     {
@@ -140,7 +142,8 @@ namespace bevo.Controllers
                     trans.FromAccount = fromAccount.AccountNum;
                     if (fromAccount.Balance < (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice))
                     {
-                        return View("Index");
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You do not have enough funds in your stock portfolio'); window.location='Index';</script>");
+
                     }
                     else
                     {
@@ -256,7 +259,8 @@ namespace bevo.Controllers
 
 
             //Redirect the user to the details page on the stockportfoliocontroller
-            return RedirectToAction("Details", "StockPortfolio");
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully purchased a stock!'); window.location='../../StockPortfolio/Details';</script>");
+
         }
 
 
