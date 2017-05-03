@@ -244,6 +244,21 @@
     <EmbeddedResource Include="Migrations\201705021614496_Updated appuser model.resx">
       <DependentUpon>201705021614496_Updated appuser model.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705021732044_Fixed Dispute ID.resx">
+      <DependentUpon>201705021732044_Fixed Dispute ID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705022129186_Updating enabled vs disabled variables.resx">
+      <DependentUpon>201705022129186_Updating enabled vs disabled variables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705022152439_Updating role relationship.resx">
+      <DependentUpon>201705022152439_Updating role relationship.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705022156150_Fixing what I just broke.resx">
+      <DependentUpon>201705022156150_Fixing what I just broke.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705022300338_Adding disputes on appuser.resx">
+      <DependentUpon>201705022300338_Adding disputes on appuser.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SeedData\Payee.csv" />
     <EmbeddedResource Include="SeedData\CheckingAccount.csv" />
     <EmbeddedResource Include="SeedData\IRAccount.csv" />
@@ -280,6 +295,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IRAccountController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Controllers\PayBillsController.cs" />
     <Compile Include="Controllers\PayeesController.cs" />
     <Compile Include="Controllers\PurchaseStockController.cs" />
@@ -375,6 +391,26 @@
     <Compile Include="Migrations\201705021614496_Updated appuser model.Designer.cs">
       <DependentUpon>201705021614496_Updated appuser model.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705021732044_Fixed Dispute ID.cs" />
+    <Compile Include="Migrations\201705021732044_Fixed Dispute ID.Designer.cs">
+      <DependentUpon>201705021732044_Fixed Dispute ID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705022129186_Updating enabled vs disabled variables.cs" />
+    <Compile Include="Migrations\201705022129186_Updating enabled vs disabled variables.Designer.cs">
+      <DependentUpon>201705022129186_Updating enabled vs disabled variables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705022152439_Updating role relationship.cs" />
+    <Compile Include="Migrations\201705022152439_Updating role relationship.Designer.cs">
+      <DependentUpon>201705022152439_Updating role relationship.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705022156150_Fixing what I just broke.cs" />
+    <Compile Include="Migrations\201705022156150_Fixing what I just broke.Designer.cs">
+      <DependentUpon>201705022156150_Fixing what I just broke.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705022300338_Adding disputes on appuser.cs" />
+    <Compile Include="Migrations\201705022300338_Adding disputes on appuser.Designer.cs">
+      <DependentUpon>201705022300338_Adding disputes on appuser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedIdentity.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -446,12 +482,7 @@
     <Content Include="Views\Stocks\Details.cshtml" />
     <Content Include="Views\Stocks\Edit.cshtml" />
     <Content Include="Views\Stocks\Index.cshtml" />
-    <Content Include="Views\IRAccount\DepositAgeError.cshtml" />
-    <Content Include="Views\IRAccount\WithdrawAgeAmountError.cshtml" />
-    <Content Include="Views\IRAccount\TransferAgeAmountError.cshtml" />
     <Content Include="Views\Dispute\Create.cshtml" />
-    <Content Include="Views\IRAccount\TransferAgeError.cshtml" />
-    <Content Include="Views\IRAccount\TransferLimitError.cshtml" />
     <Content Include="Views\Deposit\CreateAutoCorrect.cshtml" />
     <Content Include="Views\Employee\Home.cshtml" />
     <Content Include="Views\Manager\Home.cshtml" />

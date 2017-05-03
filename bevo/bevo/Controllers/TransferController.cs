@@ -45,6 +45,7 @@ namespace bevo.Controllers
                 String fromAccountType = GetAccountType(fromAccountNum);
                 String toAccountType = GetAccountType(toAccountNum);
                 transaction.TransType = TransType.Transfer;
+                transaction.Description = "Transfer " + transaction.Amount.ToString() + " from " + transaction.FromAccount.ToString().Substring(transaction.FromAccount.ToString().Length - 4) + " to " + transaction.ToAccount.ToString().Substring(transaction.ToAccount.ToString().Length - 4);
 
                 if (toAccountType == "CHECKING")
                 {
@@ -368,6 +369,9 @@ namespace bevo.Controllers
                 return RedirectToAction("Home", "Customer");
             }
 
+            List<AccountsViewModel> allAccounts = GetAccounts();
+            SelectList selectAccounts = new SelectList(allAccounts.OrderBy(q => q.AccountName), "AccountNum", "AccountName");
+            ViewBag.allAccounts = selectAccounts;
             return View(transaction);
         }
 

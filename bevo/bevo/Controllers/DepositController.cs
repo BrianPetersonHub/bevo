@@ -28,19 +28,19 @@ namespace bevo.Controllers
         //POST: Create/Deposit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description")] Transaction transaction, Int32 toAccount)
+        public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description")] Transaction transaction, int? toAccount)
         {
-            transaction.ToAccount = toAccount;
-            if (transaction.Amount < 0)
+            if (toAccount != null)
             {
-                ViewBag.Error = "putting in positive values for what you want to deposit";
-                return View("Error");
+                transaction.ToAccount = toAccount;
             }
+
             if (ModelState.IsValid)
             {
                 Int32? accountNum = transaction.ToAccount;
-                String accountType = GetAccountType(accountNum);
+                String accountType = GetAccountType(transaction.ToAccount);
                 transaction.TransType = TransType.Deposit;
+                transaction.Description = "Deposit " + transaction.Amount.ToString() + " into " + accountNum.ToString().Substring(accountNum.ToString().Length - 4);
 
                 if (accountType == "CHECKING")
                 {
@@ -95,7 +95,7 @@ namespace bevo.Controllers
                     //if user is over 70, they cannot deposit
                     if (UnderAgeLimt() == false)
                     {
-                        return RedirectToAction("DepositAgeError", "IRAccount");
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot deposit if you are over 70 years old.'); window.location='../Customer/Home';</script>");
                     }
 
                     //if total contributions > 5000, they cannot deposit this amount
@@ -112,7 +112,7 @@ namespace bevo.Controllers
                         }
                         else
                         {
-                            return View("MaxDepositError", "IRAccount");
+                            return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You have reached your max contribution amount of $5000. You cannot contribute to your IRA any more this year.'); window.location='../Customer/Home';</script>");
                         }
 
                     }
@@ -145,6 +145,9 @@ namespace bevo.Controllers
                 return RedirectToAction("Home", "Customer");
             }
 
+            List<AccountsViewModel> allAccounts = GetAccounts();
+            SelectList selectAccounts = new SelectList(allAccounts.OrderBy(q => q.AccountName), "AccountNum", "AccountName");
+            ViewBag.allAccounts = selectAccounts;
             return View(transaction);
         }
 

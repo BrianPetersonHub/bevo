@@ -18,7 +18,7 @@ namespace bevo.Models
     {
         [Key, ForeignKey("Transaction")]
         //[DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public Int32 DisputeId { get; set; }
+        public Int32 DisputeID { get; set; }
 
         public DisputeStatus DisputeStatus { get; set; }
 

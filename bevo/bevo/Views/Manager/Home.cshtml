@@ -1,7 +1,150 @@
-﻿
+﻿@model bevo.Models.AppUser
+@using Microsoft.VisualBasic;
+
 @{
     ViewBag.Title = "manager home";
 }
 
-<h2>Home</h2>
+<div class="row">
+    <div class="homepage-top">
+        <h2>Manager Home</h2>
+    </div>
+</div>
+
+
+<div class="homepage row">
+    <div class="quick-action-container col-lg-3">
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
+                linkText: "Process Portfolios",
+                actionName: "Process",
+                controllerName: "StockPortfolio",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
+                linkText: "All Disputes",
+                actionName: "Index",
+                controllerName: "Dispute",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
+                linkText: "Add Stocks",
+                actionName: "Create",
+                controllerName: "Stocks",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <p>
+              @Html.ActionLink(
+              linkText: "Manage Employees",
+              actionName: "Index",
+              controllerName: "Employees",
+              routeValues: null,
+              htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <p>
+              @Html.ActionLink(
+              linkText: "Manage Customers",
+              actionName: "Index",
+              controllerName: "Customers",
+              routeValues: null,
+              htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+    <div class="quick-action-button">
+        <!--TODO: Move this somewhere else...-->
+        <p>
+            @Html.ActionLink(linkText: "View Account Info", actionName: "ViewInfo", routeValues: null, htmlAttributes: new { @class = "quick-actions" })
+    </p>
+</div>
+</div>
+<div class="homepage-container col-lg-9">
+    <h3>Tasks awaiting Attention</h3>
+
+    <table class="table">
+        <tr>
+            <th>
+                Date
+            </th>
+            <th>
+                Transaction
+            </th>
+            <th>
+                Amount Disputed
+            </th>
+            <th>
+                Customer
+            </th>
+            <th>
+                Details
+            </th>
+
+        </tr>
+        @foreach (var d in ViewBag.UnresolvedDisputes)
+            {
+            <tr>
+                <td>
+                    @d.Date
+                </td>
+                <td>
+                    @d.TransName
+                </td>
+                <td>
+                    @d.TransAmount
+                </td>
+                <td>
+                    @d.CustNum
+                </td>
+                <td>
+                    @Html.ActionLink(
+                        linkText: "Details",
+                        actionName: "Details",
+                        controllerName: "Dispute",
+                        routeValues: new { id = d.DisputeID },
+                        htmlAttributes: null)
+                </td>
+            </tr>
+        }
+        @foreach (var t in ViewBag.TransactionToApprove)
+            {
+            <tr>
+                <td>
+                    @t.Date
+                </td>
+                <td>
+                    @t.TransactionNum
+                </td>
+                <td>
+                    @t.Amount
+                </td>
+                <td>
+                    UserID
+                </td>
+                <td>
+                    @Html.ActionLink(
+                        linkText: "Details",
+                        actionName: "Details",
+                        controllerName: "Transactions",
+                        routeValues: new { id = t.TransactionID },
+                        htmlAttributes: null)
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+</div>
 

@@ -56,7 +56,7 @@ namespace bevo.Models
         public String Birthday { get; set; }
 
         //Variable to determine whether the user's account is disabled or not
-        public Boolean? Active { get; set; }
+        public Boolean? Disabled { get; set; }
 
 
         // Navigational 
@@ -65,6 +65,7 @@ namespace bevo.Models
         public virtual IRAccount IRAccount { get; set; }
         public virtual StockPortfolio StockPortfolio { get; set; }
         public virtual List<Payee> Payees { get; set; }
+        public virtual List<Dispute> Disputes { get; set; }
 
 
         //This method allows you to create a new user
@@ -109,6 +110,7 @@ namespace bevo.Models
         }
 
         public DbSet<AppRole> AppRoles { get; set; }
+
 
         //public System.Data.Entity.DbSet<bevo.Models.AppUser> AppUsers { get; set; }
         // public DbSet <AppUser> AppUsers {get;set;}
