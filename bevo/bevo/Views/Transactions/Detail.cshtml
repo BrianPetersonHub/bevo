@@ -7,160 +7,170 @@
 <div class="row">
     <div class="homepage-top">
         <h2>@ViewBag.Title</h2>
+        <p>#@Html.DisplayFor(model => model.TransactionNum)</p>
     </div>
 </div>
 
-<div>
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.TransactionNum)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.TransactionNum)
-        </dd>
+<div class="row">
+    <div class="col-lg-12">
+        <dl class="dl-horizontal details">
+            <dt>
+                @Html.DisplayNameFor(model => model.Date)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Date)
-        </dt>
+            <dd>
+                @Model.Date.ToShortDateString()
+            </dd>
 
-        <dd>
-            @Model.Date.ToShortDateString()
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.FromAccount)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.FromAccount)
-        </dt>
-
-        <dd>
-            @if (Model.FromAccount == 0)
-            {
-                @("n/a")
-            }
-            else
-            {
-                @Html.DisplayFor(model => model.FromAccount)
-            }
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ToAccount)
-        </dt>
-
-        <dd>
-            @if (Model.ToAccount == 0)
-            {
-                @("n/a")
-            }
-            else
-            {
-                @Html.DisplayFor(model => model.ToAccount)
-            }
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TransType)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TransType)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Amount)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Amount)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Dispute)
-        </dt>
-
-        <dd>
-            @if (Model.Dispute != null)
-            {
-                if (Model.Dispute.DisputeStatus == bevo.Models.DisputeStatus.Accepted)
+            <dd>
+                @if (Model.FromAccount == 0)
                 {
-                    @("Accepted")
-                }
-                else if (Model.Dispute.DisputeStatus == bevo.Models.DisputeStatus.Adjusted)
-                {
-                    @("Adjusted")
-                }
-                else if (Model.Dispute.DisputeStatus == bevo.Models.DisputeStatus.Rejected)
-                {
-                    @("Rejected")
-                }
-                else if (Model.Dispute.DisputeStatus == bevo.Models.DisputeStatus.Submitted)
-                {
-                    @("Submitted")
+                    @("n/a")
                 }
                 else
                 {
-                    @("No status")
+                    @Html.DisplayFor(model => model.FromAccount)
                 }
-            }
-            else
-            {
-                @("none")
-            }
-        </dd>
+            </dd>
 
-    </dl>
+            <dt>
+                @Html.DisplayNameFor(model => model.ToAccount)
+            </dt>
+
+            <dd>
+                @if (Model.ToAccount == 0)
+                {
+                    @("n/a")
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.ToAccount)
+                }
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.TransType)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TransType)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Amount)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Amount)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Dispute)
+            </dt>
+
+            <dd>
+                @if (Model.Dispute != null)
+                {
+                    if (Model.Dispute.DisputeStatus == bevo.Models.DisputeStatus.Accepted)
+                    {
+                        @("Accepted")
+                    }
+                    else if (Model.Dispute.DisputeStatus == bevo.Models.DisputeStatus.Adjusted)
+                    {
+                        @("Adjusted")
+                    }
+                    else if (Model.Dispute.DisputeStatus == bevo.Models.DisputeStatus.Rejected)
+                    {
+                        @("Rejected")
+                    }
+                    else if (Model.Dispute.DisputeStatus == bevo.Models.DisputeStatus.Submitted)
+                    {
+                        @("Submitted")
+                    }
+                    else
+                    {
+                        @("No status")
+                    }
+                }
+                else
+                {
+                    @("none")
+                }
+            </dd>
+        </dl>
+    </div>
 </div>
-<p>
-    @Html.ActionLink(
-                linkText: "Dispute this transaction",
-                actionName: "Create",
-                controllerName: "Dispute",
-                routeValues: new { id = Model.TransactionID },
-                htmlAttributes: null)
-    @Html.ActionLink("Back to List", "Index")
-</p>
 
-<div class="homepage-container col-lg-9">
-    <h3>List of 5 most recent similar transactions</h3>
-    <table class="table">
-        <tr>
-            <th>
-                Amount
-            </th>
-            <th>
-                Description
-            </th>
-            <th>
-                See Details
-            </th>
-        </tr>
-        @foreach (var t in ViewBag.SimilarTransactions)
-            {
+<div class="row">
+    <div class="col-lg-12 middle-button-container">
+            @Html.ActionLink(
+              linkText: "Dispute this transaction",
+              actionName: "Create",
+              controllerName: "Dispute",
+              routeValues: new { id = Model.TransactionID },
+              htmlAttributes: new { @class = "middle-button" })
+    </div>
+</div>
+
+<div class="row transaction-container">
+    <div class="homepage-container col-lg-12">
+        <h3>List of 5 most recent similar transactions</h3>
+        <table class="table">
             <tr>
-                <td>
-                    @t.Amount
-                </td>
-                <td>
-                    @t.Description
-                </td>
-                <td>
-                    @Html.ActionLink(
+                <th>
+                    Amount
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    See Details
+                </th>
+            </tr>
+            @foreach (var t in ViewBag.SimilarTransactions)
+            {
+                <tr>
+                    <td>
+                        @t.Amount
+                    </td>
+                    <td>
+                        @t.Description
+                    </td>
+                    <td>
+                        @Html.ActionLink(
                 linkText: "Details",
                 actionName: "Detail",
                 controllerName: "Transactions",
                 routeValues: new { id = t.TransactionID },
                 htmlAttributes: null)
-                </td>
-            </tr>
-        }
-    </table>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+
+<div class="row nav-footer">
+   <p>@Html.ActionLink(
+     linkText: "<< Back to Home",
+     actionName: "Home",
+     controllerName: "Customer",
+     routeValues: null,
+     htmlAttributes: null)
+     </p>
 </div>
 

@@ -14,6 +14,12 @@
 <!--TODO: add other info needed for checking account detail page-->
 <div class="homepage row">
     <div class="quick-action-container col-lg-3">
+        <div class="stock-value">
+            <h3>Current Value</h3>
+            <div class="value-container">
+                <p>@ViewBag.Balance</p>
+            </div>
+        </div>
         <div class="quick-action-button">
             <p>
                 @Html.ActionLink(
