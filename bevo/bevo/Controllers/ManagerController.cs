@@ -179,6 +179,73 @@ namespace bevo.Controllers
             return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully promoted employee!'); window.location='../Customer/Home';</script>");
         }
 
+
+        //Make a method to get a list of all the employees and puts in in the viewbag for the fire employees view
+        public ActionResult FireEmployee()
+        {
+            ViewBag.AllEmployees = GetEmployees();
+            return View();
+        }
+
+        //Make the post edit method to fire the employee
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult FireEmployee(String id)
+        {
+            AppDbContext db = new AppDbContext();
+
+            //Get the user we want 
+            var query = from user in db.Users
+                        select user;
+            query = query.Where(user => user.Id == id);
+            List<AppUser> queryList = query.ToList();
+            AppUser userInQuestion = queryList[0];
+
+            //change the user's disabled variable to true 
+            userInQuestion.Disabled = true;
+
+            //Save Changes
+            db.Entry(userInQuestion).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully terminated employee!'); window.location='../Customer/Home';</script>");
+        }
+
+        //Make a method to get a list of all the customers and puts it in the viewbag for the freeze customer view
+        public ActionResult FreezeCustomer()
+        {
+            ViewBag.AllCustomers = GetCustomers();
+            return View();
+        }
+
+        //Make the post edit method to fire the employee
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult FreezeCustomer(String id)
+        {
+            AppDbContext db = new AppDbContext();
+
+            //Get the user we want 
+            var query = from user in db.Users
+                        select user;
+            query = query.Where(user => user.Id == id);
+            List<AppUser> queryList = query.ToList();
+            AppUser userInQuestion = queryList[0];
+
+            //change the user's disabled variable to true 
+            userInQuestion.Disabled = true;
+
+            //Save Changes
+            db.Entry(userInQuestion).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully froze customer account!'); window.location='../Customer/Home';</script>");
+        }
+
+
+
+
+
         public ActionResult ProcessBalancedPortfolios()
         {
             List<StockPortfolio> stockPortfolios = GetStockPortfolios();
@@ -471,6 +538,11 @@ namespace bevo.Controllers
         }
 
 
+
+
+
+
+
     //get a list of all the user objects for employees 
     public List<AppUser> GetEmployees()
         {
@@ -491,13 +563,45 @@ namespace bevo.Controllers
             return employeeList;
         }
 
-        //Make a select list for all of the employees a manager could choose to promote 
+        //Make a select list for all of the employees a manager could choose to promote or fire
         public IEnumerable<SelectListItem> SelectEmployee()
         {
             List<AppUser> employees = GetEmployees();
             SelectList selectEmployee = new SelectList(employees, "Id", "Email");
             return selectEmployee;
         }
+
+        //Get a list of all the customers in the db 
+        public List<AppUser> GetCustomers()
+        {
+            AppDbContext db = new AppDbContext();
+
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+            List<AppUser> customerList = new List<AppUser>();
+
+            foreach (AppUser user in db.Users)
+            {
+                if (userManager.GetRoles(user.Id).Contains("Customer"))
+                {
+                    customerList.Add(user);
+                }
+            }
+
+
+            return customerList;
+        }
+
+        //Make a select list for all of the customeres a manager could choose to disable 
+        public IEnumerable<SelectListItem> SelectCustomer()
+        {
+            List<AppUser> customers = GetCustomers();
+            SelectList selectCustomer = new SelectList(customers, "Id", "Email");
+            return selectCustomer;
+        }
+
+
+
+
 
         //get a list of all stock portfolios
         public List<StockPortfolio> GetStockPortfolios()
