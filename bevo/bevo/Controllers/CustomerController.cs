@@ -161,7 +161,7 @@ namespace bevo.Controllers
                 user.Email = vm.Email;
                 user.PhoneNumber = vm.PhoneNumber;
                 db.SaveChanges();
-                return RedirectToAction("ViewInfo");
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Your profile has been updated!'); window.location='../Customer/ViewInfo';</script>");
             }
             return View(vm);
         }

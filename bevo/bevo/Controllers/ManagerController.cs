@@ -101,7 +101,7 @@ namespace bevo.Controllers
             {
                 db.Entry(appUser).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: .'); window.location='../Customer/Home';</script>");
             }
             ViewBag.Id = new SelectList(db.IRAccounts, "IRAccountID", "AccountName", appUser.Id);
             ViewBag.Id = new SelectList(db.StockPortfolios, "StockPortfolioID", "AccountName", appUser.Id);
@@ -131,7 +131,7 @@ namespace bevo.Controllers
             AppUser appUser = db.Users.Find(id);
             db.Users.Remove(appUser);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully deleted account!'); window.location='../Manager/Home';</script>");
         }
 
         protected override void Dispose(bool disposing)
@@ -176,7 +176,7 @@ namespace bevo.Controllers
             db.Entry(userInQuestion).State = EntityState.Modified;
             db.SaveChanges();
 
-            return RedirectToAction("Home");
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully promoted employee!'); window.location='../Customer/Home';</script>");
         }
 
         public ActionResult ProcessBalancedPortfolios()
@@ -206,7 +206,7 @@ namespace bevo.Controllers
                 }
             }
             db.SaveChanges();
-            return Content("<script language'javascript' type = 'text/javascript'> alert('You have successfully added bonuses to Customers with balanced stock portfolios!'); window.location='../Manager/Home';</script>");
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully added bonuses to Customers with balanced stock portfolios!'); window.location='../Manager/Home';</script>");
         }
 
         public ActionResult CreateStock()
@@ -222,7 +222,7 @@ namespace bevo.Controllers
             {
                 db.Stocks.Add(stock);
                 db.SaveChanges();
-                return Content("<script language'javascript' type = 'text/javascript'> alert('You have successfully added a new stock!'); window.location='../Manager/Home';</script>");
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully added a new stock!'); window.location='../Manager/Home';</script>");
             }
             return View(stock);
         }

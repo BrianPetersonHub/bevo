@@ -1,0 +1,84 @@
+﻿@using bevo.Controllers
+@model IEnumerable<bevo.Models.Transaction>
+
+
+@{
+    ViewBag.Title = "Detailed Search";
+}
+
+<h2>Detailed Search</h2>
+
+@using (Html.BeginForm("SearchResults", "Transactions", FormMethod.Get))
+{
+    <p class="form-group">
+        Description: @Html.TextBox("description", null, new { @class = "form-control" }) <br />
+
+        Transaction type: @Html.DropDownList("selectedTransType", (SelectList)ViewBag.TransTypeSelectList, new { @class = "form-control" })
+
+        <div class="form-group">
+            Amount:
+            <div class="form-check">
+                <label class="form-check-label">
+                    @Html.RadioButton("selectedRange", Range.One, true, new { @class = "form-check-input" }) 0-100
+                </label>
+            </div>
+
+            <div class="form-check">
+                <label class="form-check-label">
+                    @Html.RadioButton("selectedRange", Range.Two, true, new { @class = "form-check-input" }) 100-200
+                </label>
+            </div>
+
+            <div class="form-check">
+                <label class="form-check-label">
+                    @Html.RadioButton("selectedRange", Range.Three, true, new { @class = "form-check-input" }) 200-300
+                </label>
+            </div>
+
+            <div class="form-check">
+                <label class="form-check-label">
+                    @Html.RadioButton("selectedRange", Range.Four, true, new { @class = "form-check-input" }) 300+
+                </label>
+            </div>
+
+            <div class="form-check">
+                <label class="form-check-label">
+                    @Html.RadioButton("selectedRange", Range.Custom, true, new { @class = "form-check-input" }) Custom
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            Transaction Number: @Html.TextBox("transactionNumber", null, new { @class = "form-control" }) <div class="text-danger">@ViewBag.Message
+        </div>
+
+            Date:
+            <label class="form-check-label">
+                @Html.RadioButton("selectedDate", Date.One, true, new { @class = "form-check-input" }) Last 15 days
+            </label>
+            <label class="form-check-label">
+                @Html.RadioButton("selectedDate", Date.Two, true, new { @class = "form-check-input" }) Last 30 days
+            </label>
+            <label class="form-check-label">
+                @Html.RadioButton("selectedDate", Date.Three, true, new { @class = "form-check-input" }) Last 60 days
+            </label>
+            <label class="form-check-label">
+                @Html.RadioButton("selectedDate", Date.All, true, new { @class = "form-check-input" }) All
+            </label>
+            <label class="form-check-label">
+                @Html.RadioButton("selectedDate", Date.Custom, true, new { @class = "form-check-input" }) Custom
+            </label>
+        </div>
+
+        <input type="submit" value ="Search" class="btn btn-default" />
+        @*@Html.ActionLink("Search", "Home", null, new { @class = "btn btn-default" })*@
+
+
+    </p>
+
+}
+
+
+
+
+

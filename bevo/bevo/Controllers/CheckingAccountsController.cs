@@ -38,7 +38,7 @@ namespace bevo.Controllers
                 user.CheckingAccounts.Add(checkingAccount);
                 db.SaveChanges();
 
-                return RedirectToAction("Home", "Customer");
+                return Content("<script language'javascript' type = 'text/javascript'> alert('You have successfully created a new checking account!'); window.location='../Customer/Home';</script>");
             }
             return View(checkingAccount);
         }
@@ -91,7 +91,7 @@ namespace bevo.Controllers
                 CheckingAccount checkingAccount = db.CheckingAccounts.Find(id);
                 checkingAccount.AccountName = vm.AccountName;
                 db.SaveChanges();
-                return RedirectToAction("Details", new { id = id });
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Your checking account name has been updated'); window.location='../Customer/Home;</script>");
             }
             return View(vm);
         }

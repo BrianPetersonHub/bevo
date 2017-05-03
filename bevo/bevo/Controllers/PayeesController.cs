@@ -92,7 +92,7 @@ namespace bevo.Controllers
             {
                 db.Entry(payee).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully updated Payee!'); window.location='../Customer/Home';</script>");
             }
             return View(payee);
         }
@@ -120,7 +120,7 @@ namespace bevo.Controllers
             Payee payee = db.Payees.Find(id);
             db.Payees.Remove(payee);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully deleted Payee!'); window.location='../Customer/Home';</script>");
         }
 
         protected override void Dispose(bool disposing)

@@ -15,7 +15,8 @@ namespace bevo.Models
         Sell_Stock,
         Pay_Payee,
         Fee,
-        Bonus
+        Bonus,
+        All
     }
     public class Transaction
     {

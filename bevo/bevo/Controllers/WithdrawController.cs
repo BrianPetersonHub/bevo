@@ -54,7 +54,7 @@ namespace bevo.Controllers
                     //check if account is already overdrafted
                     if (account.Balance <= -50)
                     {
-                        return View("MaxOverdraftError");
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You have already overdrafted the maximum amount.'); window.location='../Customer/Home';</script>");
                     }
                     //check for overdraft strarts. if transaction will make balance <-50, return new view with error and autofilled max transaction
                     if (account.Balance - transaction.Amount < -50)
@@ -107,7 +107,7 @@ namespace bevo.Controllers
                     //check if account is already overdrafted
                     if (account.Balance <= -50)
                     {
-                        return View("MaxOverdraftError");
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You have already overdrafted the maximum amount.'); window.location='../Customer/Home';</script>");
                     }
                     //check for overdraft strarts. if transaction will make balance <-50, return new view with error and autofilled max transaction
                     if (account.Balance - transaction.Amount < -50)
@@ -162,10 +162,14 @@ namespace bevo.Controllers
                     {
                         if (transaction.Amount > 3000)
                         {
-                            return RedirectToAction("WithdrawAgeAmountError", "IRAccount");
+                            return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot withdraw more than $3000 from IRA if you are under 65.'); window.location='../Customer/Home';</script>");
                         }
                         else
                         {
+                            if (account.Balance <= -50)
+                            {
+                                return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You have already overdrafted the maximum amount.'); window.location='../Customer/Home';</script>");
+                            }
                             if (account.Balance - transaction.Amount < -50)
                             {
                                 transaction.Amount = 50 + account.Balance;
@@ -252,7 +256,10 @@ namespace bevo.Controllers
                     //gets first (only) thing from query list
                     String accountID = query.First();
                     StockPortfolio account = db.StockPortfolios.Find(accountID);
-
+                    if (account.Balance <= -50)
+                    {
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You have already overdrafted the maximum amount.'); window.location='../Customer/Home';</script>");
+                    }
                     if (account.Balance - transaction.Amount < -50)
                     {
                         transaction.Amount = 50 + account.Balance;
@@ -291,7 +298,7 @@ namespace bevo.Controllers
                 
                 db.SaveChanges();
 
-                return RedirectToAction("Home", "Customer");
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Withdraw successfull!'); window.location='../Customer/Home';</script>");
             }
 
             List<AccountsViewModel> allAccounts = GetAccounts();
