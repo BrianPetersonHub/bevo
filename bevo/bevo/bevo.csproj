@@ -259,6 +259,9 @@
     <EmbeddedResource Include="Migrations\201705022300338_Adding disputes on appuser.resx">
       <DependentUpon>201705022300338_Adding disputes on appuser.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705030425576_Added feeAmount to Stock model.resx">
+      <DependentUpon>201705030425576_Added feeAmount to Stock model.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SeedData\Payee.csv" />
     <EmbeddedResource Include="SeedData\CheckingAccount.csv" />
     <EmbeddedResource Include="SeedData\IRAccount.csv" />
@@ -411,6 +414,10 @@
     <Compile Include="Migrations\201705022300338_Adding disputes on appuser.Designer.cs">
       <DependentUpon>201705022300338_Adding disputes on appuser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705030425576_Added feeAmount to Stock model.cs" />
+    <Compile Include="Migrations\201705030425576_Added feeAmount to Stock model.Designer.cs">
+      <DependentUpon>201705030425576_Added feeAmount to Stock model.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedIdentity.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -511,7 +518,9 @@
     <Content Include="Views\PayBills\Error.cshtml" />
     <Content Include="Views\Payees\Confirmation.cshtml" />
     <Content Include="Views\Dispute\Index.cshtml" />
-    <Content Include="Views\Dispute\EditDispute.cshtml" />
+    <Content Include="Views\Manager\EditDispute.cshtml" />
+    <Content Include="Views\Manager\CurrentDisputes.cshtml" />
+    <Content Include="Views\Manager\AllDisputes.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

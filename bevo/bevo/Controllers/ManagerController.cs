@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using bevo.Utilities;
 
 namespace bevo.Controllers
 {
@@ -178,19 +179,53 @@ namespace bevo.Controllers
             return RedirectToAction("Home");
         }
 
+        public ActionResult ProcessBalancedPortfolios()
+        {
+            List<StockPortfolio> stockPortfolios = GetStockPortfolios();
+            foreach (var sp in stockPortfolios)
+            {
+                if (BalanceCheck(sp) == true)
+                {
+                    Decimal value = sp.Balance;
+                    //add bonus transaction 
+                    foreach (StockDetail sd in sp.StockDetails)
+                    {
+                        //get current price of stock
+                        StockQuote quote = GetQuote.GetStock(sd.Stock.StockTicker);
+                        value = value + (quote.LastTradePrice * quote.Volume);
+                    }
 
+                    //make new bonus transaction
+                    Transaction t = new Transaction();
+                    t.TransType = TransType.Bonus;
+                    t.Amount = value * .1m;
+                    t.Date = DateTime.Today;
+                    t.ToAccount = sp.AccountNum;
+                    t.Description = "Balanced Portfolio Bonus";
+                    db.Transactions.Add(t);
+                }
+            }
+            db.SaveChanges();
+            return Content("<script language'javascript' type = 'text/javascript'> alert('You have successfully added bonuses to Customers with balanced stock portfolios!'); window.location='../Manager/Home';</script>");
+        }
 
+        public ActionResult CreateStock()
+        {
+            return View();
+        }
 
-
-
-
-
-
-
-
-
-
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "StockName,StockTicker,TypeOfStock,FeeAmount")] Stock stock)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Stocks.Add(stock);
+                db.SaveChanges();
+                return Content("<script language'javascript' type = 'text/javascript'> alert('You have successfully added a new stock!'); window.location='../Manager/Home';</script>");
+            }
+            return View(stock);
+        }
 
         //Get a list of all transactions 
         public List<Transaction> GetTrMasterList()
@@ -214,6 +249,12 @@ namespace bevo.Controllers
             returnList = query.ToList();
 
             return returnList;
+        }
+
+        public ActionResult CurrentDisputes()
+        {
+            List<DisputeViewModel> currentDisputes = GetUnresolvedDisputes();
+            return View(currentDisputes);
         }
 
         public List<DisputeViewModel> GetUnresolvedDisputes()
@@ -246,6 +287,12 @@ namespace bevo.Controllers
             return dvmList;
         }
 
+        public ActionResult AllDisputes()
+        {
+            List<DisputeViewModel> allDisputes = GetAllDisputes();
+            return View(allDisputes);
+        }
+
         public List<DisputeViewModel> GetAllDisputes()
         {
             AppDbContext db = new AppDbContext();
@@ -272,8 +319,135 @@ namespace bevo.Controllers
             return dvmList;
         }
 
-        //get a list of all the user objects for employees 
-        public List<AppUser> GetEmployees()
+        //Make a get method for editing the dispute
+        //The view for this method should be bound to the disputeviewmodel class 
+        public ActionResult EditDispute(int? id)
+        {
+            AppDbContext db = new AppDbContext();
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            //Get the dispute object we're concerned with 
+            var query = from d in db.Disputes
+                        select d;
+            query = query.Where(d => d.DisputeID == id);
+
+            if (query == null)
+            {
+                return HttpNotFound();
+            }
+
+            else
+            {
+                Dispute theDispute = query.ToList()[0];
+                //Apply this dispute's information to a dispute viewmodel which will then be passed
+                //to the edit object view 
+
+                DisputeViewModel dvm = new DisputeViewModel();
+                dvm.CorrectAmount = theDispute.DisputedAmount;
+                dvm.CustEmail = theDispute.AppUser.Email;
+                dvm.FirstName = theDispute.AppUser.FirstName;
+                dvm.LastName = theDispute.AppUser.LastName;
+                dvm.Message = theDispute.Message;
+                dvm.Status = theDispute.DisputeStatus;
+                dvm.TransName = theDispute.Transaction.TransactionID;
+                dvm.TransAmount = theDispute.Transaction.Amount;
+                dvm.DisputeID = theDispute.DisputeID;
+
+                return View(dvm);
+            }
+        }
+
+        //Make a post method for editing disputes 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditDispute([Bind(Include = "CorrectAmount,CustEmail,FirstName,LastName,Message,Status,TransName,TransAmount,DisputeID")] DisputeViewModel dvm, Decimal? adjustedAmount, String comment)
+        {
+            AppDbContext db = new AppDbContext();
+
+            if (ModelState.IsValid)
+            {
+                Dispute disToChange = db.Disputes.Find(dvm.DisputeID);
+                Transaction transToChange = db.Transactions.Find(dvm.TransName);
+
+                //get user currently logged in 
+                UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+                var user = userManager.FindById(User.Identity.GetUserId());
+
+                //Make appropriate changes to the dispute and transaction in quetion 
+                //based on whether the dispute was accepted, rejected, or adjusted
+                if (dvm.Status == DisputeStatus.Accepted)
+                {
+                    disToChange.DisputeStatus = dvm.Status;
+                    if (dvm.Message != null)
+                    {
+                        disToChange.Message = disToChange.Message + "\n" + comment;
+                    }
+                    transToChange.Amount = dvm.CorrectAmount;
+                    transToChange.Description = "Dispute [Accepted] " + transToChange.Description;
+                    disToChange.ManResolvedEmail = user.Email;
+
+                    db.Entry(disToChange).State = EntityState.Modified;
+                    db.Entry(transToChange).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: You have successfully accepted the dispute!'); window.location='../../Manager/Home';</script>");
+
+                }
+                if (dvm.Status == DisputeStatus.Rejected)
+                {
+                    //Send an email to the user in question 
+                    String bodyForEmail = null;
+                    if (dvm.Message != null)
+                    {
+                        bodyForEmail = "Your dispute on transaction number " + transToChange.TransactionID + " has been rejected."
+                       + "Additional messages from the manager who resolved your dispute: " + "\n" + comment;
+                    }
+                    else
+                    {
+                        bodyForEmail = "Your dispute on transaction number " + transToChange.TransactionID + " has been rejected.";
+                    }
+
+                    bevo.Messaging.EmailMessaging.SendEmail(disToChange.AppUser.Email, "Dispute Rejected", bodyForEmail);
+
+                    //Change the appropriate information and save it to the DB
+                    disToChange.DisputeStatus = dvm.Status;
+                    transToChange.Description = "Dispute [Rejected] " + transToChange.Description + comment;
+                    db.Entry(disToChange).State = EntityState.Modified;
+                    db.Entry(transToChange).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: You have successfuly rejected the dispute!'); window.location='../../Manager/Home';</script>");
+                }
+                if (dvm.Status == DisputeStatus.Adjusted)
+                {
+                    disToChange.DisputeStatus = dvm.Status;
+                    if (dvm.Message != null)
+                    {
+                        disToChange.Message = disToChange.Message + "\n" + comment;
+                    }
+                    transToChange.Amount = (decimal)adjustedAmount;
+                    transToChange.Description = "Dispute [Accepted] " + transToChange.Description + comment;
+                    disToChange.ManResolvedEmail = user.Email;
+
+                    db.Entry(disToChange).State = EntityState.Modified;
+                    db.Entry(transToChange).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return Content("<script language'javascript' type = 'text/javascript'> alert('You have successfuly adjusted the dispute!'); window.location='../../Manager/Home';</script>");
+                }
+
+
+            }
+            return View(dvm);
+        }
+
+
+    //get a list of all the user objects for employees 
+    public List<AppUser> GetEmployees()
         {
             AppDbContext db = new AppDbContext();
 
@@ -298,7 +472,58 @@ namespace bevo.Controllers
             List<AppUser> employees = GetEmployees();
             SelectList selectEmployee = new SelectList(employees, "Id", "Email");
             return selectEmployee;
-        } 
+        }
+
+        //get a list of all stock portfolios
+        public List<StockPortfolio> GetStockPortfolios()
+        {
+            List<StockPortfolio> stockPortfolios = db.StockPortfolios.ToList();
+            return stockPortfolios;
+        }
+
+        //returns true if portfolio is balanced
+        public Boolean BalanceCheck(StockPortfolio sp)
+        {
+            //Get a list of all the stocks in the account 
+            List<Stock> stockList = new List<Stock>();
+
+            foreach (StockDetail s in sp.StockDetails)
+            {
+                stockList.Add(s.Stock);
+            }
+
+            //Counts to keep track of each stock type in the account 
+            Int32 numOrdinary = new Int32();
+            Int32 numIndex = new Int32();
+            Int32 numMutual = new Int32();
+
+            foreach (Stock stock in stockList)
+            {
+                if (stock.TypeOfStock == StockType.Ordinary)
+                {
+                    numOrdinary += 1;
+                }
+                else if (stock.TypeOfStock == StockType.Index_Fund)
+                {
+                    numIndex += 1;
+                }
+                else if (stock.TypeOfStock == StockType.Mutual_Fund)
+                {
+                    numMutual += 1;
+                }
+            }
+
+            //Check if the account qualifies 
+            if (numOrdinary >= 2 && numIndex >= 1 && numMutual >= 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
 
 
     }

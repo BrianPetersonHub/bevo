@@ -1,0 +1,65 @@
+﻿@model IEnumerable<bevo.Models.DisputeViewModel>
+
+@{
+    ViewBag.Title = "current disputes";
+}
+
+<h2>current disputes</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CustEmail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TransName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TransAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CorrectAmount)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CustEmail)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TransName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TransAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CorrectAmount)
+        </td>
+        <td>
+            @Html.ActionLink(
+            linkText: "Resolve",
+            actionName: "EditDispute",
+            controllerName: "Manager",
+            routeValues: new { id = item.DisputeID },
+            htmlAttributes: null)
+
+        </td>
+    </tr>
+}
+
+</table>

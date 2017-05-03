@@ -18,8 +18,18 @@
             <p>
                 @Html.ActionLink(
                 linkText: "Process Portfolios",
-                actionName: "Process",
-                controllerName: "StockPortfolio",
+                actionName: "ProcessBalancedPortfolios",
+                controllerName: "Manager",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
+                linkText: "Current Disputes",
+                actionName: "CurrentDisputes",
+                controllerName: "Manager",
                 routeValues: null,
                 htmlAttributes: new { @class = "quick-actions" })
             </p>
@@ -28,8 +38,8 @@
             <p>
                 @Html.ActionLink(
                 linkText: "All Disputes",
-                actionName: "Index",
-                controllerName: "Dispute",
+                actionName: "AllDisputes",
+                controllerName: "Manager",
                 routeValues: null,
                 htmlAttributes: new { @class = "quick-actions" })
             </p>
@@ -106,7 +116,7 @@
                     @Html.ActionLink(
                         linkText: "Resolve",
                         actionName: "EditDispute",
-                        controllerName: "Dispute",
+                        controllerName: "Manager",
                         routeValues: new { id = d.DisputeID },
                         htmlAttributes: null)
                 </td>
