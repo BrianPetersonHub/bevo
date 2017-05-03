@@ -548,8 +548,8 @@ namespace bevo.Controllers
 
 
 
-    //get a list of all the user objects for employees 
-    public List<AppUser> GetEmployees()
+        //get a list of all the user objects for employees 
+        public List<AppUser> GetEmployees()
         {
             AppDbContext db = new AppDbContext();
 
@@ -569,7 +569,7 @@ namespace bevo.Controllers
         }
 
         //Make a select list for all of the employees a manager could choose to promote or fire
-        public IEnumerable<SelectListItem> SelectEmployee()
+        public SelectList SelectEmployee()
         {
             List<AppUser> employees = GetEmployees();
             SelectList selectEmployee = new SelectList(employees, "Id", "Email");
@@ -597,7 +597,7 @@ namespace bevo.Controllers
         }
 
         //Make a select list for all of the customeres a manager could choose to disable 
-        public IEnumerable<SelectListItem> SelectCustomer()
+        public SelectList SelectCustomer()
         {
             List<AppUser> customers = GetCustomers();
             SelectList selectCustomer = new SelectList(customers, "Id", "Email");
