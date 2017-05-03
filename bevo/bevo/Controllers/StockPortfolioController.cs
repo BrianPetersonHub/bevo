@@ -204,15 +204,6 @@ namespace bevo.Controllers
                 
             }
 
-
-            //Check to see if the portfolio is balanced 
-            bool bal = BalanceCheck();
-            if (bal == true)
-            {
-                portfolioInfo.Balanced = true;
-                portfolioInfo.TotalBonuses = 0;
-            }
-
             //Define how much is in the GAINS PORTION of the portfolio
             decimal currentMarketValue = new decimal();
             currentMarketValue = 0;
