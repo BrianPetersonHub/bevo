@@ -410,5 +410,36 @@ namespace bevo.Controllers
 
             return AcctNums;
         }
+
+        public List<DisputeViewModel> GetUnresolvedDisputes()
+        {
+            AppDbContext db = new AppDbContext();
+
+            List<Dispute> disputeList = new List<Dispute>();
+            var query = from d in db.Disputes
+                        select d;
+            query = query.Where(d => d.DisputeStatus == DisputeStatus.Submitted);
+            disputeList = query.ToList();
+
+            List<DisputeViewModel> dvmList = new List<DisputeViewModel>();
+            foreach (Dispute d in disputeList)
+            {
+                DisputeViewModel dvm = new DisputeViewModel();
+                dvm.CorrectAmount = d.DisputedAmount;
+                dvm.FirstName = d.AppUser.FirstName;
+                dvm.LastName = d.AppUser.LastName;
+                dvm.TransAmount = d.Transaction.Amount;
+                dvm.Message = d.Message;
+                dvm.CustEmail = d.AppUser.Email;
+                dvm.TransName = d.Transaction.TransactionID;
+                dvm.DisputeID = d.DisputeID;
+                dvm.Status = DisputeStatus.Submitted;
+                dvmList.Add(dvm);
+            }
+
+
+            return dvmList;
+        }
+
     }
 }
