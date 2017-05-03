@@ -244,18 +244,21 @@ namespace bevo.Controllers
 
 
             //Add a transaction for the fee associated with stock purchase 
-            decimal FeeToPay = 10m;
-            Transaction newFee = new Transaction();
-            newFee.TransType = TransType.Fee;
-            newFee.Date = enteredDate;
-            newFee.FromAccount = portfolio.AccountNum;
-            newFee.Amount = FeeToPay;
-            newFee.Description = "$10 fee for purchasing " + numShares.ToString() + " shares of " + stockInQuestion.StockTicker.ToString();
-            newFee.StockPortfolios = new List<StockPortfolio>();
-            newFee.StockPortfolios.Add(portfolio);
-            db.Transactions.Add(newFee);
-            db.SaveChanges();
-
+            if(stockInQuestion.feeAmount != null)
+            {
+                decimal FeeToPay = (Int32)stockInQuestion.feeAmount;
+                Transaction newFee = new Transaction();
+                newFee.TransType = TransType.Fee;
+                newFee.Date = enteredDate;
+                newFee.FromAccount = portfolio.AccountNum;
+                newFee.Amount = FeeToPay;
+                newFee.Description = "$10 fee for purchasing " + numShares.ToString() + " shares of " + stockInQuestion.StockTicker.ToString();
+                newFee.StockPortfolios = new List<StockPortfolio>();
+                newFee.StockPortfolios.Add(portfolio);
+                db.Transactions.Add(newFee);
+                db.SaveChanges();
+            }
+            
 
 
             //Redirect the user to the details page on the stockportfoliocontroller

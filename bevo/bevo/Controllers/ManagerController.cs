@@ -203,6 +203,27 @@ namespace bevo.Controllers
                     t.ToAccount = sp.AccountNum;
                     t.Description = "Balanced Portfolio Bonus";
                     db.Transactions.Add(t);
+                    
+                    if (GetAccountType(t.ToAccount) == "CHECKING")
+                    {
+                        CheckingAccount checkingAccount = db.CheckingAccounts.Find(t.ToAccount);
+                        checkingAccount.Balance = checkingAccount.Balance + t.Amount;
+                    }
+                    else if (GetAccountType(t.ToAccount) == "SAVING")
+                    {
+                        SavingAccount savingAccount = db.SavingAccounts.Find(t.ToAccount);
+                        savingAccount.Balance = savingAccount.Balance + t.Amount;
+                    }
+                    else if (GetAccountType(t.ToAccount) == "IRA")
+                    {
+                        IRAccount irAccount = db.IRAccounts.Find(t.ToAccount);
+                        irAccount.Balance = irAccount.Balance + t.Amount;
+                    }
+                    else if (GetAccountType(t.ToAccount) == "STOCKPORTFOLIO")
+                    {
+                        StockPortfolio stockPortfolio = db.StockPortfolios.Find(t.ToAccount);
+                        stockPortfolio.Balance = stockPortfolio.Balance + t.Amount;
+                    }
                 }
             }
             db.SaveChanges();
@@ -220,6 +241,15 @@ namespace bevo.Controllers
         {
             if (ModelState.IsValid)
             {
+                List<Stock> stocks = db.Stocks.ToList();
+                foreach (Stock s in stocks)
+                {
+                    if (s.StockTicker == stock.StockTicker)
+                    {
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot add two of the same stock tickers'); window.location='../Manager/Home';</script>");
+                    }
+                }
+
                 db.Stocks.Add(stock);
                 db.SaveChanges();
                 return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully added a new stock!'); window.location='../Manager/Home';</script>");
@@ -523,6 +553,48 @@ namespace bevo.Controllers
                 return false;
             }
 
+        }
+
+        public String GetAccountType(Int32? accountNum)
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            String accountType;
+
+            List<CheckingAccount> checkingAccounts = user.CheckingAccounts;
+            foreach (var c in checkingAccounts)
+            {
+                if (accountNum == c.AccountNum)
+                {
+                    accountType = "CHECKING";
+                    return accountType;
+                }
+            }
+
+            List<SavingAccount> savingAccounts = user.SavingAccounts;
+            foreach (var s in savingAccounts)
+            {
+                if (accountNum == s.AccountNum)
+                {
+                    accountType = "SAVING";
+                    return accountType;
+                }
+            }
+
+            IRAccount iraAccount = user.IRAccount;
+            if (accountNum == iraAccount.AccountNum)
+            {
+                accountType = "IRA";
+                return accountType;
+            }
+
+            StockPortfolio stockPortfolio = user.StockPortfolio;
+            if (accountNum == stockPortfolio.AccountNum)
+            {
+                accountType = "STOCKPORTFOLIO";
+                return accountType;
+            }
+
+            return "NOT FOUND";
         }
 
 

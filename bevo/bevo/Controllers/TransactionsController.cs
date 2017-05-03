@@ -69,6 +69,7 @@ namespace bevo.Controllers
         public ActionResult DetailedSearch()
         {
             ViewBag.TransTypeSelectList = GetAllTransTypesSL();
+
             return View();
         }
 
