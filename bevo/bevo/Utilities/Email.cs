@@ -26,7 +26,7 @@ namespace bevo.Messaging
 
             //Add anything that you need to the body of the message
             // /n is a new line – this will add some white space after the main body of the message
-            String finalMessage = emailBody + "\n\n Comments, questions, concerns? Contact us at test@example.com.";
+            String finalMessage = emailBody + "<br><br>" + "Comments, questions, concerns? Contact us at test@example.com.";
 
                 // <img src= ”” alt=”UT_Campus” title=”UT_Campus” height=”220” width=”490” />";
 
@@ -53,6 +53,7 @@ namespace bevo.Messaging
             mm.To.Add(new MailAddress(toEmailAddress));
             mm.Body = finalMessage;
             mm.IsBodyHtml = true;
+            
             //for adding an image in:
             //mm.AlternateViews.Add(av);
             client.Send(mm);

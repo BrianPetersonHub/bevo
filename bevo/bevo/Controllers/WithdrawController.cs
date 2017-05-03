@@ -78,6 +78,13 @@ namespace bevo.Controllers
                         account.Transactions.Add(feeTransaction);
 
                         account.Balance = account.Balance - transaction.Amount - feeTransaction.Amount;
+
+                        //send email
+                        string userId = User.Identity.GetUserId();
+                        AppUser user = db.Users.Find(userId);
+                        string userEmail = user.Email;
+
+                        Messaging.EmailMessaging.SendEmail(userEmail, "Overdraft on " + account.AccountName, account.AccountName + " is overdrawn and a $30.00 fee was added to your account. Your current balance on the account is -$" + (account.Balance * -1).ToString() + ".");
                     }
                     else
                     {
@@ -124,6 +131,14 @@ namespace bevo.Controllers
                         account.Transactions.Add(feeTransaction);
 
                         account.Balance = account.Balance - transaction.Amount - feeTransaction.Amount;
+
+                        //send email
+
+                        string userId = User.Identity.GetUserId();
+                        AppUser user = db.Users.Find(userId);
+                        string userEmail = user.Email;
+
+                        Messaging.EmailMessaging.SendEmail(userEmail, "Overdraft on " + account.AccountName, account.AccountName + " is overdrawn and a $30.00 fee was added to your account. Your current balance on the account is -$" + (account.Balance * -1).ToString() + ".");
                     }
                     else
                     {
@@ -169,6 +184,14 @@ namespace bevo.Controllers
                                 ODfeeTransaction.Description = "$30 fee from overdrafting";
                                 account.Transactions.Add(ODfeeTransaction);
 
+                                //send email
+                                string userId = User.Identity.GetUserId();
+                                AppUser user = db.Users.Find(userId);
+                                string userEmail = user.Email;
+
+                                Messaging.EmailMessaging.SendEmail(userEmail, "Overdraft on " + account.AccountName, account.AccountName + " is overdrawn and a $30.00 fee was added to your account. Your current balance on the account is -$" + (account.Balance * -1).ToString() + ".");
+
+
                                 Transaction feeTransaction = new Transaction();
                                 feeTransaction.TransType = TransType.Fee;
                                 feeTransaction.Date = DateTime.Now;
@@ -203,6 +226,14 @@ namespace bevo.Controllers
                             account.Transactions.Add(feeTransaction);
 
                             account.Balance = account.Balance - transaction.Amount - feeTransaction.Amount;
+
+                            //send email
+
+                            string userId = User.Identity.GetUserId();
+                            AppUser user = db.Users.Find(userId);
+                            string userEmail = user.Email;
+
+                            Messaging.EmailMessaging.SendEmail(userEmail, "Overdraft on " + account.AccountName, account.AccountName + " is overdrawn and a $30.00 fee was added to your account. Your current balance on the account is -$" + (account.Balance * -1).ToString() + ".");
                         }
                         else
                         {
@@ -242,6 +273,14 @@ namespace bevo.Controllers
                         account.Transactions.Add(feeTransaction);
 
                         account.Balance = account.Balance - transaction.Amount - feeTransaction.Amount;
+
+                        //send email
+
+                        string userId = User.Identity.GetUserId();
+                        AppUser user = db.Users.Find(userId);
+                        string userEmail = user.Email;
+
+                        Messaging.EmailMessaging.SendEmail(userEmail, "Overdraft on " + account.AccountName, account.AccountName + " is overdrawn and a $30.00 fee was added to your account. Your current balance on the account is -$" + (account.Balance * -1).ToString() + ".");
                     }
                     else
                     {
