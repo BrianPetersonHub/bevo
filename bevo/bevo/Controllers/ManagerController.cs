@@ -1068,10 +1068,10 @@ namespace bevo.Controllers
         }
 
         //Make a select list for all of the customeres a manager could choose to disable 
-        public SelectList SelectCustomer()
+        public IEnumerable<SelectListItem> SelectCustomer()
         {
             List<AppUser> customers = GetCustomers();
-            SelectList selectCustomer = new SelectList(customers, "Id", "Email");
+            SelectList selectCustomer = new SelectList(customers.OrderBy(c => c.Email), "Id", "Email");
             return selectCustomer;
         }
 

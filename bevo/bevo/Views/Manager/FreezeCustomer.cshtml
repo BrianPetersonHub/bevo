@@ -24,22 +24,10 @@
                         @Html.DisplayNameFor(model => model.FirstName)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.MiddleInitial)
-                    </th>
-                    <th>
                         @Html.DisplayNameFor(model => model.LastName)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Email)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.State)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ZipCode)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.PhoneNumber)
                     </th>
                     <th></th>
                 </tr>
@@ -51,22 +39,10 @@
                             @Html.DisplayFor(modelItem => item.FirstName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.MiddleInitial)
-                        </td>
-                        <td>
                             @Html.DisplayFor(modelItem => item.LastName)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.State)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ZipCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PhoneNumber)
                         </td>
                         <td>
                             @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
@@ -81,7 +57,7 @@
     <div class="form-container col-lg-4">
         <div class="form-group">
             <p>
-                Select Customer to Disable @Html.DropDownList("selectedStock", (SelectList)ViewBag.SelectStock, new { @class = "form-control" }) <br />
+                Select Customer to Disable @Html.DropDownList("id", (SelectList)ViewBag.SelectCustomers, new { @class = "form-control" }) <br />
                 <input type="submit" value="Submit" class="btn btn-default color" />
             </p>
         </div>
