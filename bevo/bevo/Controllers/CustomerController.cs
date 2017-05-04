@@ -134,6 +134,12 @@ namespace bevo.Controllers
         public ActionResult EditInfo()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
+
+            if(user.Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: Your account has been disabled. You are in a view-only mode.'); window.location='../Customer/Home';</script>");
+            }
+
             EditUserViewModel editUserVM = new EditUserViewModel();
             editUserVM.FirstName = user.FirstName;
             editUserVM.MiddleInitial = user.MiddleInitial;

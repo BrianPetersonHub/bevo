@@ -76,18 +76,16 @@ namespace bevo.Controllers
         // GET: Manager/Edit/5
         public ActionResult Edit(string id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AppUser appUser = db.Users.Find(id);
-            if (appUser == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.Id = new SelectList(db.IRAccounts, "IRAccountID", "AccountName", appUser.Id);
-            ViewBag.Id = new SelectList(db.StockPortfolios, "StockPortfolioID", "AccountName", appUser.Id);
-            return View(appUser);
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            EditEmployeeViewModel eevm = new EditEmployeeViewModel();
+            eevm.City = user.City;
+            eevm.Email = user.Email;
+            eevm.PhoneNumber = user.PhoneNumber;
+            eevm.State = user.State;
+            eevm.Street = user.Street;
+            eevm.ZipCode = user.ZipCode;
+
+            return View(eevm);
         }
 
         // POST: Manager/Edit/5
@@ -95,43 +93,25 @@ namespace bevo.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Enabled,FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Active,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName")] AppUser appUser)
+        public ActionResult Edit([Bind(Include = "Street,City,State,ZipCode,Email,PhoneNumber")] EditEmployeeViewModel eevm)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(appUser).State = EntityState.Modified;
+                //Get the db record for the user who is logged in 
+                AppUser user = db.Users.Find(User.Identity.GetUserId());
+
+                user.Street = eevm.Street;
+                user.City = eevm.City;
+                user.State = eevm.State;
+                user.ZipCode = eevm.ZipCode;
+                user.Email = eevm.Email;
+                user.PhoneNumber = eevm.PhoneNumber;
+
+                db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
-                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: .'); window.location='../Customer/Home';</script>");
+                return RedirectToAction("Home");
             }
-            ViewBag.Id = new SelectList(db.IRAccounts, "IRAccountID", "AccountName", appUser.Id);
-            ViewBag.Id = new SelectList(db.StockPortfolios, "StockPortfolioID", "AccountName", appUser.Id);
-            return View(appUser);
-        }
-
-        // GET: Manager/Delete/5
-        public ActionResult Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AppUser appUser = db.Users.Find(id);
-            if (appUser == null)
-            {
-                return HttpNotFound();
-            }
-            return View(appUser);
-        }
-
-        // POST: Manager/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
-        {
-            AppUser appUser = db.Users.Find(id);
-            db.Users.Remove(appUser);
-            db.SaveChanges();
-            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully deleted account!'); window.location='../Manager/Home';</script>");
+            return View(eevm);
         }
 
         protected override void Dispose(bool disposing)
@@ -142,6 +122,13 @@ namespace bevo.Controllers
             }
             base.Dispose(disposing);
         }
+
+
+
+
+
+
+
 
         //TODO: finsh this
         //Get method for seeing account initial deposit approvals
@@ -460,7 +447,7 @@ namespace bevo.Controllers
             db.Entry(userInQuestion).State = EntityState.Modified;
             db.SaveChanges();
 
-            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully promoted employee!'); window.location='../Customer/Home';</script>");
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully promoted employee!'); window.location='../Manager/Home';</script>");
         }
 
 
@@ -494,7 +481,7 @@ namespace bevo.Controllers
             db.Entry(userInQuestion).State = EntityState.Modified;
             db.SaveChanges();
 
-            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully terminated employee!'); window.location='../Customer/Home';</script>");
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully terminated employee!'); window.location='../Manager/Home';</script>");
         }
 
         //Make a method to get a list of all the customers and puts it in the viewbag for the freeze customer view
@@ -527,177 +514,39 @@ namespace bevo.Controllers
             db.Entry(userInQuestion).State = EntityState.Modified;
             db.SaveChanges();
 
-            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully froze customer account!'); window.location='../Customer/Home';</script>");
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully froze customer account!'); window.location='../Manager/Home';</script>");
         }
 
-
-
-
-
-        public ActionResult ProcessBalancedPortfolios()
+        public ActionResult ReactivateCustomer()
         {
-            List<StockPortfolio> stockPortfolios = GetStockPortfolios();
-            foreach (var sp in stockPortfolios)
-            {
-                if (BalanceCheck(sp) == true)
-                {
-                    Decimal value = sp.Balance;
-                    //add bonus transaction 
-                    foreach (StockDetail sd in sp.StockDetails)
-                    {
-                        //get current price of stock
-                        StockQuote quote = GetQuote.GetStock(sd.Stock.StockTicker);
-                        value = value + (quote.LastTradePrice * sd.Quantity);
-                    }
-                    foreach (Transaction trans in sp.Transactions)
-                    {
-                        if (trans.TransType == TransType.Fee)
-                        {
-                            value = value - trans.Amount;
-                        }
-                    }
-
-                    //make new bonus transaction
-                    Transaction t = new Transaction();
-                    t.TransType = TransType.Bonus;
-                    t.Amount = value * .1m;
-                    t.Date = DateTime.Today;
-                    t.ToAccount = sp.AccountNum;
-                    t.Description = "Balanced Portfolio Bonus";
-                    db.Transactions.Add(t);
-
-                    var query = from a in db.StockPortfolios
-                                where a.AccountNum == t.ToAccount
-                                select a.StockPortfolioID;
-                    //gets first (only) thing from query list
-                    String accountID = query.First();
-                    StockPortfolio account = db.StockPortfolios.Find(accountID);
-                    account.Transactions.Add(t);
-                    account.Balance = account.Balance + t.Amount;
-                }
-            }
-            //ViewBag.TotalBonuses
-            db.SaveChanges();
-            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully added bonuses to Customers with balanced stock portfolios!'); window.location='../Manager/Home';</script>");
-        }
-
-        public ActionResult CreateStock()
-        {
-            return View();
+            ViewBag.SelectCustomers = SelectDisabledCustomer();
+            ViewBag.AllCustomers = GetDisabledCustomers();
+            List<AppUser> customers = GetDisabledCustomers();
+            return View(customers);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "StockName,StockTicker,TypeOfStock,FeeAmount")] Stock stock)
-        {
-            if (ModelState.IsValid)
-            {
-                List<Stock> stocks = db.Stocks.ToList();
-                foreach (Stock s in stocks)
-                {
-                    if (s.StockTicker == stock.StockTicker)
-                    {
-                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot add two of the same stock tickers'); window.location='../Manager/Home';</script>");
-                    }
-                }
-
-                db.Stocks.Add(stock);
-                db.SaveChanges();
-                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully added a new stock!'); window.location='../Manager/Home';</script>");
-            }
-            return View(stock);
-        }
-
-        //Get a list of all transactions 
-        public List<Transaction> GetTrMasterList()
+        public ActionResult ReactivateCustomer(String id)
         {
             AppDbContext db = new AppDbContext();
 
-            List<Transaction> returnList = db.Transactions.ToList();
+            //Get the user we want 
+            var query = from user in db.Users
+                        select user;
+            query = query.Where(user => user.Id == id);
+            List<AppUser> queryList = query.ToList();
+            AppUser userInQuestion = queryList[0];
 
-            return returnList;
-        }
+            //change the user's disabled variable to true 
+            userInQuestion.Disabled = false;
 
-        //Get a list of all transactions requiring manager approval
-        public List<Transaction> GetTrToApprove()
-        {
-            AppDbContext db = new AppDbContext();
+            //Save Changes
+            db.Entry(userInQuestion).State = EntityState.Modified;
+            db.SaveChanges();
 
-            List<Transaction> returnList = new List<Transaction>();
-            var query = from t in db.Transactions
-                        select t;
-            query = query.Where(t => t.NeedsApproval == true);
-            returnList = query.ToList();
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully reactivated customer account!'); window.location='../Manager/Home';</script>");
 
-            return returnList;
-        }
-
-        public ActionResult CurrentDisputes()
-        {
-            List<DisputeViewModel> currentDisputes = GetUnresolvedDisputes();
-            return View(currentDisputes);
-        }
-
-        public List<DisputeViewModel> GetUnresolvedDisputes()
-        {
-            AppDbContext db = new AppDbContext();
-
-            List<Dispute> disputeList = new List<Dispute>();
-            var query = from d in db.Disputes
-                        select d;
-            query = query.Where(d => d.DisputeStatus == DisputeStatus.Submitted);
-            disputeList = query.ToList();
-
-            List<DisputeViewModel> dvmList = new List<DisputeViewModel>();
-            foreach (Dispute d in disputeList)
-            {
-                DisputeViewModel dvm = new DisputeViewModel();
-                dvm.CorrectAmount = d.DisputedAmount;
-                dvm.FirstName = d.AppUser.FirstName;
-                dvm.LastName = d.AppUser.LastName;
-                dvm.TransAmount = d.Transaction.Amount;
-                dvm.Message = d.Message;
-                dvm.CustEmail = d.AppUser.Email;
-                dvm.TransName = d.Transaction.TransactionID;
-                dvm.DisputeID = d.DisputeID;
-                dvm.Status = DisputeStatus.Submitted;
-                dvmList.Add(dvm);
-            }
-
-
-            return dvmList;
-        }
-
-        public ActionResult AllDisputes()
-        {
-            List<DisputeViewModel> allDisputes = GetAllDisputes();
-            return View(allDisputes);
-        }
-
-        public List<DisputeViewModel> GetAllDisputes()
-        {
-            AppDbContext db = new AppDbContext();
-
-            List<Dispute> disputeList = db.Disputes.ToList();
-
-            List<DisputeViewModel> dvmList = new List<DisputeViewModel>();
-            foreach (Dispute d in disputeList)
-            {
-                DisputeViewModel dvm = new DisputeViewModel();
-                dvm.CorrectAmount = d.DisputedAmount;
-                dvm.FirstName = d.AppUser.FirstName;
-                dvm.LastName = d.AppUser.LastName;
-                dvm.TransAmount = d.Transaction.Amount;
-                dvm.Message = d.Message;
-                dvm.CustEmail = d.AppUser.Email;
-                dvm.TransName = d.Transaction.TransactionID;
-                dvm.DisputeID = d.DisputeID;
-                dvm.Status = d.DisputeStatus;
-
-                dvmList.Add(dvm);
-            }
-
-            return dvmList;
         }
 
         //Make a get method for editing the dispute
@@ -966,10 +815,327 @@ namespace bevo.Controllers
             return View(edvm);
         }
 
+        public ActionResult ProcessBalancedPortfolios()
+        {
+            List<StockPortfolio> stockPortfolios = GetStockPortfolios();
+            foreach (var sp in stockPortfolios)
+            {
+                if (BalanceCheck(sp) == true)
+                {
+                    Decimal value = sp.Balance;
+                    //add bonus transaction 
+                    foreach (StockDetail sd in sp.StockDetails)
+                    {
+                        //get current price of stock
+                        StockQuote quote = GetQuote.GetStock(sd.Stock.StockTicker);
+                        value = value + (quote.LastTradePrice * sd.Quantity);
+                    }
+                    foreach (Transaction trans in sp.Transactions)
+                    {
+                        if (trans.TransType == TransType.Fee)
+                        {
+                            value = value - trans.Amount;
+                        }
+                    }
+
+                    //make new bonus transaction
+                    Transaction t = new Transaction();
+                    t.TransType = TransType.Bonus;
+                    t.Amount = value * .1m;
+                    t.Date = DateTime.Today;
+                    t.ToAccount = sp.AccountNum;
+                    t.Description = "Balanced Portfolio Bonus";
+                    db.Transactions.Add(t);
+
+                    var query = from a in db.StockPortfolios
+                                where a.AccountNum == t.ToAccount
+                                select a.StockPortfolioID;
+                    //gets first (only) thing from query list
+                    String accountID = query.First();
+                    StockPortfolio account = db.StockPortfolios.Find(accountID);
+                    account.Transactions.Add(t);
+                    account.Balance = account.Balance + t.Amount;
+                }
+            }
+            //ViewBag.TotalBonuses
+            db.SaveChanges();
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully added bonuses to Customers with balanced stock portfolios!'); window.location='../Manager/Home';</script>");
+        }
+
+        public ActionResult CreateStock()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "StockName,StockTicker,TypeOfStock,FeeAmount")] Stock stock)
+        {
+            if (ModelState.IsValid)
+            {
+                List<Stock> stocks = db.Stocks.ToList();
+                foreach (Stock s in stocks)
+                {
+                    if (s.StockTicker == stock.StockTicker)
+                    {
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot add two of the same stock tickers'); window.location='../Manager/Home';</script>");
+                    }
+                }
+
+                db.Stocks.Add(stock);
+                db.SaveChanges();
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully added a new stock!'); window.location='../Manager/Home';</script>");
+            }
+            return View(stock);
+        }
+
+        //Go to page to edit a customer's account 
+        public ActionResult ChangeCustomerInfo()
+        {
+            ViewBag.AllCustomers = GetCustomers();
+            ViewBag.SelectCustomer = SelectCustomer();
+
+            return View();
+        }
+
+        //Post method for editing the customer's account 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeCustomerInfo([Bind(Include = "FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Email,PhoneNumber")] EditUserViewModel evm, String id)
+        {
+            AppUser user = db.Users.Find(id);
+
+            if (ModelState.IsValid)
+            {
+                user.Birthday = evm.Birthday;
+                user.City = evm.City;
+                user.Email = evm.Email;
+                user.FirstName = evm.FirstName;
+                user.LastName = evm.LastName;
+                user.MiddleInitial = evm.MiddleInitial;
+                user.PhoneNumber = evm.PhoneNumber;
+                user.State = evm.State;
+                user.Street = evm.Street;
+                user.ZipCode = evm.ZipCode;
+
+                db.SaveChanges();
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Successfully updated customer info!'); window.location='../Manager/Home';</script>");
+
+            }
+
+            return View(evm);
+
+        }
+
+        //Go to the view for selecting which customer you want to change the password for 
+        public ActionResult ChangeCustomerPassword()
+        {
+            ViewBag.AllCustomers = GetCustomers();
+            ViewBag.SelectCustomer = SelectCustomer();
+
+            return View();
+        }
+
+        //Post method for changing a customer's password 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeCustomerPassword(String id, String newPassword)
+        {
+            AppDbContext db = new AppDbContext();
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+
+            //Get the user we want 
+            var query = from user in db.Users
+                        select user;
+            query = query.Where(user => user.Id == id);
+            List<AppUser> queryList = query.ToList();
+            AppUser userInQuestion = queryList[0];
+
+            String resetToken = userManager.GeneratePasswordResetToken(id);
+            userManager.ResetPassword(id, resetToken, newPassword);
+
+            db.Entry(userInQuestion).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully changed customer password!'); window.location='../Manager/Home';</script>");
+        }
+
+        //Go to page to edit a customer's account 
+        public ActionResult ChangeEmployeeInfo()
+        {
+            ViewBag.AllEmployees = GetEmployees();
+            ViewBag.SelectEmployee = SelectEmployee();
+
+            return View();
+        }
+
+        //Post method for editing the customer's account 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeEmployeeInfo([Bind(Include = "FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Email,PhoneNumber")] EditUserViewModel evm, String id)
+        {
+            AppUser user = db.Users.Find(id);
+
+            if (ModelState.IsValid)
+            {
+                user.Birthday = evm.Birthday;
+                user.City = evm.City;
+                user.Email = evm.Email;
+                user.FirstName = evm.FirstName;
+                user.LastName = evm.LastName;
+                user.MiddleInitial = evm.MiddleInitial;
+                user.PhoneNumber = evm.PhoneNumber;
+                user.State = evm.State;
+                user.Street = evm.Street;
+                user.ZipCode = evm.ZipCode;
+
+                db.SaveChanges();
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Successfully updated employee info!'); window.location='../Manager/Home';</script>");
+
+            }
+
+            return View(evm);
+
+        }
+
+        //Go to the view for selecting which customer you want to change the password for 
+        public ActionResult ChangeEmployeePassword()
+        {
+            ViewBag.AllEmployees = GetEmployees();
+            ViewBag.SelectEmployee = SelectEmployee();
+
+            return View();
+        }
+
+        //Post method for changing a customer's password 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeEmployeePassword(String id, String newPassword)
+        {
+            AppDbContext db = new AppDbContext();
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+
+            //Get the user we want 
+            var query = from user in db.Users
+                        select user;
+            query = query.Where(user => user.Id == id);
+            List<AppUser> queryList = query.ToList();
+            AppUser userInQuestion = queryList[0];
+
+            String resetToken = userManager.GeneratePasswordResetToken(id);
+            userManager.ResetPassword(id, resetToken, newPassword);
+
+            db.Entry(userInQuestion).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully changed employee password!'); window.location='../Manager/Home';</script>");
+        }
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+        //Get a list of all transactions 
+        public List<Transaction> GetTrMasterList()
+        {
+            AppDbContext db = new AppDbContext();
+
+            List<Transaction> returnList = db.Transactions.ToList();
+
+            return returnList;
+        }
+
+        //Get a list of all transactions requiring manager approval
+        public List<Transaction> GetTrToApprove()
+        {
+            AppDbContext db = new AppDbContext();
+
+            List<Transaction> returnList = new List<Transaction>();
+            var query = from t in db.Transactions
+                        select t;
+            query = query.Where(t => t.NeedsApproval == true);
+            returnList = query.ToList();
+
+            return returnList;
+        }
+
+        public ActionResult CurrentDisputes()
+        {
+            List<DisputeViewModel> currentDisputes = GetUnresolvedDisputes();
+            return View(currentDisputes);
+        }
+
+        public List<DisputeViewModel> GetUnresolvedDisputes()
+        {
+            AppDbContext db = new AppDbContext();
+
+            List<Dispute> disputeList = new List<Dispute>();
+            var query = from d in db.Disputes
+                        select d;
+            query = query.Where(d => d.DisputeStatus == DisputeStatus.Submitted);
+            disputeList = query.ToList();
+
+            List<DisputeViewModel> dvmList = new List<DisputeViewModel>();
+            foreach (Dispute d in disputeList)
+            {
+                DisputeViewModel dvm = new DisputeViewModel();
+                dvm.CorrectAmount = d.DisputedAmount;
+                dvm.FirstName = d.AppUser.FirstName;
+                dvm.LastName = d.AppUser.LastName;
+                dvm.TransAmount = d.Transaction.Amount;
+                dvm.Message = d.Message;
+                dvm.CustEmail = d.AppUser.Email;
+                dvm.TransName = d.Transaction.TransactionID;
+                dvm.DisputeID = d.DisputeID;
+                dvm.Status = DisputeStatus.Submitted;
+                dvmList.Add(dvm);
+            }
+
+
+            return dvmList;
+        }
+
+        public ActionResult AllDisputes()
+        {
+            List<DisputeViewModel> allDisputes = GetAllDisputes();
+            return View(allDisputes);
+        }
+
+        public List<DisputeViewModel> GetAllDisputes()
+        {
+            AppDbContext db = new AppDbContext();
+
+            List<Dispute> disputeList = db.Disputes.ToList();
+
+            List<DisputeViewModel> dvmList = new List<DisputeViewModel>();
+            foreach (Dispute d in disputeList)
+            {
+                DisputeViewModel dvm = new DisputeViewModel();
+                dvm.CorrectAmount = d.DisputedAmount;
+                dvm.FirstName = d.AppUser.FirstName;
+                dvm.LastName = d.AppUser.LastName;
+                dvm.TransAmount = d.Transaction.Amount;
+                dvm.Message = d.Message;
+                dvm.CustEmail = d.AppUser.Email;
+                dvm.TransName = d.Transaction.TransactionID;
+                dvm.DisputeID = d.DisputeID;
+                dvm.Status = d.DisputeStatus;
+
+                dvmList.Add(dvm);
+            }
+
+            return dvmList;
+        }
+                
 
         //get a list of all the user objects for employees 
         public List<AppUser> GetEmployees()
@@ -992,10 +1158,10 @@ namespace bevo.Controllers
         }
 
         //Make a select list for all of the employees a manager could choose to promote or fire
-        public SelectList SelectEmployee()
+        public IEnumerable<SelectListItem> SelectEmployee()
         {
             List<AppUser> employees = GetEmployees();
-            SelectList selectEmployee = new SelectList(employees, "Id", "Email");
+            SelectList selectEmployee = new SelectList(employees.OrderBy(e => e.Email), "Id", "Email");
             return selectEmployee;
         }
 
@@ -1021,16 +1187,38 @@ namespace bevo.Controllers
         }
 
         //Make a select list for all of the customeres a manager could choose to disable 
-        public SelectList SelectCustomer()
+        public IEnumerable<SelectListItem> SelectCustomer()
         {
             List<AppUser> customers = GetCustomers();
-            SelectList selectCustomer = new SelectList(customers, "Id", "Email");
+            SelectList selectCustomer = new SelectList(customers.OrderBy(c => c.Email), "Id", "Email");
             return selectCustomer;
         }
 
+        public List<AppUser> GetDisabledCustomers()
+        {
+            AppDbContext db = new AppDbContext();
+
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+            List<AppUser> customerList = new List<AppUser>();
+
+            foreach (AppUser user in db.Users)
+            {
+                if (userManager.GetRoles(user.Id).Contains("Customer") && user.Disabled == true)
+                {
+                    customerList.Add(user);
+                }
+            }
 
 
+            return customerList;
+        }
 
+        public IEnumerable<SelectListItem> SelectDisabledCustomer()
+        {
+            List<AppUser> customers = GetDisabledCustomers();
+            SelectList selectCustomer = new SelectList(customers, "Id", "Email");
+            return selectCustomer;
+        }
 
         //get a list of all stock portfolios
         public List<StockPortfolio> GetStockPortfolios()

@@ -18,6 +18,11 @@ namespace bevo.Controllers
         //GET: IRA/Create
         public ActionResult Create()
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: Your account has been disabled. You are in a view-only mode.'); window.location='../Customer/Home';</script>");
+            }
+
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             if (user.IRAccount == null)
             {
@@ -100,6 +105,11 @@ namespace bevo.Controllers
         [HttpGet]
         public ActionResult EditName(String id)
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: Your account has been disabled. You are in a view-only mode.'); window.location='../Customer/Home';</script>");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

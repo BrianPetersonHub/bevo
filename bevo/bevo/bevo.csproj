@@ -535,6 +535,7 @@
     <Content Include="Views\Manager\ApprovePendingTransactions.cshtml" />
     <Content Include="Views\Manager\FreezeCustomer.cshtml" />
     <Content Include="Views\Manager\FireEmployee.cshtml" />
+    <Content Include="Views\Manager\ReactivateCustomer.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

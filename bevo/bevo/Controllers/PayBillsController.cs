@@ -48,6 +48,11 @@ namespace bevo.Controllers
         // Add payee to customer from list of payees 
         public ActionResult AddPayee(Int32 selectedPayee)
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: Your account has been disabled. You are in a view-only mode.'); window.location='../Customer/Home';</script>");
+            }
+
             Payee payeeToAdd = new Payee();
             //Get the curent user
             UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
@@ -180,6 +185,10 @@ namespace bevo.Controllers
         // POST: Pay bill, make payment 
         public ActionResult PayBill(Int32 selectedPayee, Int32 selectedAccount, Decimal paymentAmount, DateTime dateEntered)
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: Your account has been disabled. You are in a view-only mode.'); window.location='../Customer/Home';</script>");
+            }
 
             //Make a transaction to store this info
             Transaction trans = new Transaction();
@@ -248,6 +257,7 @@ namespace bevo.Controllers
                     {
                         fromAccount.Transactions.Add(trans);
                         //Assign the from account as that account's AccountNum
+                        trans.FromAccount = fromAccount.AccountNum;
                         fromAccount.Transactions.Add(trans);
                         fromAccount.Balance = fromAccount.Balance - trans.Amount;
 

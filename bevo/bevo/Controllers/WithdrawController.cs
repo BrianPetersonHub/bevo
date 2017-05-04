@@ -18,6 +18,11 @@ namespace bevo.Controllers
         // GET: Withdraw
         public ActionResult Create()
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: Your account has been disabled. You are in a view-only mode.'); window.location='../Customer/Home';</script>");
+            }
+
             // pass account numbers, names, and balances for dropdown list
             List<AccountsViewModel> allAccounts = GetAccounts();
             SelectList selectAccounts = new SelectList(allAccounts.OrderBy(q => q.AccountName), "AccountNum", "AccountName");

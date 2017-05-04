@@ -17,6 +17,11 @@ namespace bevo.Controllers
         // GET: SellStock
         public ActionResult Index()
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: Your account has been disabled. You are in a view-only mode.'); window.location='../Customer/Home';</script>");
+            }
+
             // get relevant information into view bags
             //Get list of stockviewmodel objects that are available to the user in their account
             //Remember that these objects contain a property saying how many of each stock are in

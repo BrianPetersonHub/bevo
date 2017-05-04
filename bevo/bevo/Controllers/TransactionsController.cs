@@ -55,6 +55,11 @@ namespace bevo.Controllers
         // For employees and managers 
         public ActionResult Home(String SearchString)
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: Your account has been disabled. You are in a view-only mode.'); window.location='../Customer/Home';</script>");
+            }
+
             ViewBag.CountAllTransactions = GetAllTransactions().Count();
 
             if (SearchString == null)
@@ -69,6 +74,11 @@ namespace bevo.Controllers
 
         public ActionResult DetailedSearch()
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: Your account has been disabled. You are in a view-only mode.'); window.location='../Customer/Home';</script>");
+            }
+
             ViewBag.TransTypeSelectList = GetAllTransTypesSL();
 
             return View();
