@@ -383,7 +383,7 @@ namespace bevo.Controllers
             }
 
             IRAccount iraAccount = user.IRAccount;
-            if (user.IRAccount != null)
+            if (iraAccount != null)
             {
                 if (accountNum == iraAccount.AccountNum)
                 {
@@ -394,10 +394,13 @@ namespace bevo.Controllers
 
 
             StockPortfolio stockPortfolio = user.StockPortfolio;
-            if (accountNum == stockPortfolio.AccountNum)
+            if (stockPortfolio != null)
             {
-                accountType = "STOCKPORTFOLIO";
-                return accountType;
+                if (accountNum == stockPortfolio.AccountNum)
+                {
+                    accountType = "STOCKPORTFOLIO";
+                    return accountType;
+                }
             }
 
             return "NOT FOUND";

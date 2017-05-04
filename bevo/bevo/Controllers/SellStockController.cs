@@ -176,11 +176,11 @@ namespace bevo.Controllers
                 db.Entry(portfolio).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-            
+
 
 
             //Redirect to the details page
-            return RedirectToAction("Details", "StockPortfolio");
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully sold a stock!'); window.location='../../StockPortfolio/Details';</script>");
         }
 
         public ActionResult SummaryScreen()

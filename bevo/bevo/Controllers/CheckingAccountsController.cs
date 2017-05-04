@@ -18,7 +18,9 @@ namespace bevo.Controllers
         //GET: CheckingAccount/Create
         public ActionResult Create()
         {
-            return View();
+            CheckingAccount ca = new CheckingAccount();
+            ca.AccountName = "Longhorn Checking";
+            return View(ca);
             Int32 myint = 1000;
             String mystring = myint.ToString();
         }
@@ -30,6 +32,10 @@ namespace bevo.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (checkingAccount.Balance <= 0)
+                {
+                    return Content("<script language'javascript' type = 'text/javascript'> alert('Error: Your starting balance must be positive.'); window.location='../CheckingAccounts/Create';</script>");
+                }
                 AppUser user = db.Users.Find(User.Identity.GetUserId());
                 if (checkingAccount.AccountName == null)
                 {

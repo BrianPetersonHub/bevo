@@ -17,7 +17,9 @@ namespace bevo.Controllers
         //GET: SavingsAccount/Create
         public ActionResult Create()
         {
-            return View();
+            SavingAccount sa = new SavingAccount();
+            sa.AccountName = "Longhorn Savings";
+            return View(sa);
         }
 
         //POST: SavingAccount/Create
@@ -27,6 +29,10 @@ namespace bevo.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (savingAccount.Balance <= 0)
+                {
+                    return Content("<script language'javascript' type = 'text/javascript'> alert('Error: Your starting balance must be positive.'); window.location='../SavingAccounts/Create';</script>");
+                }
                 AppUser user = db.Users.Find(User.Identity.GetUserId());
                 if (savingAccount.AccountName == null)
                 {
@@ -34,7 +40,7 @@ namespace bevo.Controllers
                 }
                 user.SavingAccounts.Add(savingAccount);
                 db.SaveChanges();
-                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully added new Savings Account!'); window.location='../Cusomer/Home';</script>");
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully added new Savings Account!'); window.location='../Customer/Home';</script>");
             }
             return View(savingAccount);
         }
