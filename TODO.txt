@@ -1,7 +1,7 @@
 Controllers
 DONE [BP] 5 similar transactions: Currently pulling from entire db
 DONE [BP] Update balance of accounts after dispute is accepted/rejected/adjusted
-[ ] Update portfolio balance after process stock portfolio
+[BP] Update portfolio balance after process stock portfolio
 [ ] Cannot double dispute transaction
 [ ] Customer inactive state, can only use GET methods 
 [BP] Transfer: Customer has option to add $30 service fee to withdrawal amount or have total amount entered include the fee
