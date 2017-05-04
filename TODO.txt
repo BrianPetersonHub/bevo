@@ -5,7 +5,7 @@ DONE (huge number for annatwo sp value bc of those mis calculations earlier) [BP
 DONE [BP] Cannot double dispute transaction
 [ ] Customer inactive state, can only use GET methods 
 [BP] Transfer: Customer has option to add $30 service fee to withdrawal amount or have total amount entered include the fee
-[ ] Initial deposits, opeing accounts > $5000 approved by manager before being added to customer account
+[BP] Initial deposits, opeing accounts > $5000 approved by manager before being added to customer account
 [ ] Get pending transactions (awaiting approval)
 [JA] Sell Stock: customers cannot enter sale date prior to date of purchase
 [JA] Employee Controller: 
