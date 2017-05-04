@@ -44,17 +44,23 @@ namespace bevo.Controllers
                 {
                     return Content("<script language'javascript' type = 'text/javascript'> alert('Error: Your starting balance must be positive.'); window.location='../StockPortfolio/Create';</script>");
                 }
+                AppUser user = db.Users.Find(User.Identity.GetUserId());
 
-                //if (stockPortfolio.Balance > 5000)
-                //{
-                //    t.NeedsApproval = true;
-                //    stockPortfolio.Balance = 0;
-                //}
-
+                Transaction t = new Transaction();
+                t.Date = DateTime.Today;
+                t.ToAccount = stockPortfolio.AccountNum;
+                t.TransType = TransType.Deposit;
+                t.Description = "Initial deposit";
+                t.Amount = stockPortfolio.Balance;
+                if (stockPortfolio.Balance > 5000)
+                {
+                    stockPortfolio.Balance = 0;
+                    t.NeedsApproval = true;
+                }
 
                 stockPortfolio.Transactions = new List<Transaction>();
-                //stockPortfolio.Transactions.Add(t);
-                //user.StockPortfolio = stockPortfolio;
+                stockPortfolio.Transactions.Add(t);
+
 
                 db.SaveChanges();
                 return RedirectToAction("Home", "Customer");

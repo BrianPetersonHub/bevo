@@ -41,6 +41,21 @@ namespace bevo.Controllers
                 {
                     checkingAccount.AccountName = "Longhorn Checking";
                 }
+
+                Transaction t = new Transaction();
+                t.Date = DateTime.Today;
+                t.ToAccount = checkingAccount.AccountNum;
+                t.TransType = TransType.Deposit;
+                t.Description = "Initial deposit";
+                t.Amount = checkingAccount.Balance;
+                if (checkingAccount.Balance > 5000)
+                {
+                    checkingAccount.Balance = 0;
+                    t.NeedsApproval = true;
+                }
+
+                checkingAccount.Transactions = new List<Transaction>();
+                checkingAccount.Transactions.Add(t);
                 user.CheckingAccounts.Add(checkingAccount);
                 db.SaveChanges();
 

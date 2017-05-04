@@ -49,8 +49,4 @@ Test
 	DONE- Password
 	- Large deposit approved
 [ ] Accounts with negative balance cannot be used to make transfers or payments
-
-
-
-
 UI (not required but would be nice to get to)

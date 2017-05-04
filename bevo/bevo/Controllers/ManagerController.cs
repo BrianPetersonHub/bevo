@@ -151,8 +151,118 @@ namespace bevo.Controllers
             return View();
         }
 
-        [HttpPost]
         public ActionResult ApprovePendingTransactions(int? id)
+        {
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            Transaction transToChange = db.Transactions.Find(id);
+            //if (transToChange == null)
+            //{
+            //    return HttpNotFound();
+            //}
+
+            //for transfers, have to chagne two accounts balances
+            if (transToChange.TransType == TransType.Transfer || transToChange.TransType == TransType.Deposit || transToChange.TransType == TransType.Sell_Stock || transToChange.TransType == TransType.Bonus)
+            {
+                //to accounts
+                if (GetAccountType(transToChange.ToAccount) == "CHECKING")
+                {
+                    var query = from account in db.CheckingAccounts
+                                where account.AccountNum == transToChange.ToAccount
+                                select account.CheckingAccountID;
+                    //gets first (only) thing from query list
+                    Int32 accountID = query.First();
+                    CheckingAccount a = db.CheckingAccounts.Find(accountID);
+                    a.Balance = a.Balance + transToChange.Amount;
+                }
+
+                else if (GetAccountType(transToChange.ToAccount) == "SAVING")
+                {
+                    var query = from account in db.SavingAccounts
+                                where account.AccountNum == transToChange.ToAccount
+                                select account.SavingAccountID;
+                    //gets first (only) thing from query list
+                    Int32 accountID = query.First();
+                    SavingAccount a = db.SavingAccounts.Find(accountID);
+                    a.Balance = a.Balance + transToChange.Amount;
+                }
+
+                else if (GetAccountType(transToChange.ToAccount) == "IRA")
+                {
+                    var query = from account in db.IRAccounts
+                                where account.AccountNum == transToChange.ToAccount
+                                select account.IRAccountID;
+                    //gets first (only) thing from query list
+                    String accountID = query.First();
+                    IRAccount a = db.IRAccounts.Find(accountID);
+                    a.Balance = a.Balance + transToChange.Amount;
+                }
+
+                else if (GetAccountType(transToChange.ToAccount) == "STOCKPORTFOLIO")
+                {
+                    var query = from account in db.StockPortfolios
+                                where account.AccountNum == transToChange.ToAccount
+                                select account.StockPortfolioID;
+                    //gets first (only) thing from query list
+                    String accountID = query.First();
+                    StockPortfolio a = db.StockPortfolios.Find(accountID);
+                    a.Balance = a.Balance + transToChange.Amount;
+                }
+            }
+            else
+            {
+                //from accounts
+                if (GetAccountType(transToChange.FromAccount) == "CHECKING")
+                {
+                    var query = from account in db.CheckingAccounts
+                                where account.AccountNum == transToChange.FromAccount
+                                select account.CheckingAccountID;
+                    //gets first (only) thing from query list
+                    Int32 accountID = query.First();
+                    CheckingAccount a = db.CheckingAccounts.Find(accountID);
+                    a.Balance = a.Balance - transToChange.Amount;
+                }
+
+                else if (GetAccountType(transToChange.FromAccount) == "SAVING")
+                {
+                    var query = from account in db.SavingAccounts
+                                where account.AccountNum == transToChange.FromAccount
+                                select account.SavingAccountID;
+                    //gets first (only) thing from query list
+                    Int32 accountID = query.First();
+                    SavingAccount a = db.SavingAccounts.Find(accountID);
+                    a.Balance = a.Balance - transToChange.Amount;
+                }
+
+                else if (GetAccountType(transToChange.FromAccount) == "IRA")
+                {
+                    var query = from account in db.IRAccounts
+                                where account.AccountNum == transToChange.FromAccount
+                                select account.IRAccountID;
+                    //gets first (only) thing from query list
+                    String accountID = query.First();
+                    IRAccount a = db.IRAccounts.Find(accountID);
+                    a.Balance = a.Balance - transToChange.Amount;
+                }
+
+                else if (GetAccountType(transToChange.FromAccount) == "STOCKPORTFOLIO")
+                {
+                    var query = from account in db.StockPortfolios
+                                where account.AccountNum == transToChange.FromAccount
+                                select account.StockPortfolioID;
+                    //gets first (only) thing from query list
+                    String accountID = query.First();
+                    StockPortfolio a = db.StockPortfolios.Find(accountID);
+                    a.Balance = a.Balance - transToChange.Amount;
+                }
+            }
+            db.SaveChanges();
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully approved transactions!'); window.location='../Manager/Home';</script>");
+        }
+
+        public ActionResult RejectPendingTransactions(int? id)
         {
             if (id == null)
             {
@@ -163,54 +273,160 @@ namespace bevo.Controllers
             {
                 return HttpNotFound();
             }
-            return View(transaction);
+
+            String accountType = GetAccountType(transaction.ToAccount);
+
+            AppUser user = new AppUser();
+            if (GetAccountType(transaction.ToAccount) == "CHECKING" || GetAccountType(transaction.FromAccount) == "CHECKING")
+            {
+                var query = from account in db.CheckingAccounts
+                            where account.AccountNum == transaction.ToAccount || account.AccountNum == transaction.FromAccount
+                            select account.CheckingAccountID;
+                //gets first (only) thing from query list
+                Int32 accountID = query.First();
+                CheckingAccount a = db.CheckingAccounts.Find(accountID);
+                user = a.AppUser;
+            }
+            if (GetAccountType(transaction.ToAccount) == "SAVING" || GetAccountType(transaction.FromAccount) == "SAVING")
+            {
+                var query = from account in db.SavingAccounts
+                            where account.AccountNum == transaction.ToAccount || account.AccountNum == transaction.FromAccount
+                            select account.SavingAccountID;
+                //gets first (only) thing from query list
+                Int32 accountID = query.First();
+                SavingAccount a = db.SavingAccounts.Find(accountID);
+                user = a.AppUser;
+            }
+            else if (GetAccountType(transaction.ToAccount) == "IRA" || GetAccountType(transaction.FromAccount) == "IRA")
+            {
+                var query = from account in db.IRAccounts
+                            where account.AccountNum == transaction.ToAccount || account.AccountNum == transaction.FromAccount
+                            select account.IRAccountID;
+                //gets first (only) thing from query list
+                String accountID = query.First();
+                IRAccount a = db.IRAccounts.Find(accountID);
+                user = a.AppUser;
+            }
+            else if (GetAccountType(transaction.ToAccount) == "STOCKPORTFOLIO" || GetAccountType(transaction.FromAccount) == "STOCKPORTFOLIO")
+            {
+                var query = from account in db.StockPortfolios
+                            where account.AccountNum == transaction.ToAccount || account.AccountNum == transaction.FromAccount
+                            select account.StockPortfolioID;
+                //gets first (only) thing from query list
+                String accountID = query.First();
+                StockPortfolio a = db.StockPortfolios.Find(accountID);
+                user = a.AppUser;
+            }
+
+            db.SaveChanges();
+            //Send an email to the user in question 
+            String bodyForEmail = null;
+
+            bodyForEmail = "Your pending transaction, transaction number " + transaction.TransactionID + ", has been rejected.";
+
+            bevo.Messaging.EmailMessaging.SendEmail(user.Email, "Dispute Rejected", bodyForEmail);
+
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully rejected pending transactions!'); window.location='../Manager/Home';</script>");
         }
 
-        public List<Transaction> GetPendingTransactions()
+
+        public List<TransViewModel> GetPendingTransactions()
         {
-            List<Transaction> transactions = new List<Transaction>();
+            List<TransViewModel> tvms = new List<TransViewModel>();
             foreach (CheckingAccount a in db.CheckingAccounts)
             {
+                AppUser user = a.AppUser;
                 foreach (Transaction t in a.Transactions)
                 {
                     if (t.NeedsApproval == true)
                     {
-                        transactions.Add(t);
+                        TransViewModel tvm = new TransViewModel();
+                        tvm.TransactionID = t.TransactionID;
+                        tvm.TransactionNum = t.TransactionNum;
+                        tvm.TransType = t.TransType;
+                        tvm.Amount = t.Amount;
+                        tvm.toAccount = t.ToAccount;
+                        tvm.fromAccount = t.FromAccount;
+                        tvm.Date = t.Date;
+                        tvm.Description = t.Description;
+                        tvm.FirstName = user.FirstName;
+                        tvm.LastName = user.LastName;
+
+                        tvms.Add(tvm);
                     }
                 }
             }
             foreach (SavingAccount a in db.SavingAccounts)
             {
+                AppUser user = a.AppUser;
                 foreach (Transaction t in a.Transactions)
                 {
                     if (t.NeedsApproval == true)
                     {
-                        transactions.Add(t);
+                        TransViewModel tvm = new TransViewModel();
+                        tvm.TransactionID = t.TransactionID;
+                        tvm.TransactionNum = t.TransactionNum;
+                        tvm.TransType = t.TransType;
+                        tvm.Amount = t.Amount;
+                        tvm.toAccount = t.ToAccount;
+                        tvm.fromAccount = t.FromAccount;
+                        tvm.Date = t.Date;
+                        tvm.Description = t.Description;
+                        tvm.FirstName = user.FirstName;
+                        tvm.LastName = user.LastName;
+
+                        tvms.Add(tvm);
                     }
                 }
             }
             foreach (IRAccount a in db.IRAccounts)
             {
+                AppUser user = a.AppUser;
                 foreach (Transaction t in a.Transactions)
                 {
                     if (t.NeedsApproval == true)
                     {
-                        transactions.Add(t);
+                        TransViewModel tvm = new TransViewModel();
+                        tvm.TransactionID = t.TransactionID;
+                        tvm.TransactionNum = t.TransactionNum;
+                        tvm.TransType = t.TransType;
+                        tvm.Amount = t.Amount;
+                        tvm.toAccount = t.ToAccount;
+                        tvm.fromAccount = t.FromAccount;
+                        tvm.Date = t.Date;
+                        tvm.Description = t.Description;
+                        tvm.FirstName = user.FirstName;
+                        tvm.LastName = user.LastName;
+
+                        tvms.Add(tvm);
                     }
                 }
             }
             foreach (StockPortfolio a in db.StockPortfolios)
             {
+                AppUser user = a.AppUser;
                 foreach (Transaction t in a.Transactions)
                 {
                     if (t.NeedsApproval == true)
                     {
-                        transactions.Add(t);
+                        TransViewModel tvm = new TransViewModel();
+                        tvm.TransactionID = t.TransactionID;
+                        tvm.TransactionNum = t.TransactionNum;
+                        tvm.TransType = t.TransType;
+                        tvm.Amount = t.Amount;
+                        tvm.toAccount = t.ToAccount;
+                        tvm.fromAccount = t.FromAccount;
+                        tvm.Date = t.Date;
+                        tvm.Description = t.Description;
+                        tvm.FirstName = user.FirstName;
+                        tvm.LastName = user.LastName;
+
+                        tvms.Add(tvm);
                     }
                 }
             }
 
-            return transactions;
+            return tvms;
         }
 
 
@@ -600,6 +816,7 @@ namespace bevo.Controllers
                             //gets first (only) thing from query list
                             String accountID = query.First();
                             IRAccount a = db.IRAccounts.Find(accountID);
+                            a.Balance = a.Balance + dvm.CorrectAmount - transToChange.Amount;
                         }
 
                         else if (GetAccountType(transToChange.ToAccount) == "STOCKPORTFOLIO")
@@ -610,6 +827,7 @@ namespace bevo.Controllers
                             //gets first (only) thing from query list
                             String accountID = query.First();
                             StockPortfolio a = db.StockPortfolios.Find(accountID);
+                            a.Balance = a.Balance + dvm.CorrectAmount - transToChange.Amount;
                         }
                     }
                     else
@@ -865,10 +1083,9 @@ namespace bevo.Controllers
 
         public String GetAccountType(Int32? accountNum)
         {
-            AppUser user = db.Users.Find(User.Identity.GetUserId());
             String accountType;
 
-            List<CheckingAccount> checkingAccounts = user.CheckingAccounts;
+            List<CheckingAccount> checkingAccounts = db.CheckingAccounts.ToList();
             foreach (var c in checkingAccounts)
             {
                 if (accountNum == c.AccountNum)
@@ -878,7 +1095,7 @@ namespace bevo.Controllers
                 }
             }
 
-            List<SavingAccount> savingAccounts = user.SavingAccounts;
+            List<SavingAccount> savingAccounts = db.SavingAccounts.ToList();
             foreach (var s in savingAccounts)
             {
                 if (accountNum == s.AccountNum)
@@ -888,24 +1105,30 @@ namespace bevo.Controllers
                 }
             }
 
-            IRAccount iraAccount = user.IRAccount;
-            if (iraAccount != null)
+            List<IRAccount> iraAccounts = db.IRAccounts.ToList();
+            if (iraAccounts != null)
             {
-                if (accountNum == iraAccount.AccountNum)
+                foreach (var i in iraAccounts)
                 {
-                    accountType = "IRA";
-                    return accountType;
+                  if (accountNum == i.AccountNum)
+                    {
+                        accountType = "IRA";
+                        return accountType;
+                    }
                 }
             }
 
 
-            StockPortfolio stockPortfolio = user.StockPortfolio;
-            if (stockPortfolio != null)
+            List<StockPortfolio> stockPortfolios = db.StockPortfolios.ToList();
+            if (iraAccounts != null)
             {
-                if (accountNum == stockPortfolio.AccountNum)
+                foreach (var s in stockPortfolios)
                 {
-                    accountType = "STOCKPORTFOLIO";
-                    return accountType;
+                    if (accountNum == s.AccountNum)
+                    {
+                        accountType = "STOCKPORTFOLIO";
+                        return accountType;
+                    }
                 }
             }
 
