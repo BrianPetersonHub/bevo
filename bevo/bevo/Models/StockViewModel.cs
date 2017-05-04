@@ -62,6 +62,15 @@ namespace bevo.Models
 
     }
 
+    public class StockSummaryViewModel
+    {
+        public String Stock { get; set; }
+        public Int32 Quantity { get; set; }
+        public Int32 Remaining { get; set; }
+        public Decimal Fees { get; set; }
+        public Decimal Profit { get; set; }
+    }
+
 
 
 

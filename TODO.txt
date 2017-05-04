@@ -1,20 +1,36 @@
 Controllers
-[ ] 5 similar transactions: Currently pulling from entire db
+[BP] 5 similar transactions: Currently pulling from entire db
 [ ] Update balance of accounts after dispute is accepted/rejected/adjusted
 [ ] Update portfolio balance after process stock portfolio
-[ ] Transaction Search
 [ ] Cannot double dispute transaction
 [ ] Customer inactive state, can only use GET methods 
-[ ] Transfer: Customer has option to add $30 service fee to withdrawal amount or have total amount entered include the fee
+[BP] Transfer: Customer has option to add $30 service fee to withdrawal amount or have total amount entered include the fee
 [ ] Initial deposits, opeing accounts > $5000 approved by manager before being added to customer account
 [ ] Get pending transactions (awaiting approval)
+[JA] Sell Stock: customers cannot enter sale date prior to date of purchase
+[JA] Employee Controller: 
+	- Modify their own account (new password requires entering old password),
+	- Index get list of all customers
+	- Edit customer: change password w/o entering old one
+	- Enable/Disable customer accounts
+	- Transaction Search
+	- Access transaction detail pages, cannot dispute transactions
+[ ] Manager Controller:
+	- Resolved disputes show manager email on transaction detail page
+	- [AW] EditDispute method- make new viewmodel 
+[ ] *Add role authentication markers
+[ ] *Publish
 
-Views
+
+Views - AW
 [ ] Stock Details Views (220 - 224)
 [ ] Add pending transactions to account detail page
 [ ] Employee Views
 [ ] Transfer: display account name, number, current balance
 [ ] Manager: Index page of customers, can choose to activate/deactivate account 
+[ ] Manager: Index page of employees- terminate employees (select list) / promote employees to manager 
+[ ] Summary view selling stock: confirm transaction or cancel
+[ ] Transfer confirmation page: confirm or cancel transfer
 
 
 Test
@@ -22,6 +38,8 @@ Test
 	- Dispute
 	- Overdraft
 	- Password
+	- Large deposit approved
+[ ] Accounts with negative balance cannot be used to make transfers or payments
 
 
 
