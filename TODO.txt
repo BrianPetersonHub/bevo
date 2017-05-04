@@ -28,10 +28,18 @@ DONE [AW] Stock Details Views (220 - 224)
 [ ] Add pending transactions to account detail page
 [ ] Employee Views
 [ ] Transfer: display account name, number, current balance
-DONE [AW] Manager: Index page of customers, can choose to activate/deactivate account 
+DONE [AW] Manager: Index page of customers
+	[ ] can choose to activate/deactivate account 
 DONE [AW] Manager: Index page of employees- terminate employees (select list) / promote employees to manager 
 [ ] Summary view selling stock: confirm transaction or cancel
 [ ] Transfer confirmation page: confirm or cancel transfer
+
+
+Misc
+[ ] Phone number is not being added upon registration for some reason
+
+
+
 
 
 Test
