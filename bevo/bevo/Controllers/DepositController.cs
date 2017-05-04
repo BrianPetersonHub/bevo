@@ -158,7 +158,7 @@ namespace bevo.Controllers
 
                 db.SaveChanges();
 
-                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Deposit successfull!'); window.location='../PayBills/Index';</script>");
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Deposit successfull!'); window.location='../Customer/Home';</script>");
             }
 
             List<AccountsViewModel> allAccounts = GetAccounts();

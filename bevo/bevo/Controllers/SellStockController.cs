@@ -209,6 +209,7 @@ namespace bevo.Controllers
                 StockViewModel viewModel = new StockViewModel();
                 viewModel.CurrentPrice = bevo.Utilities.GetQuote.GetStock(s.Stock.StockTicker).LastTradePrice;
                 viewModel.Name = s.Stock.StockName;
+                viewModel.Type = s.Stock.TypeOfStock;
                 viewModel.NumInAccount = s.Quantity;
                 viewModel.Ticker = s.Stock.StockTicker;
                 viewModel.PurchasePrice = 10.00m;

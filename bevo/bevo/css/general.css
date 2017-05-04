@@ -84,11 +84,13 @@ ____________________________________________________________________*/
 ____________________________________________________________________*/
 .hero {
    height: 800px;
+   border: none;
 }
 
 .hero h2 {
-    padding-top: 150px;
-    font-family: 'Open Sans', sans-serif;
+    padding-top: 400px;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-weight: normal;
     font-size: 30px;
     font-weight: 400;
     text-align: center;

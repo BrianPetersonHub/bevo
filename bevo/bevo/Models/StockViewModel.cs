@@ -30,6 +30,7 @@ namespace bevo.Models
         //if it isn't already there
         public String Ticker { get; set; }
         public Decimal? PurchasePrice { get; set; }
+        public StockType Type { get; set; }
 
         public Decimal CurrentPrice { get; set; }
         public Int32? StockID { get; set; }
@@ -40,6 +41,7 @@ namespace bevo.Models
     //Used when displaying information about a POTENTIALLY PURCHASABLE stock
     public class AvailableStock
     {
+        public StockType Type { get; set; }
         public String Name { get; set; }
         public String Ticker { get; set; }
         public Decimal CurrentPrice { get; set; }
@@ -90,8 +92,10 @@ namespace bevo.Models
     {
         public String Name { get; set; }
         public String Ticker { get; set; }
-        public Decimal PurchasePrice { get; set; }
-        public Decimal Delta { get; set; }
+        public Int32? Quantity { get; set; }
+        public Decimal? PurchasePrice { get; set; }
+        public Decimal? CurrentPrice { get; set; }
+        public Decimal? Delta { get; set; }
     }
 
     //I don't know what this is for either. Don't use it, please. 

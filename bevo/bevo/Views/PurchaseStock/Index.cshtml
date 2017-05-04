@@ -38,14 +38,25 @@
                     <tr>
                         <th>Stock</th>
                         <th>Ticker</th>
+                        <th>Type</th>
                         <th>Current Price</th>
+                        <td>Detail</td>
                     </tr>
                     @foreach (var s in ViewBag.AvailableStocks)
                     {
                         <tr>
                             <td>@s.Name</td>
                             <td>@s.Ticker</td>
+                            <td>@s.Type</td>
                             <td>@s.CurrentPrice</td>
+                            <td>
+                                @Html.ActionLink(
+                            linkText: "Details",
+                            actionName: "Details",
+                            controllerName: "Stocks",
+                            routeValues: new { id = s.StockID },
+                            htmlAttributes: null)
+                            </td>
                         </tr>
                     }
                 </table>

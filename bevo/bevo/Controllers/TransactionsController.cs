@@ -300,9 +300,12 @@ namespace bevo.Controllers
         public List<Transaction> Get5SimilarTransactions(Transaction transaction)
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
-
+            List<Transaction> list = new List<Transaction>();
             //make list of users transactions
-            List<Transaction> list = user.IRAccount.Transactions;
+            if (user.IRAccount != null)
+            {
+                list = user.IRAccount.Transactions;
+            }
             foreach (CheckingAccount c in user.CheckingAccounts)
             {
                 foreach (Transaction t in c.Transactions)

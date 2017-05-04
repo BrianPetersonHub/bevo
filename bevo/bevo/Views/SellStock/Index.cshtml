@@ -27,6 +27,7 @@
                     <tr>
                         <th>Stock</th>
                         <th>Ticker</th>
+                        <th>Type</th>
                         <th>Purchase Price</th>
                         <th>Current Price</th>
                         <th>Transaction Fee</th>
@@ -38,6 +39,7 @@
                         <tr>
                             <td>@s.Name</td>
                             <td>@s.Ticker</td>
+                            <td>@s.Type</td>
                             <td>@s.PurchasePrice</td>
                             <td>@s.CurrentPrice</td>
                             <td>$10.00</td>
@@ -45,7 +47,7 @@
                             <td>@Html.ActionLink(
                             linkText: "Details",
                             actionName: "Details",
-                            controllerName: "Stock",
+                            controllerName: "Stocks",
                             routeValues: new { id = s.StockID },
                             htmlAttributes: null)
                             </td>

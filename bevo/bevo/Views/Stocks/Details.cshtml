@@ -1,48 +1,54 @@
-﻿@model bevo.Models.Stock
+﻿@model bevo.Models.StockDetailsViewModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "stock detail";
 }
 
-<h2>Details</h2>
+<div class="row">
+    <div class="homepage-top">
+        <h2>stock detail</h2>
+        <p>@Html.DisplayFor(model => model.Name)</p>
+    </div>
+</div>
 
-<div>
-    <h4>Stock</h4>
+<div class="row">
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.StockName)
+            @Html.DisplayNameFor(model => model.Ticker)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.StockName)
+            @Html.DisplayFor(model => model.Ticker)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.StockTicker)
+            Average Purchaes Price
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.StockTicker)
+            @Html.DisplayFor(model => model.PurchasePrice)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TypeOfStock)
+            Current Price
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.TypeOfStock)
+            @Html.DisplayFor(model => model.CurrentPrice)
         </dd>
+
         <dt>
-            @Html.DisplayNameFor(model => model.feeAmount)
+            Profit
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.feeAmount)
+            @Html.DisplayFor(model => model.Delta)
         </dd>
 
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.StockID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+<div class="row">
+    <img src="@ViewBag.YahooImg" />
+</div>
+

@@ -32,7 +32,32 @@ namespace bevo.Controllers
             {
                 return HttpNotFound();
             }
-            return View(stock);
+
+            StockDetailsViewModel details = new StockDetailsViewModel();
+            List<Transaction> trans = stock.Transactions.ToList();
+            Decimal? decTotal = 0;
+            Decimal? decAddP = 0;
+            Int32? intQuantity = 0;
+            foreach(Transaction t in trans)
+            {
+                Decimal? decPrice = t.Amount / t.NumShares;
+                Decimal? decCurrentP = Utilities.GetQuote.GetStock(stock.StockTicker).LastTradePrice;
+                Decimal? decDiff = decPrice - decCurrentP;
+                Int32? intQuant = t.NumShares;
+                decAddP += decPrice;
+                decTotal += decDiff;
+                intQuantity += t.NumShares;
+            }
+            Decimal? decAvgP = decAddP / intQuantity;
+
+            details.Name = stock.StockName;
+            details.Ticker = stock.StockTicker;
+            details.PurchasePrice = decAvgP;
+            details.Quantity = intQuantity; 
+            details.CurrentPrice = Utilities.GetQuote.GetStock(stock.StockTicker).LastTradePrice;
+            details.Delta = details.PurchasePrice - details.CurrentPrice;
+            ViewBag.YahooImg = "https://chart.finance.yahoo.com/z?s=" + details.Ticker + "&t=6m&q=l&l=on&z=s&p=m50,m200";
+            return View(details);
         }
 
         // GET: Stocks/Create
