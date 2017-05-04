@@ -295,14 +295,35 @@ namespace bevo.Controllers
         public List<Transaction> Get5SimilarTransactions(Transaction transaction)
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
-            var query = (from t in db.Transactions
+
+            //make list of users transactions
+            List<Transaction> list = user.IRAccount.Transactions;
+            foreach (CheckingAccount c in user.CheckingAccounts)
+            {
+                foreach (Transaction t in c.Transactions)
+                {
+                    list.Add(t);
+                }
+            }
+            foreach (SavingAccount s in user.SavingAccounts)
+            {
+                foreach (Transaction t in s.Transactions)
+                {
+                    list.Add(t);
+                }
+            }
+            foreach (Transaction t in user.StockPortfolio.Transactions)
+            {
+                list.Add(t);
+            }
+
+            var query = (from t in list
                          where t.TransType == transaction.TransType
                          where (t.FromAccount == transaction.FromAccount && transaction.FromAccount != 0) || (t.ToAccount == transaction.ToAccount && transaction.ToAccount != 0)
                          orderby t.Date descending
                          select t).Take(5);
-
-            List<Transaction> listTransactions = query.ToList();
-            return listTransactions;
+            List<Transaction> listTransaction = query.ToList();
+            return listTransaction;
         }
     }
 }

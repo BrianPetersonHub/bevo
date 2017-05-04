@@ -52,9 +52,9 @@ namespace bevo.Controllers
                     Int32 accountID = query.First();
                     CheckingAccount account = db.CheckingAccounts.Find(accountID);
                     //check if account is already overdrafted
-                    if (account.Balance <= -50)
+                    if (account.Balance < 0)
                     {
-                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You have already overdrafted the maximum amount.'); window.location='../Customer/Home';</script>");
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You can't transfer money out of an overdrawn account.'); window.location='../Customer/Home';</script>");
                     }
                     //check for overdraft strarts. if transaction will make balance <-50, return new view with error and autofilled max transaction
                     if (account.Balance - transaction.Amount < -50)
@@ -105,9 +105,9 @@ namespace bevo.Controllers
                     SavingAccount account = db.SavingAccounts.Find(accountID);
 
                     //check if account is already overdrafted
-                    if (account.Balance <= -50)
+                    if (account.Balance < 0)
                     {
-                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You have already overdrafted the maximum amount.'); window.location='../Customer/Home';</script>");
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You can't transfer money out of an overdrawn account.'); window.location='../Customer/Home';</script>");
                     }
                     //check for overdraft strarts. if transaction will make balance <-50, return new view with error and autofilled max transaction
                     if (account.Balance - transaction.Amount < -50)
@@ -166,9 +166,9 @@ namespace bevo.Controllers
                         }
                         else
                         {
-                            if (account.Balance <= -50)
+                            if (account.Balance < 0)
                             {
-                                return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You have already overdrafted the maximum amount.'); window.location='../Customer/Home';</script>");
+                                return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You can't transfer money out of an overdrawn account.'); window.location='../Customer/Home';</script>");
                             }
                             if (account.Balance - transaction.Amount < -50)
                             {
@@ -256,9 +256,9 @@ namespace bevo.Controllers
                     //gets first (only) thing from query list
                     String accountID = query.First();
                     StockPortfolio account = db.StockPortfolios.Find(accountID);
-                    if (account.Balance <= -50)
+                    if (account.Balance < 0)
                     {
-                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You have already overdrafted the maximum amount.'); window.location='../Customer/Home';</script>");
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You can't transfer money out of an overdrawn account.'); window.location='../Customer/Home';</script>");
                     }
                     if (account.Balance - transaction.Amount < -50)
                     {
