@@ -20,7 +20,17 @@ namespace bevo.Controllers
         //GET: StockPortfolio/Create
         public ActionResult Create()
         {
-            return View();
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            if (user.StockPortfolio == null)
+            {
+                StockPortfolio sp = new StockPortfolio();
+                sp.AccountName = "My StockPortfolio";
+                return View(sp);
+            }
+            else
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You can only have one Stock Portfolio.'); window.location='../Customer/Home';</script>");
+            }
         }
 
         //POST: StockPortfolio/Create
@@ -30,6 +40,10 @@ namespace bevo.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (stockPortfolio.Balance <= 0)
+                {
+                    return Content("<script language'javascript' type = 'text/javascript'> alert('Error: Your starting balance must be positive.'); window.location='../StockPortfolio/Create';</script>");
+                }
                 AppUser user = db.Users.Find(User.Identity.GetUserId());
                 user.StockPortfolio = stockPortfolio;
                 //TODO: error here bc adding duplicate primary key

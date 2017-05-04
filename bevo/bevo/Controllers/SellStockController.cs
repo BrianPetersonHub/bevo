@@ -145,11 +145,6 @@ namespace bevo.Controllers
             //Assign all the remaining values to the transaction to be created
             //Assign the SMVRedux property on the transaction record  
             transToAdd.SMVRedux = stockMarketValueReduction;
-            
-
-            //Save this to the DB
-            db.Transactions.Add(transToAdd);
-            db.SaveChanges();
 
             if(detailInQuestion.Stock.feeAmount != null)
             {
@@ -167,20 +162,21 @@ namespace bevo.Controllers
                 feeTransaction.StockPortfolios = new List<StockPortfolio>();
                 feeTransaction.StockPortfolios.Add(portfolio);
 
-                db.Transactions.Add(feeTransaction);
-                db.SaveChanges();
-
-
+                
                 //Subtract the ten dollars from the stock portfolio cash section as a result of the fee for selling stock
                 //Assume here that they have at least ten bucks in their account 
                 db.Entry(portfolio).State = System.Data.Entity.EntityState.Modified;
+                db.Transactions.Add(feeTransaction);
                 db.SaveChanges();
             }
+
+            //Save this to the DB
+            db.Transactions.Add(transToAdd);
+            db.SaveChanges();
             
 
-
             //Redirect to the details page
-            return RedirectToAction("Details", "StockPortfolio");
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully sold a stock!'); window.location='../../StockPortfolio/Details';</script>");
         }
 
         public ActionResult SummaryScreen()

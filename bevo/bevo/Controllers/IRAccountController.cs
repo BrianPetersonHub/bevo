@@ -21,7 +21,9 @@ namespace bevo.Controllers
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             if (user.IRAccount == null)
             {
-                return View();
+                IRAccount ira = new IRAccount();
+                ira.AccountName = "My IRA Account";
+                return View(ira);
             }
             else
             {
@@ -37,8 +39,13 @@ namespace bevo.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (irAccount.Balance <= 0)
+                {
+                    return Content("<script language'javascript' type = 'text/javascript'> alert('Error: Your starting balance must be positive.'); window.location='../IRAccount/Create';</script>");
+                }
                 AppUser user = db.Users.Find(User.Identity.GetUserId());
                 user.IRAccount = irAccount;
+
 
                 //TODO: make the initial balance count as a deposit
                 //Transaction t = new Transaction();
