@@ -179,6 +179,73 @@ namespace bevo.Controllers
             return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully promoted employee!'); window.location='../Customer/Home';</script>");
         }
 
+
+        //Make a method to get a list of all the employees and puts in in the viewbag for the fire employees view
+        public ActionResult FireEmployee()
+        {
+            ViewBag.AllEmployees = GetEmployees();
+            return View();
+        }
+
+        //Make the post edit method to fire the employee
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult FireEmployee(String id)
+        {
+            AppDbContext db = new AppDbContext();
+
+            //Get the user we want 
+            var query = from user in db.Users
+                        select user;
+            query = query.Where(user => user.Id == id);
+            List<AppUser> queryList = query.ToList();
+            AppUser userInQuestion = queryList[0];
+
+            //change the user's disabled variable to true 
+            userInQuestion.Disabled = true;
+
+            //Save Changes
+            db.Entry(userInQuestion).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully terminated employee!'); window.location='../Customer/Home';</script>");
+        }
+
+        //Make a method to get a list of all the customers and puts it in the viewbag for the freeze customer view
+        public ActionResult FreezeCustomer()
+        {
+            ViewBag.AllCustomers = GetCustomers();
+            return View();
+        }
+
+        //Make the post edit method to fire the employee
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult FreezeCustomer(String id)
+        {
+            AppDbContext db = new AppDbContext();
+
+            //Get the user we want 
+            var query = from user in db.Users
+                        select user;
+            query = query.Where(user => user.Id == id);
+            List<AppUser> queryList = query.ToList();
+            AppUser userInQuestion = queryList[0];
+
+            //change the user's disabled variable to true 
+            userInQuestion.Disabled = true;
+
+            //Save Changes
+            db.Entry(userInQuestion).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully froze customer account!'); window.location='../Customer/Home';</script>");
+        }
+
+
+
+
+
         public ActionResult ProcessBalancedPortfolios()
         {
             List<StockPortfolio> stockPortfolios = GetStockPortfolios();
@@ -192,7 +259,14 @@ namespace bevo.Controllers
                     {
                         //get current price of stock
                         StockQuote quote = GetQuote.GetStock(sd.Stock.StockTicker);
-                        value = value + (quote.LastTradePrice * quote.Volume);
+                        value = value + (quote.LastTradePrice * sd.Quantity);
+                    }
+                    foreach (Transaction trans in sp.Transactions)
+                    {
+                        if (trans.TransType == TransType.Fee)
+                        {
+                            value = value - trans.Amount;
+                        }
                     }
 
                     //make new bonus transaction
@@ -203,27 +277,15 @@ namespace bevo.Controllers
                     t.ToAccount = sp.AccountNum;
                     t.Description = "Balanced Portfolio Bonus";
                     db.Transactions.Add(t);
-                    
-                    if (GetAccountType(t.ToAccount) == "CHECKING")
-                    {
-                        CheckingAccount checkingAccount = db.CheckingAccounts.Find(t.ToAccount);
-                        checkingAccount.Balance = checkingAccount.Balance + t.Amount;
-                    }
-                    else if (GetAccountType(t.ToAccount) == "SAVING")
-                    {
-                        SavingAccount savingAccount = db.SavingAccounts.Find(t.ToAccount);
-                        savingAccount.Balance = savingAccount.Balance + t.Amount;
-                    }
-                    else if (GetAccountType(t.ToAccount) == "IRA")
-                    {
-                        IRAccount irAccount = db.IRAccounts.Find(t.ToAccount);
-                        irAccount.Balance = irAccount.Balance + t.Amount;
-                    }
-                    else if (GetAccountType(t.ToAccount) == "STOCKPORTFOLIO")
-                    {
-                        StockPortfolio stockPortfolio = db.StockPortfolios.Find(t.ToAccount);
-                        stockPortfolio.Balance = stockPortfolio.Balance + t.Amount;
-                    }
+
+                    var query = from a in db.StockPortfolios
+                                where a.AccountNum == t.ToAccount
+                                select a.StockPortfolioID;
+                    //gets first (only) thing from query list
+                    String accountID = query.First();
+                    StockPortfolio account = db.StockPortfolios.Find(accountID);
+                    account.Transactions.Add(t);
+                    account.Balance = account.Balance + t.Amount;
                 }
             }
             db.SaveChanges();
@@ -476,8 +538,13 @@ namespace bevo.Controllers
         }
 
 
-    //get a list of all the user objects for employees 
-    public List<AppUser> GetEmployees()
+
+
+
+
+
+        //get a list of all the user objects for employees 
+        public List<AppUser> GetEmployees()
         {
             AppDbContext db = new AppDbContext();
 
@@ -496,13 +563,45 @@ namespace bevo.Controllers
             return employeeList;
         }
 
-        //Make a select list for all of the employees a manager could choose to promote 
-        public IEnumerable<SelectListItem> SelectEmployee()
+        //Make a select list for all of the employees a manager could choose to promote or fire
+        public SelectList SelectEmployee()
         {
             List<AppUser> employees = GetEmployees();
             SelectList selectEmployee = new SelectList(employees, "Id", "Email");
             return selectEmployee;
         }
+
+        //Get a list of all the customers in the db 
+        public List<AppUser> GetCustomers()
+        {
+            AppDbContext db = new AppDbContext();
+
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+            List<AppUser> customerList = new List<AppUser>();
+
+            foreach (AppUser user in db.Users)
+            {
+                if (userManager.GetRoles(user.Id).Contains("Customer"))
+                {
+                    customerList.Add(user);
+                }
+            }
+
+
+            return customerList;
+        }
+
+        //Make a select list for all of the customeres a manager could choose to disable 
+        public SelectList SelectCustomer()
+        {
+            List<AppUser> customers = GetCustomers();
+            SelectList selectCustomer = new SelectList(customers, "Id", "Email");
+            return selectCustomer;
+        }
+
+
+
+
 
         //get a list of all stock portfolios
         public List<StockPortfolio> GetStockPortfolios()
@@ -604,6 +703,41 @@ namespace bevo.Controllers
             return "NOT FOUND";
         }
 
+        public List<StockViewModel> PortfolioSnapshot()
+        {
+            //Get the ID of the user who is currently logged in
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+            var user = userManager.FindById(User.Identity.GetUserId());
+
+            //Look at each StockDetail in the person's account and make a StockViewModel to campture information about it 
+            //Get a list of all the stocks in the account 
+            List<StockDetail> stockDetailList = new List<StockDetail>();
+            foreach (StockDetail s in user.StockPortfolio.StockDetails)
+            {
+                stockDetailList.Add(s);
+            }
+
+            //Make list to hold all the stockviewmodel objects
+            List<StockViewModel> listToReturn = new List<StockViewModel>();
+
+            //Add information from each stock record into the viewbag 
+            foreach (StockDetail detail in stockDetailList)
+            {
+                StockViewModel model = new StockViewModel();
+                model.Name = detail.Stock.StockName;
+                model.NumInAccount = detail.Quantity;
+                model.Ticker = detail.Stock.StockTicker;
+
+                StockQuote quote = bevo.Utilities.GetQuote.GetStock(detail.Stock.StockTicker);
+
+                model.CurrentPrice = quote.LastTradePrice;
+
+                //Add the model to the list of models already in the viewbag
+                listToReturn.Add(model);
+            }
+
+            return listToReturn;
+        }
 
     }
 }

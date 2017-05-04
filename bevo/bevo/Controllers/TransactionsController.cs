@@ -181,24 +181,22 @@ namespace bevo.Controllers
         //returns select list of drop down options for trans type
         public SelectList GetAllTransTypesSL()
         {
-            //making a list of all Frequencies
-            List<TransType> transTypes = new List<TransType>();
-            transTypes.Add(TransType.Bonus);
-            transTypes.Add(TransType.Deposit);
-            transTypes.Add(TransType.Fee);
-            transTypes.Add(TransType.Pay_Payee);
-            transTypes.Add(TransType.Purchase_Stock);
-            transTypes.Add(TransType.Sell_Stock);
-            transTypes.Add(TransType.Transfer);
-            transTypes.Add(TransType.Withdrawal);
-            transTypes.Add(TransType.All);
 
-            SelectList allTransTypes = new SelectList(transTypes);
-            return allTransTypes;
-        }
+            List<SelectListItem> allTransTypes = 
+            Enum.GetValues(typeof(TransType)).Cast<TransType>().Select(v => new SelectListItem
+            {
+                Text = v.ToString(),
+                Value = ((int)v).ToString()
+            }).ToList();
 
-        // Get list of all transactions to view
-        public List<Transaction> GetAllTransactions()
+            SelectList listToReturn = new SelectList(allTransTypes, "Value", "Text");
+
+
+            return listToReturn;
+         }
+
+    // Get list of all transactions to view
+    public List<Transaction> GetAllTransactions()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             //initialize list and add all transactions in the user's IRA
