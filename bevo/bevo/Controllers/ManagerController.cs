@@ -109,7 +109,7 @@ namespace bevo.Controllers
 
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Home");
             }
             return View(eevm);
         }
@@ -549,10 +549,6 @@ namespace bevo.Controllers
 
         }
 
-
-
-
-
         //Make a get method for editing the dispute
         //The view for this method should be bound to the disputeviewmodel class 
         public ActionResult EditDispute(int? id)
@@ -892,6 +888,149 @@ namespace bevo.Controllers
             }
             return View(stock);
         }
+
+        //Go to page to edit a customer's account 
+        public ActionResult ChangeCustomerInfo()
+        {
+            ViewBag.AllCustomers = GetCustomers();
+            ViewBag.SelectCustomer = SelectCustomer();
+
+            return View();
+        }
+
+        //Post method for editing the customer's account 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeCustomerInfo([Bind(Include = "FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Email,PhoneNumber")] EditUserViewModel evm, String id)
+        {
+            AppUser user = db.Users.Find(id);
+
+            if (ModelState.IsValid)
+            {
+                user.Birthday = evm.Birthday;
+                user.City = evm.City;
+                user.Email = evm.Email;
+                user.FirstName = evm.FirstName;
+                user.LastName = evm.LastName;
+                user.MiddleInitial = evm.MiddleInitial;
+                user.PhoneNumber = evm.PhoneNumber;
+                user.State = evm.State;
+                user.Street = evm.Street;
+                user.ZipCode = evm.ZipCode;
+
+                db.SaveChanges();
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Successfully updated customer info!'); window.location='../Manager/Home';</script>");
+
+            }
+
+            return View(evm);
+
+        }
+
+        //Go to the view for selecting which customer you want to change the password for 
+        public ActionResult ChangeCustomerPassword()
+        {
+            ViewBag.AllCustomers = GetCustomers();
+            ViewBag.SelectCustomer = SelectCustomer();
+
+            return View();
+        }
+
+        //Post method for changing a customer's password 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeCustomerPassword(String id, String newPassword)
+        {
+            AppDbContext db = new AppDbContext();
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+
+            //Get the user we want 
+            var query = from user in db.Users
+                        select user;
+            query = query.Where(user => user.Id == id);
+            List<AppUser> queryList = query.ToList();
+            AppUser userInQuestion = queryList[0];
+
+            String resetToken = userManager.GeneratePasswordResetToken(id);
+            userManager.ResetPassword(id, resetToken, newPassword);
+
+            db.Entry(userInQuestion).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully changed customer password!'); window.location='../Manager/Home';</script>");
+        }
+
+        //Go to page to edit a customer's account 
+        public ActionResult ChangeEmployeeInfo()
+        {
+            ViewBag.AllEmployees = GetEmployees();
+            ViewBag.SelectEmployee = SelectEmployee();
+
+            return View();
+        }
+
+        //Post method for editing the customer's account 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeEmployeeInfo([Bind(Include = "FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Email,PhoneNumber")] EditUserViewModel evm, String id)
+        {
+            AppUser user = db.Users.Find(id);
+
+            if (ModelState.IsValid)
+            {
+                user.Birthday = evm.Birthday;
+                user.City = evm.City;
+                user.Email = evm.Email;
+                user.FirstName = evm.FirstName;
+                user.LastName = evm.LastName;
+                user.MiddleInitial = evm.MiddleInitial;
+                user.PhoneNumber = evm.PhoneNumber;
+                user.State = evm.State;
+                user.Street = evm.Street;
+                user.ZipCode = evm.ZipCode;
+
+                db.SaveChanges();
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Successfully updated employee info!'); window.location='../Manager/Home';</script>");
+
+            }
+
+            return View(evm);
+
+        }
+
+        //Go to the view for selecting which customer you want to change the password for 
+        public ActionResult ChangeEmployeePassword()
+        {
+            ViewBag.AllEmployees = GetEmployees();
+            ViewBag.SelectEmployee = SelectEmployee();
+
+            return View();
+        }
+
+        //Post method for changing a customer's password 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeEmployeePassword(String id, String newPassword)
+        {
+            AppDbContext db = new AppDbContext();
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+
+            //Get the user we want 
+            var query = from user in db.Users
+                        select user;
+            query = query.Where(user => user.Id == id);
+            List<AppUser> queryList = query.ToList();
+            AppUser userInQuestion = queryList[0];
+
+            String resetToken = userManager.GeneratePasswordResetToken(id);
+            userManager.ResetPassword(id, resetToken, newPassword);
+
+            db.Entry(userInQuestion).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully changed employee password!'); window.location='../Manager/Home';</script>");
+        }
+
 
 
 

@@ -74,7 +74,7 @@ namespace bevo.Controllers
 
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Home");
             }
             return View(eevm);
         }
@@ -206,25 +206,10 @@ namespace bevo.Controllers
         //Go to page to edit a customer's account 
         public ActionResult ChangeCustomerInfo()
         {
-            AppUser user = db.Users.Find(User.Identity.GetUserId());
-
             ViewBag.AllCustomers = GetCustomers();
             ViewBag.SelectCustomer = SelectCustomer();
-
-            EditUserViewModel evm = new EditUserViewModel();
-            evm.Birthday = user.Birthday;
-            evm.City = user.City;
-            evm.Email = user.Email;
-            evm.FirstName = user.FirstName;
-            evm.LastName = user.LastName;
-            evm.MiddleInitial = user.MiddleInitial;
-            evm.PhoneNumber = user.PhoneNumber;
-            evm.State = user.State;
-            evm.Street = user.Street;
-            evm.ZipCode = user.ZipCode;
             
-
-            return View(evm);
+            return View();
         }
 
         //Post method for editing the customer's account 
@@ -232,7 +217,7 @@ namespace bevo.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangeCustomerInfo([Bind(Include = "FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Email,PhoneNumber")] EditUserViewModel evm, String id)
         {
-            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            AppUser user = db.Users.Find(id);
 
             if(ModelState.IsValid)
             {
