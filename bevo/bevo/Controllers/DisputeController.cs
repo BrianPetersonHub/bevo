@@ -19,6 +19,11 @@ namespace bevo.Controllers
         // GET: Dispute
         public ActionResult Create(int? id)  //this is an id for a transaction (which will also be the disputes id)
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: Your account has been disabled. You are in a view-only mode.'); window.location='../Customer/Home';</script>");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

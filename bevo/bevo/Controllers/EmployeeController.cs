@@ -17,7 +17,7 @@ namespace bevo.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: Employee
-        public ActionResult Index()
+        public ActionResult Home()
         {
             var appUsers = db.Users.Include(a => a.IRAccount).Include(a => a.StockPortfolio);
             return View(appUsers.ToList());
