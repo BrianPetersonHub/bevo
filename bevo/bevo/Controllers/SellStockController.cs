@@ -44,8 +44,9 @@ namespace bevo.Controllers
 
 
         //Create Purchase: Extensive description if you expand the method
-        public ActionResult SellStock(Int32 numShares, Int32 selectedStock, DateTime dateEntered)
+        public ActionResult SellStock(Int32 numShares, Int32 selectedStock)
         {
+            DateTime dateEntered = System.DateTime.Now;
             //Get the ID for the user who is currently logged in 
             UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
             var user = userManager.FindById(User.Identity.GetUserId());
