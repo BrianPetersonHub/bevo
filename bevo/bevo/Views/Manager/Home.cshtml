@@ -47,6 +47,16 @@
         <div class="quick-action-button">
             <p>
                 @Html.ActionLink(
+              linkText: "Search Transactions",
+              actionName: "Home",
+              controllerName: "Transactions",
+              routeValues: null,
+              htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
                 linkText: "Add Stocks",
                 actionName: "Create",
                 controllerName: "Stocks",
@@ -58,7 +68,7 @@
             <p>
               @Html.ActionLink(
               linkText: "Manage Employees",
-              actionName: "Index",
+              actionName: "FireEmployee",
               controllerName: "Employees",
               routeValues: null,
               htmlAttributes: new { @class = "quick-actions" })
@@ -68,12 +78,13 @@
             <p>
               @Html.ActionLink(
               linkText: "Manage Customers",
-              actionName: "Index",
-              controllerName: "Customers",
+              actionName: "FreezeCustomer",
+              controllerName: "Manager",
               routeValues: null,
               htmlAttributes: new { @class = "quick-actions" })
             </p>
         </div>
+        
     <div class="quick-action-button">
         <!--TODO: Move this somewhere else...-->
         <p>

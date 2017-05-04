@@ -19,4 +19,12 @@ namespace bevo.Models
         public Int32? DisputeID { get; set; }
 
     }
+
+    public class EditDisputeViewModel
+    {
+        public Int32? DisputeID { get; set; }
+        public DisputeStatus Status { get; set; }
+        public String Comment { get; set; }
+        public Decimal? AdjustedAmount { get; set; }
+    }
 }

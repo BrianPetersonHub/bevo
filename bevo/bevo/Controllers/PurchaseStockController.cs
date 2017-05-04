@@ -281,6 +281,7 @@ namespace bevo.Controllers
             foreach (Stock s in stocksList)
             {
                 AvailableStock avail = new AvailableStock();
+                avail.Type = s.TypeOfStock;
                 avail.Name = s.StockName;
                 avail.Ticker = s.StockTicker;
                 avail.CurrentPrice = bevo.Utilities.GetQuote.GetStock(s.StockTicker).LastTradePrice;

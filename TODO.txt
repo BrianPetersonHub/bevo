@@ -1,11 +1,11 @@
 Controllers
 DONE [BP] 5 similar transactions: Currently pulling from entire db
 DONE [BP] Update balance of accounts after dispute is accepted/rejected/adjusted
-[BP] Update portfolio balance after process stock portfolio (huge number for annatwo sp value bc of those mis calculations earlier) 
+DONE (huge number for annatwo sp value bc of those mis calculations earlier) [BP] Update portfolio balance after process stock portfolio
 DONE [BP] Cannot double dispute transaction
 [ ] Customer inactive state, can only use GET methods 
 [BP] Transfer: Customer has option to add $30 service fee to withdrawal amount or have total amount entered include the fee
-DONE [BP] Initial deposits, opeing accounts > $5000 approved by manager before being added to customer account
+[BP] Initial deposits, opeing accounts > $5000 approved by manager before being added to customer account
 [ ] Get pending transactions (awaiting approval)
 [JA] Sell Stock: customers cannot enter sale date prior to date of purchase
 [JA] Employee Controller: 
@@ -17,27 +17,28 @@ DONE [BP] Initial deposits, opeing accounts > $5000 approved by manager before b
 	- Access transaction detail pages, cannot dispute transactions
 [ ] Manager Controller:
 	- Resolved disputes show manager email on transaction detail page
-	- [AW] EditDispute method- make new viewmodel 
+	- Write methods to Re-enable customers and Re-hire employees
+	- DONE [AW] EditDispute method- make new viewmodel 
 [ ] *Add role authentication markers
-[ ] *Publish
+DONE [AW] *Publish
 
 
-Views - AW
-[ ] Stock Details Views (220 - 224)
+Views - 
+DONE [AW] Stock Details Views (220 - 224)
 [ ] Add pending transactions to account detail page
 [ ] Employee Views
 [ ] Transfer: display account name, number, current balance
-[ ] Manager: Index page of customers, can choose to activate/deactivate account 
-[ ] Manager: Index page of employees- terminate employees (select list) / promote employees to manager 
+DONE [AW] Manager: Index page of customers, can choose to activate/deactivate account 
+DONE [AW] Manager: Index page of employees- terminate employees (select list) / promote employees to manager 
 [ ] Summary view selling stock: confirm transaction or cancel
 [ ] Transfer confirmation page: confirm or cancel transfer
 
 
 Test
 [ ] Email functionality: 
-	- Dispute
-	- Overdraft
-	- Password
+	DONE- Dispute --> discrepancy. do we need to add for other resolved disputes beside rejected?
+	DONE- Overdraft
+	DONE- Password
 	- Large deposit approved
 [ ] Accounts with negative balance cannot be used to make transfers or payments
 

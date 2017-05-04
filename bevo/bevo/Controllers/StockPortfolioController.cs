@@ -47,13 +47,13 @@ namespace bevo.Controllers
 
                 if (stockPortfolio.Balance > 5000)
                 {
-                    t.NeedsApproval = true;
+                    //t.NeedsApproval = true;
                     stockPortfolio.Balance = 0;
                 }
 
                 stockPortfolio.Transactions = new List<Transaction>();
-                stockPortfolio.Transactions.Add(t);
-                user.StockPortfolio = stockPortfolio;
+                //stockPortfolio.Transactions.Add(t);
+                //user.StockPortfolio = stockPortfolio;
 
                 db.SaveChanges();
                 return RedirectToAction("Home", "Customer");
