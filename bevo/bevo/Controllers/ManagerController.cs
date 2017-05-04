@@ -252,6 +252,7 @@ namespace bevo.Controllers
         public ActionResult FireEmployee()
         {
             ViewBag.AllEmployees = GetEmployees();
+            ViewBag.SelectEmployee = SelectEmployee();
             List<AppUser> employees = GetEmployees();
             return View(employees);
         }
@@ -283,6 +284,7 @@ namespace bevo.Controllers
         //Make a method to get a list of all the customers and puts it in the viewbag for the freeze customer view
         public ActionResult FreezeCustomer()
         {
+            ViewBag.SelectCustomers = SelectCustomer();
             ViewBag.AllCustomers = GetCustomers();
             List<AppUser> customers = GetCustomers();
             return View(customers);

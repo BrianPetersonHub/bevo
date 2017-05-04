@@ -79,32 +79,6 @@ namespace bevo.Controllers
             return View(eevm);
         }
 
-        // GET: Employee/Delete/5
-        public ActionResult Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AppUser appUser = db.Users.Find(id);
-            if (appUser == null)
-            {
-                return HttpNotFound();
-            }
-            return View(appUser);
-        }
-
-        // POST: Employee/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
-        {
-            AppUser appUser = db.Users.Find(id);
-            db.Users.Remove(appUser);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -136,7 +110,7 @@ namespace bevo.Controllers
             return View();
         }
 
-        //Make the post edit method to fire the employee
+        //Make the post edit method to freeze customer account
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult FreezeCustomer(String id)
@@ -160,6 +134,18 @@ namespace bevo.Controllers
             return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully froze customer account!'); window.location='../Customer/Home';</script>");
         }
 
+        public ActionResult ChangeCustomerPassword()
+        {
+            ViewBag.AllCustomers
+        }
+
+
+
+
+
+
+
+
 
 
 
@@ -181,6 +167,14 @@ namespace bevo.Controllers
 
 
             return customerList;
+        }
+
+        //Make a select list for all of the customeres an employee could choose 
+        public SelectList SelectCustomer()
+        {
+            List<AppUser> customers = GetCustomers();
+            SelectList selectCustomer = new SelectList(customers, "Id", "Email");
+            return selectCustomer;
         }
 
 
