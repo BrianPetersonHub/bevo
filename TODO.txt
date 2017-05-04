@@ -54,3 +54,6 @@ Test
 
 
 UI (not required but would be nice to get to)
+
+Errors:
+[ ] When transactions dealing with Payees are viewed, the "from account" is not filled in

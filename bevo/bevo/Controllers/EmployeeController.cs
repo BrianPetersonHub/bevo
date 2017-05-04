@@ -134,10 +134,10 @@ namespace bevo.Controllers
             return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully froze customer account!'); window.location='../Customer/Home';</script>");
         }
 
-        public ActionResult ChangeCustomerPassword()
-        {
-            ViewBag.AllCustomers
-        }
+       // public ActionResult ChangeCustomerPassword()
+       // {
+       //     ViewBag.AllCustomers
+       // }
 
 
 
