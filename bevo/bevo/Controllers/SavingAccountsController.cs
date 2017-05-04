@@ -38,6 +38,22 @@ namespace bevo.Controllers
                 {
                     savingAccount.AccountName = "Longhorn Saving";
                 }
+
+                Transaction t = new Transaction();
+                t.Date = DateTime.Today;
+                t.ToAccount = savingAccount.AccountNum;
+                t.TransType = TransType.Deposit;
+                t.Description = "Initial deposit";
+                t.Amount = savingAccount.Balance;
+                if (savingAccount.Balance > 5000)
+                {
+                    savingAccount.Balance = 0;
+                    t.NeedsApproval = true;
+                }
+
+                savingAccount.Transactions = new List<Transaction>();
+                savingAccount.Transactions.Add(t);
+
                 user.SavingAccounts.Add(savingAccount);
                 db.SaveChanges();
                 return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully added new Savings Account!'); window.location='../Customer/Home';</script>");
