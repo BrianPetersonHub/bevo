@@ -17,23 +17,24 @@
         <div class="quick-action-button">
             <p>
                 @Html.ActionLink(
-                linkText: "View Transactions",
-                actionName: "Index",
-                controllerName: "Transactions",
-                routeValues: null,
-                htmlAttributes: new { @class = "quick-actions" })
+              linkText: "Search Transactions",
+              actionName: "Home",
+              controllerName: "Transactions",
+              routeValues: null,
+              htmlAttributes: new { @class = "quick-actions" })
             </p>
         </div>
         <div class="quick-action-button">
             <p>
                 @Html.ActionLink(
               linkText: "Manage Customers",
-              actionName: "Index",
-              controllerName: "Customers",
+              actionName: "FreezeCustomer",
+              controllerName: "Manager",
               routeValues: null,
               htmlAttributes: new { @class = "quick-actions" })
             </p>
         </div>
+
         <div class="quick-action-button">
             <!--TODO: Move this somewhere else...-->
             <p>
@@ -41,5 +42,9 @@
             </p>
         </div>
     </div>
-    
+
+    <div class="homepage-container col-lg-9">
+        <h3></h3>
+    </div>
+
 </div>
