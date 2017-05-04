@@ -1039,10 +1039,10 @@ namespace bevo.Controllers
         }
 
         //Make a select list for all of the employees a manager could choose to promote or fire
-        public SelectList SelectEmployee()
+        public IEnumerable<SelectListItem> SelectEmployee()
         {
             List<AppUser> employees = GetEmployees();
-            SelectList selectEmployee = new SelectList(employees, "Id", "Email");
+            SelectList selectEmployee = new SelectList(employees.OrderBy(e => e.Email), "Id", "Email");
             return selectEmployee;
         }
 
