@@ -39,33 +39,24 @@ namespace bevo.Controllers
         {
             if (ModelState.IsValid)
             {
-                AppUser user = db.Users.Find(User.Identity.GetUserId());
-
-                if (user.IRAccount != null)
-                {
-                    return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot have more than one IRA'); window.location='../Customer/Home';</script>");
-                }
-
-                Transaction t = new Transaction();
-                t.Date = DateTime.Today;
-                t.FromAccount = 0;
-                t.ToAccount = 0;
-                t.TransType = TransType.Deposit;
-                t.Description = "Initial deposit";
-                t.Amount = irAccount.Balance;
-
                 if (irAccount.Balance <= 0)
                 {
                     return Content("<script language'javascript' type = 'text/javascript'> alert('Error: Your starting balance must be positive.'); window.location='../IRAccount/Create';</script>");
                 }
-                if (irAccount.Balance > 5000)
-                {
-                    t.NeedsApproval = true;
-                    irAccount.Balance = 0;
-                }
-                irAccount.Transactions = new List<Transaction>();
-                irAccount.Transactions.Add(t);
+                AppUser user = db.Users.Find(User.Identity.GetUserId());
                 user.IRAccount = irAccount;
+
+
+                //TODO: make the initial balance count as a deposit
+                //Transaction t = new Transaction();
+
+                //t.Date = DateTime.Today;
+                //t.ToAccount = irAccount.AccountNum;
+                //t.TransType = TransType.Deposit;
+                //t.Amount = irAccount.Balance;
+                //t.Description = "Initial deposit amount";
+                //t.ToAccount = irAccount.AccountNum;
+                //irAccount.Transactions.Add(t);
 
                 db.SaveChanges();
                 return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: You have successfully created an IRA!'); window.location='../Customer/Home';</script>");
