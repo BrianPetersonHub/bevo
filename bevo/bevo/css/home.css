@@ -1,0 +1,23 @@
+﻿body {
+   background-image: url('../imgs/bevo-home.jpg');
+   background-size: cover;
+   background-position: center;
+   background-position-y: center;
+}
+
+
+.hero h2 {
+    padding-top: 30px;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-weight: bolder;
+    font-size: 20px;
+    font-weight: 400;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #333;
+}
+
+hr {
+    display: none !important;
+}

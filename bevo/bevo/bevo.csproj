@@ -175,6 +175,7 @@
     <Content Include="css\ChooseAccount.css" />
     <Content Include="css\Forms.css" />
     <Content Include="css\General.css" />
+    <Content Include="css\Home.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -273,6 +274,7 @@
     <None Include="Properties\PublishProfiles\bevo-final - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\bevo-final - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="imgs\bevo-home.jpg" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
