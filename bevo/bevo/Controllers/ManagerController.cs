@@ -313,7 +313,7 @@ namespace bevo.Controllers
 
             bevo.Messaging.EmailMessaging.SendEmail(user.Email, "Dispute Rejected", bodyForEmail);
 
-            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully rejected pending transactions!'); window.location='../Manager/Home';</script>");
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully rejected pending transactions!'); window.location='../Home';</script>");
         }
 
 
