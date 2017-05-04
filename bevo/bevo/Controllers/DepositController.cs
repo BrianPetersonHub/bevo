@@ -158,7 +158,15 @@ namespace bevo.Controllers
 
                 db.SaveChanges();
 
-                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Deposit successfull!'); window.location='../Customer/Home';</script>");
+                if (transaction.NeedsApproval == true)
+                {
+                    return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Deposit over $5000.00, pending manager approval'); window.location='../Customer/Home';</script>");
+                }
+                else
+                {
+                    return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Deposit successfull!'); window.location='../Customer/Home';</script>");
+
+                }
             }
 
             List<AccountsViewModel> allAccounts = GetAccounts();

@@ -256,9 +256,12 @@ namespace bevo.Controllers
             //initialize list and add all transactions in the user's IRA
             List<Transaction> allTransactions = new List<Transaction>();
 
-            foreach (Transaction t in user.IRAccount.Transactions.ToList())
+            if (user.IRAccount != null)
             {
-                allTransactions.Add(t);
+                foreach (Transaction t in user.IRAccount.Transactions.ToList())
+                {
+                    allTransactions.Add(t);
+                }
             }
 
             //add all checking account transactions
@@ -279,12 +282,15 @@ namespace bevo.Controllers
                 }
             }
 
-            //add all stock portfolio transactions
-            foreach (Transaction t in user.StockPortfolio.Transactions)
+            if (user.StockPortfolio != null)
             {
-                allTransactions.Add(t);
+                //add all stock portfolio transactions
+                foreach (Transaction t in user.StockPortfolio.Transactions)
+                {
+                    allTransactions.Add(t);
+                }
             }
-
+          
             return allTransactions;
         }
 

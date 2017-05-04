@@ -27,6 +27,7 @@ namespace bevo.Controllers
             ViewBag.TransactionToApprove = GetTrToApprove();
             ViewBag.UnresolvedDisputes = GetUnresolvedDisputes();
             ViewBag.AllDisputes = GetAllDisputes();
+            ViewBag.PendingTransactions = GetPendingTransactions();
 
             return View();
         }
@@ -246,7 +247,7 @@ namespace bevo.Controllers
                 }
             }
             db.SaveChanges();
-            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully approved transactions!'); window.location='../Manager/Home';</script>");
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully approved transactions!'); window.location='Home';</script>");
         }
 
         public ActionResult RejectPendingTransactions(int? id)

@@ -17,7 +17,7 @@ DONE [BP] Cannot double dispute transaction
 	- Access transaction detail pages, cannot dispute transactions
 [ ] Manager Controller:
 	- Resolved disputes show manager email on transaction detail page
-	- Write methods to Re-enable customers 
+	- DONE Write methods to Re-enable customers 
 	- DONE [AW] EditDispute method- make new viewmodel 
 [ ] *Add role authentication markers
 DONE [AW] *Publish
@@ -46,7 +46,7 @@ Test
 	DONE- Dispute --> discrepancy. do we need to add for other resolved disputes beside rejected?
 	DONE- Overdraft
 	DONE- Password
-	- Large deposit approved
+	DONE - Large deposit approved
 [ ] Accounts with negative balance cannot be used to make transfers or payments
 
 

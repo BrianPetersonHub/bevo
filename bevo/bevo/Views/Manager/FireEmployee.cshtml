@@ -10,16 +10,15 @@
     </div>
 </div>
 
-
-@using (Html.BeginForm("FireEmpoyees", "Manager", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
     <div class="row">
         <div class="form-table-container col-lg-7">
             <p>All Employees</p>
             <div class="form-display-table">
                 <table class="table">
                     <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Disabled)
+                        </th>
                         <th>
                             @Html.DisplayNameFor(model => model.FirstName)
                         </th>
@@ -35,6 +34,16 @@
                     @foreach (var item in Model)
                 {
                         <tr>
+                            @{
+                                if (item.Disabled == true)
+                                {
+                                    <td>Y</td>;
+                                }
+                                else
+                                {
+                                    <td>N</td>;
+                                }
+                            }
                             <td>
                                 @Html.DisplayFor(modelItem => item.FirstName)
                             </td>
@@ -46,21 +55,37 @@
                             </td>
                             <td>
                                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                                @Html.ActionLink("Details", "Details", new { id = item.Id }) 
                             </td>
                         </tr>
                     }
                 </table>
             </div>
         </div>
+        @using (Html.BeginForm("FireEmployee", "Manager", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+                <div class="form-container col-lg-4">
+                    <div class="form-group">
+                        <p>
+                            Select Employee to Fire @Html.DropDownList("id", (SelectList)ViewBag.SelectEmployee, new { @class = "form-control" }) <br />
+                            <input type="submit" value="Submit" class="btn btn-default color" />
+                        </p>
+                    </div>
+                </div>
+        }
 
-        <div class="form-container col-lg-4">
-            <div class="form-group">
-                <p>
-                    Select Employee to Fire @Html.DropDownList("id", (SelectList)ViewBag.SelectEmployee, new { @class = "form-control" }) <br />
-                    <input type="submit" value="Submit" class="btn btn-default color" />
-                </p>
+        @using (Html.BeginForm("PromoteEmployee", "Manager", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-container col-lg-4">
+                <div class="form-group">
+                    <p>
+                        Select Employee to Promote @Html.DropDownList("id", (SelectList)ViewBag.SelectEmployee, new { @class = "form-control" }) <br />
+                        <input type="submit" value="Submit" class="btn btn-default color" />
+                    </p>
+                </div>
             </div>
-        </div>
-    </div>
-}
+        }
+</div>
+

@@ -21,6 +21,9 @@
             <table class="table">
                 <tr>
                     <th>
+                        @Html.DisplayNameFor(model => model.Disabled)
+                    </th>
+                    <th>
                         @Html.DisplayNameFor(model => model.FirstName)
                     </th>
                     <th>
@@ -35,6 +38,16 @@
                 @foreach (var item in Model)
                 {
                     <tr>
+                        @{ 
+                            if (item.Disabled == true)
+                            {
+                                <td>Y</td>;
+                            }
+                            else
+                            {
+                                <td>N</td>;
+                            }
+                        }
                         <td>
                             @Html.DisplayFor(modelItem => item.FirstName)
                         </td>
@@ -46,7 +59,7 @@
                         </td>
                         <td>
                             @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }) 
                         </td>
                     </tr>
                 }
