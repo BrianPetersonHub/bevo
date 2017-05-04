@@ -101,7 +101,7 @@ namespace bevo.Controllers
             {
                 db.Entry(appUser).State = EntityState.Modified;
                 db.SaveChanges();
-                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: .'); window.location='../Customer/Home';</script>");
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: .'); window.location='../Manager/Home';</script>");
             }
             ViewBag.Id = new SelectList(db.IRAccounts, "IRAccountID", "AccountName", appUser.Id);
             ViewBag.Id = new SelectList(db.StockPortfolios, "StockPortfolioID", "AccountName", appUser.Id);
@@ -143,6 +143,13 @@ namespace bevo.Controllers
             base.Dispose(disposing);
         }
 
+
+
+
+
+
+
+
         //TODO: finsh this
         //Get method for seeing account initial deposit approvals
         public ActionResult ViewPendingTransactions()
@@ -151,8 +158,118 @@ namespace bevo.Controllers
             return View();
         }
 
-        [HttpPost]
         public ActionResult ApprovePendingTransactions(int? id)
+        {
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            Transaction transToChange = db.Transactions.Find(id);
+            //if (transToChange == null)
+            //{
+            //    return HttpNotFound();
+            //}
+
+            //for transfers, have to chagne two accounts balances
+            if (transToChange.TransType == TransType.Transfer || transToChange.TransType == TransType.Deposit || transToChange.TransType == TransType.Sell_Stock || transToChange.TransType == TransType.Bonus)
+            {
+                //to accounts
+                if (GetAccountType(transToChange.ToAccount) == "CHECKING")
+                {
+                    var query = from account in db.CheckingAccounts
+                                where account.AccountNum == transToChange.ToAccount
+                                select account.CheckingAccountID;
+                    //gets first (only) thing from query list
+                    Int32 accountID = query.First();
+                    CheckingAccount a = db.CheckingAccounts.Find(accountID);
+                    a.Balance = a.Balance + transToChange.Amount;
+                }
+
+                else if (GetAccountType(transToChange.ToAccount) == "SAVING")
+                {
+                    var query = from account in db.SavingAccounts
+                                where account.AccountNum == transToChange.ToAccount
+                                select account.SavingAccountID;
+                    //gets first (only) thing from query list
+                    Int32 accountID = query.First();
+                    SavingAccount a = db.SavingAccounts.Find(accountID);
+                    a.Balance = a.Balance + transToChange.Amount;
+                }
+
+                else if (GetAccountType(transToChange.ToAccount) == "IRA")
+                {
+                    var query = from account in db.IRAccounts
+                                where account.AccountNum == transToChange.ToAccount
+                                select account.IRAccountID;
+                    //gets first (only) thing from query list
+                    String accountID = query.First();
+                    IRAccount a = db.IRAccounts.Find(accountID);
+                    a.Balance = a.Balance + transToChange.Amount;
+                }
+
+                else if (GetAccountType(transToChange.ToAccount) == "STOCKPORTFOLIO")
+                {
+                    var query = from account in db.StockPortfolios
+                                where account.AccountNum == transToChange.ToAccount
+                                select account.StockPortfolioID;
+                    //gets first (only) thing from query list
+                    String accountID = query.First();
+                    StockPortfolio a = db.StockPortfolios.Find(accountID);
+                    a.Balance = a.Balance + transToChange.Amount;
+                }
+            }
+            else
+            {
+                //from accounts
+                if (GetAccountType(transToChange.FromAccount) == "CHECKING")
+                {
+                    var query = from account in db.CheckingAccounts
+                                where account.AccountNum == transToChange.FromAccount
+                                select account.CheckingAccountID;
+                    //gets first (only) thing from query list
+                    Int32 accountID = query.First();
+                    CheckingAccount a = db.CheckingAccounts.Find(accountID);
+                    a.Balance = a.Balance - transToChange.Amount;
+                }
+
+                else if (GetAccountType(transToChange.FromAccount) == "SAVING")
+                {
+                    var query = from account in db.SavingAccounts
+                                where account.AccountNum == transToChange.FromAccount
+                                select account.SavingAccountID;
+                    //gets first (only) thing from query list
+                    Int32 accountID = query.First();
+                    SavingAccount a = db.SavingAccounts.Find(accountID);
+                    a.Balance = a.Balance - transToChange.Amount;
+                }
+
+                else if (GetAccountType(transToChange.FromAccount) == "IRA")
+                {
+                    var query = from account in db.IRAccounts
+                                where account.AccountNum == transToChange.FromAccount
+                                select account.IRAccountID;
+                    //gets first (only) thing from query list
+                    String accountID = query.First();
+                    IRAccount a = db.IRAccounts.Find(accountID);
+                    a.Balance = a.Balance - transToChange.Amount;
+                }
+
+                else if (GetAccountType(transToChange.FromAccount) == "STOCKPORTFOLIO")
+                {
+                    var query = from account in db.StockPortfolios
+                                where account.AccountNum == transToChange.FromAccount
+                                select account.StockPortfolioID;
+                    //gets first (only) thing from query list
+                    String accountID = query.First();
+                    StockPortfolio a = db.StockPortfolios.Find(accountID);
+                    a.Balance = a.Balance - transToChange.Amount;
+                }
+            }
+            db.SaveChanges();
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully approved transactions!'); window.location='../Manager/Home';</script>");
+        }
+
+        public ActionResult RejectPendingTransactions(int? id)
         {
             if (id == null)
             {
@@ -163,54 +280,160 @@ namespace bevo.Controllers
             {
                 return HttpNotFound();
             }
-            return View(transaction);
+
+            String accountType = GetAccountType(transaction.ToAccount);
+
+            AppUser user = new AppUser();
+            if (GetAccountType(transaction.ToAccount) == "CHECKING" || GetAccountType(transaction.FromAccount) == "CHECKING")
+            {
+                var query = from account in db.CheckingAccounts
+                            where account.AccountNum == transaction.ToAccount || account.AccountNum == transaction.FromAccount
+                            select account.CheckingAccountID;
+                //gets first (only) thing from query list
+                Int32 accountID = query.First();
+                CheckingAccount a = db.CheckingAccounts.Find(accountID);
+                user = a.AppUser;
+            }
+            if (GetAccountType(transaction.ToAccount) == "SAVING" || GetAccountType(transaction.FromAccount) == "SAVING")
+            {
+                var query = from account in db.SavingAccounts
+                            where account.AccountNum == transaction.ToAccount || account.AccountNum == transaction.FromAccount
+                            select account.SavingAccountID;
+                //gets first (only) thing from query list
+                Int32 accountID = query.First();
+                SavingAccount a = db.SavingAccounts.Find(accountID);
+                user = a.AppUser;
+            }
+            else if (GetAccountType(transaction.ToAccount) == "IRA" || GetAccountType(transaction.FromAccount) == "IRA")
+            {
+                var query = from account in db.IRAccounts
+                            where account.AccountNum == transaction.ToAccount || account.AccountNum == transaction.FromAccount
+                            select account.IRAccountID;
+                //gets first (only) thing from query list
+                String accountID = query.First();
+                IRAccount a = db.IRAccounts.Find(accountID);
+                user = a.AppUser;
+            }
+            else if (GetAccountType(transaction.ToAccount) == "STOCKPORTFOLIO" || GetAccountType(transaction.FromAccount) == "STOCKPORTFOLIO")
+            {
+                var query = from account in db.StockPortfolios
+                            where account.AccountNum == transaction.ToAccount || account.AccountNum == transaction.FromAccount
+                            select account.StockPortfolioID;
+                //gets first (only) thing from query list
+                String accountID = query.First();
+                StockPortfolio a = db.StockPortfolios.Find(accountID);
+                user = a.AppUser;
+            }
+
+            db.SaveChanges();
+            //Send an email to the user in question 
+            String bodyForEmail = null;
+
+            bodyForEmail = "Your pending transaction, transaction number " + transaction.TransactionID + ", has been rejected.";
+
+            bevo.Messaging.EmailMessaging.SendEmail(user.Email, "Dispute Rejected", bodyForEmail);
+
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully rejected pending transactions!'); window.location='../Manager/Home';</script>");
         }
 
-        public List<Transaction> GetPendingTransactions()
+
+        public List<TransViewModel> GetPendingTransactions()
         {
-            List<Transaction> transactions = new List<Transaction>();
+            List<TransViewModel> tvms = new List<TransViewModel>();
             foreach (CheckingAccount a in db.CheckingAccounts)
             {
+                AppUser user = a.AppUser;
                 foreach (Transaction t in a.Transactions)
                 {
                     if (t.NeedsApproval == true)
                     {
-                        transactions.Add(t);
+                        TransViewModel tvm = new TransViewModel();
+                        tvm.TransactionID = t.TransactionID;
+                        tvm.TransactionNum = t.TransactionNum;
+                        tvm.TransType = t.TransType;
+                        tvm.Amount = t.Amount;
+                        tvm.toAccount = t.ToAccount;
+                        tvm.fromAccount = t.FromAccount;
+                        tvm.Date = t.Date;
+                        tvm.Description = t.Description;
+                        tvm.FirstName = user.FirstName;
+                        tvm.LastName = user.LastName;
+
+                        tvms.Add(tvm);
                     }
                 }
             }
             foreach (SavingAccount a in db.SavingAccounts)
             {
+                AppUser user = a.AppUser;
                 foreach (Transaction t in a.Transactions)
                 {
                     if (t.NeedsApproval == true)
                     {
-                        transactions.Add(t);
+                        TransViewModel tvm = new TransViewModel();
+                        tvm.TransactionID = t.TransactionID;
+                        tvm.TransactionNum = t.TransactionNum;
+                        tvm.TransType = t.TransType;
+                        tvm.Amount = t.Amount;
+                        tvm.toAccount = t.ToAccount;
+                        tvm.fromAccount = t.FromAccount;
+                        tvm.Date = t.Date;
+                        tvm.Description = t.Description;
+                        tvm.FirstName = user.FirstName;
+                        tvm.LastName = user.LastName;
+
+                        tvms.Add(tvm);
                     }
                 }
             }
             foreach (IRAccount a in db.IRAccounts)
             {
+                AppUser user = a.AppUser;
                 foreach (Transaction t in a.Transactions)
                 {
                     if (t.NeedsApproval == true)
                     {
-                        transactions.Add(t);
+                        TransViewModel tvm = new TransViewModel();
+                        tvm.TransactionID = t.TransactionID;
+                        tvm.TransactionNum = t.TransactionNum;
+                        tvm.TransType = t.TransType;
+                        tvm.Amount = t.Amount;
+                        tvm.toAccount = t.ToAccount;
+                        tvm.fromAccount = t.FromAccount;
+                        tvm.Date = t.Date;
+                        tvm.Description = t.Description;
+                        tvm.FirstName = user.FirstName;
+                        tvm.LastName = user.LastName;
+
+                        tvms.Add(tvm);
                     }
                 }
             }
             foreach (StockPortfolio a in db.StockPortfolios)
             {
+                AppUser user = a.AppUser;
                 foreach (Transaction t in a.Transactions)
                 {
                     if (t.NeedsApproval == true)
                     {
-                        transactions.Add(t);
+                        TransViewModel tvm = new TransViewModel();
+                        tvm.TransactionID = t.TransactionID;
+                        tvm.TransactionNum = t.TransactionNum;
+                        tvm.TransType = t.TransType;
+                        tvm.Amount = t.Amount;
+                        tvm.toAccount = t.ToAccount;
+                        tvm.fromAccount = t.FromAccount;
+                        tvm.Date = t.Date;
+                        tvm.Description = t.Description;
+                        tvm.FirstName = user.FirstName;
+                        tvm.LastName = user.LastName;
+
+                        tvms.Add(tvm);
                     }
                 }
             }
 
-            return transactions;
+            return tvms;
         }
 
 
@@ -244,7 +467,7 @@ namespace bevo.Controllers
             db.Entry(userInQuestion).State = EntityState.Modified;
             db.SaveChanges();
 
-            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully promoted employee!'); window.location='../Customer/Home';</script>");
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully promoted employee!'); window.location='../Manager/Home';</script>");
         }
 
 
@@ -278,7 +501,7 @@ namespace bevo.Controllers
             db.Entry(userInQuestion).State = EntityState.Modified;
             db.SaveChanges();
 
-            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully terminated employee!'); window.location='../Customer/Home';</script>");
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully terminated employee!'); window.location='../Manager/Home';</script>");
         }
 
         //Make a method to get a list of all the customers and puts it in the viewbag for the freeze customer view
@@ -311,178 +534,44 @@ namespace bevo.Controllers
             db.Entry(userInQuestion).State = EntityState.Modified;
             db.SaveChanges();
 
-            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully froze customer account!'); window.location='../Customer/Home';</script>");
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully froze customer account!'); window.location='../Manager/Home';</script>");
         }
 
-
-
-
-
-        public ActionResult ProcessBalancedPortfolios()
+        public ActionResult ReactivateCustomer()
         {
-            List<StockPortfolio> stockPortfolios = GetStockPortfolios();
-            foreach (var sp in stockPortfolios)
-            {
-                if (BalanceCheck(sp) == true)
-                {
-                    Decimal value = sp.Balance;
-                    //add bonus transaction 
-                    foreach (StockDetail sd in sp.StockDetails)
-                    {
-                        //get current price of stock
-                        StockQuote quote = GetQuote.GetStock(sd.Stock.StockTicker);
-                        value = value + (quote.LastTradePrice * sd.Quantity);
-                    }
-                    foreach (Transaction trans in sp.Transactions)
-                    {
-                        if (trans.TransType == TransType.Fee)
-                        {
-                            value = value - trans.Amount;
-                        }
-                    }
-
-                    //make new bonus transaction
-                    Transaction t = new Transaction();
-                    t.TransType = TransType.Bonus;
-                    t.Amount = value * .1m;
-                    t.Date = DateTime.Today;
-                    t.ToAccount = sp.AccountNum;
-                    t.Description = "Balanced Portfolio Bonus";
-                    db.Transactions.Add(t);
-
-                    var query = from a in db.StockPortfolios
-                                where a.AccountNum == t.ToAccount
-                                select a.StockPortfolioID;
-                    //gets first (only) thing from query list
-                    String accountID = query.First();
-                    StockPortfolio account = db.StockPortfolios.Find(accountID);
-                    account.Transactions.Add(t);
-                    account.Balance = account.Balance + t.Amount;
-                }
-            }
-            //ViewBag.TotalBonuses
-            db.SaveChanges();
-            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully added bonuses to Customers with balanced stock portfolios!'); window.location='../Manager/Home';</script>");
-        }
-
-        public ActionResult CreateStock()
-        {
-            return View();
+            ViewBag.SelectCustomers = SelectDisabledCustomer();
+            ViewBag.AllCustomers = GetDisabledCustomers();
+            List<AppUser> customers = GetDisabledCustomers();
+            return View(customers);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "StockName,StockTicker,TypeOfStock,FeeAmount")] Stock stock)
-        {
-            if (ModelState.IsValid)
-            {
-                List<Stock> stocks = db.Stocks.ToList();
-                foreach (Stock s in stocks)
-                {
-                    if (s.StockTicker == stock.StockTicker)
-                    {
-                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot add two of the same stock tickers'); window.location='../Manager/Home';</script>");
-                    }
-                }
-
-                db.Stocks.Add(stock);
-                db.SaveChanges();
-                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully added a new stock!'); window.location='../Manager/Home';</script>");
-            }
-            return View(stock);
-        }
-
-        //Get a list of all transactions 
-        public List<Transaction> GetTrMasterList()
+        public ActionResult ReactivateCustomer(String id)
         {
             AppDbContext db = new AppDbContext();
 
-            List<Transaction> returnList = db.Transactions.ToList();
+            //Get the user we want 
+            var query = from user in db.Users
+                        select user;
+            query = query.Where(user => user.Id == id);
+            List<AppUser> queryList = query.ToList();
+            AppUser userInQuestion = queryList[0];
 
-            return returnList;
+            //change the user's disabled variable to true 
+            userInQuestion.Disabled = false;
+
+            //Save Changes
+            db.Entry(userInQuestion).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully reactivated customer account!'); window.location='../Manager/Home';</script>");
+
         }
 
-        //Get a list of all transactions requiring manager approval
-        public List<Transaction> GetTrToApprove()
-        {
-            AppDbContext db = new AppDbContext();
-
-            List<Transaction> returnList = new List<Transaction>();
-            var query = from t in db.Transactions
-                        select t;
-            query = query.Where(t => t.NeedsApproval == true);
-            returnList = query.ToList();
-
-            return returnList;
-        }
-
-        public ActionResult CurrentDisputes()
-        {
-            List<DisputeViewModel> currentDisputes = GetUnresolvedDisputes();
-            return View(currentDisputes);
-        }
-
-        public List<DisputeViewModel> GetUnresolvedDisputes()
-        {
-            AppDbContext db = new AppDbContext();
-
-            List<Dispute> disputeList = new List<Dispute>();
-            var query = from d in db.Disputes
-                        select d;
-            query = query.Where(d => d.DisputeStatus == DisputeStatus.Submitted);
-            disputeList = query.ToList();
-
-            List<DisputeViewModel> dvmList = new List<DisputeViewModel>();
-            foreach (Dispute d in disputeList)
-            {
-                DisputeViewModel dvm = new DisputeViewModel();
-                dvm.CorrectAmount = d.DisputedAmount;
-                dvm.FirstName = d.AppUser.FirstName;
-                dvm.LastName = d.AppUser.LastName;
-                dvm.TransAmount = d.Transaction.Amount;
-                dvm.Message = d.Message;
-                dvm.CustEmail = d.AppUser.Email;
-                dvm.TransName = d.Transaction.TransactionID;
-                dvm.DisputeID = d.DisputeID;
-                dvm.Status = DisputeStatus.Submitted;
-                dvmList.Add(dvm);
-            }
 
 
-            return dvmList;
-        }
 
-        public ActionResult AllDisputes()
-        {
-            List<DisputeViewModel> allDisputes = GetAllDisputes();
-            return View(allDisputes);
-        }
-
-        public List<DisputeViewModel> GetAllDisputes()
-        {
-            AppDbContext db = new AppDbContext();
-
-            List<Dispute> disputeList = db.Disputes.ToList();
-
-            List<DisputeViewModel> dvmList = new List<DisputeViewModel>();
-            foreach (Dispute d in disputeList)
-            {
-                DisputeViewModel dvm = new DisputeViewModel();
-                dvm.CorrectAmount = d.DisputedAmount;
-                dvm.FirstName = d.AppUser.FirstName;
-                dvm.LastName = d.AppUser.LastName;
-                dvm.TransAmount = d.Transaction.Amount;
-                dvm.Message = d.Message;
-                dvm.CustEmail = d.AppUser.Email;
-                dvm.TransName = d.Transaction.TransactionID;
-                dvm.DisputeID = d.DisputeID;
-                dvm.Status = d.DisputeStatus;
-
-                dvmList.Add(dvm);
-            }
-
-            return dvmList;
-        }
 
         //Make a get method for editing the dispute
         //The view for this method should be bound to the disputeviewmodel class 
@@ -602,6 +691,7 @@ namespace bevo.Controllers
                             //gets first (only) thing from query list
                             String accountID = query.First();
                             IRAccount a = db.IRAccounts.Find(accountID);
+                            a.Balance = a.Balance + dvm.CorrectAmount - transToChange.Amount;
                         }
 
                         else if (GetAccountType(transToChange.ToAccount) == "STOCKPORTFOLIO")
@@ -612,6 +702,7 @@ namespace bevo.Controllers
                             //gets first (only) thing from query list
                             String accountID = query.First();
                             StockPortfolio a = db.StockPortfolios.Find(accountID);
+                            a.Balance = a.Balance + dvm.CorrectAmount - transToChange.Amount;
                         }
                     }
                     else
@@ -748,10 +839,184 @@ namespace bevo.Controllers
             return View(edvm);
         }
 
+        public ActionResult ProcessBalancedPortfolios()
+        {
+            List<StockPortfolio> stockPortfolios = GetStockPortfolios();
+            foreach (var sp in stockPortfolios)
+            {
+                if (BalanceCheck(sp) == true)
+                {
+                    Decimal value = sp.Balance;
+                    //add bonus transaction 
+                    foreach (StockDetail sd in sp.StockDetails)
+                    {
+                        //get current price of stock
+                        StockQuote quote = GetQuote.GetStock(sd.Stock.StockTicker);
+                        value = value + (quote.LastTradePrice * sd.Quantity);
+                    }
+                    foreach (Transaction trans in sp.Transactions)
+                    {
+                        if (trans.TransType == TransType.Fee)
+                        {
+                            value = value - trans.Amount;
+                        }
+                    }
+
+                    //make new bonus transaction
+                    Transaction t = new Transaction();
+                    t.TransType = TransType.Bonus;
+                    t.Amount = value * .1m;
+                    t.Date = DateTime.Today;
+                    t.ToAccount = sp.AccountNum;
+                    t.Description = "Balanced Portfolio Bonus";
+                    db.Transactions.Add(t);
+
+                    var query = from a in db.StockPortfolios
+                                where a.AccountNum == t.ToAccount
+                                select a.StockPortfolioID;
+                    //gets first (only) thing from query list
+                    String accountID = query.First();
+                    StockPortfolio account = db.StockPortfolios.Find(accountID);
+                    account.Transactions.Add(t);
+                    account.Balance = account.Balance + t.Amount;
+                }
+            }
+            //ViewBag.TotalBonuses
+            db.SaveChanges();
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully added bonuses to Customers with balanced stock portfolios!'); window.location='../Manager/Home';</script>");
+        }
+
+        public ActionResult CreateStock()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "StockName,StockTicker,TypeOfStock,FeeAmount")] Stock stock)
+        {
+            if (ModelState.IsValid)
+            {
+                List<Stock> stocks = db.Stocks.ToList();
+                foreach (Stock s in stocks)
+                {
+                    if (s.StockTicker == stock.StockTicker)
+                    {
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot add two of the same stock tickers'); window.location='../Manager/Home';</script>");
+                    }
+                }
+
+                db.Stocks.Add(stock);
+                db.SaveChanges();
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully added a new stock!'); window.location='../Manager/Home';</script>");
+            }
+            return View(stock);
+        }
 
 
 
 
+
+
+
+
+
+
+
+
+
+        //Get a list of all transactions 
+        public List<Transaction> GetTrMasterList()
+        {
+            AppDbContext db = new AppDbContext();
+
+            List<Transaction> returnList = db.Transactions.ToList();
+
+            return returnList;
+        }
+
+        //Get a list of all transactions requiring manager approval
+        public List<Transaction> GetTrToApprove()
+        {
+            AppDbContext db = new AppDbContext();
+
+            List<Transaction> returnList = new List<Transaction>();
+            var query = from t in db.Transactions
+                        select t;
+            query = query.Where(t => t.NeedsApproval == true);
+            returnList = query.ToList();
+
+            return returnList;
+        }
+
+        public ActionResult CurrentDisputes()
+        {
+            List<DisputeViewModel> currentDisputes = GetUnresolvedDisputes();
+            return View(currentDisputes);
+        }
+
+        public List<DisputeViewModel> GetUnresolvedDisputes()
+        {
+            AppDbContext db = new AppDbContext();
+
+            List<Dispute> disputeList = new List<Dispute>();
+            var query = from d in db.Disputes
+                        select d;
+            query = query.Where(d => d.DisputeStatus == DisputeStatus.Submitted);
+            disputeList = query.ToList();
+
+            List<DisputeViewModel> dvmList = new List<DisputeViewModel>();
+            foreach (Dispute d in disputeList)
+            {
+                DisputeViewModel dvm = new DisputeViewModel();
+                dvm.CorrectAmount = d.DisputedAmount;
+                dvm.FirstName = d.AppUser.FirstName;
+                dvm.LastName = d.AppUser.LastName;
+                dvm.TransAmount = d.Transaction.Amount;
+                dvm.Message = d.Message;
+                dvm.CustEmail = d.AppUser.Email;
+                dvm.TransName = d.Transaction.TransactionID;
+                dvm.DisputeID = d.DisputeID;
+                dvm.Status = DisputeStatus.Submitted;
+                dvmList.Add(dvm);
+            }
+
+
+            return dvmList;
+        }
+
+        public ActionResult AllDisputes()
+        {
+            List<DisputeViewModel> allDisputes = GetAllDisputes();
+            return View(allDisputes);
+        }
+
+        public List<DisputeViewModel> GetAllDisputes()
+        {
+            AppDbContext db = new AppDbContext();
+
+            List<Dispute> disputeList = db.Disputes.ToList();
+
+            List<DisputeViewModel> dvmList = new List<DisputeViewModel>();
+            foreach (Dispute d in disputeList)
+            {
+                DisputeViewModel dvm = new DisputeViewModel();
+                dvm.CorrectAmount = d.DisputedAmount;
+                dvm.FirstName = d.AppUser.FirstName;
+                dvm.LastName = d.AppUser.LastName;
+                dvm.TransAmount = d.Transaction.Amount;
+                dvm.Message = d.Message;
+                dvm.CustEmail = d.AppUser.Email;
+                dvm.TransName = d.Transaction.TransactionID;
+                dvm.DisputeID = d.DisputeID;
+                dvm.Status = d.DisputeStatus;
+
+                dvmList.Add(dvm);
+            }
+
+            return dvmList;
+        }
+                
 
         //get a list of all the user objects for employees 
         public List<AppUser> GetEmployees()
@@ -810,9 +1075,31 @@ namespace bevo.Controllers
             return selectCustomer;
         }
 
+        public List<AppUser> GetDisabledCustomers()
+        {
+            AppDbContext db = new AppDbContext();
+
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+            List<AppUser> customerList = new List<AppUser>();
+
+            foreach (AppUser user in db.Users)
+            {
+                if (userManager.GetRoles(user.Id).Contains("Customer") && user.Disabled == true)
+                {
+                    customerList.Add(user);
+                }
+            }
 
 
+            return customerList;
+        }
 
+        public SelectList SelectDisabledCustomer()
+        {
+            List<AppUser> customers = GetDisabledCustomers();
+            SelectList selectCustomer = new SelectList(customers, "Id", "Email");
+            return selectCustomer;
+        }
 
         //get a list of all stock portfolios
         public List<StockPortfolio> GetStockPortfolios()
@@ -867,10 +1154,9 @@ namespace bevo.Controllers
 
         public String GetAccountType(Int32? accountNum)
         {
-            AppUser user = db.Users.Find(User.Identity.GetUserId());
             String accountType;
 
-            List<CheckingAccount> checkingAccounts = user.CheckingAccounts;
+            List<CheckingAccount> checkingAccounts = db.CheckingAccounts.ToList();
             foreach (var c in checkingAccounts)
             {
                 if (accountNum == c.AccountNum)
@@ -880,7 +1166,7 @@ namespace bevo.Controllers
                 }
             }
 
-            List<SavingAccount> savingAccounts = user.SavingAccounts;
+            List<SavingAccount> savingAccounts = db.SavingAccounts.ToList();
             foreach (var s in savingAccounts)
             {
                 if (accountNum == s.AccountNum)
@@ -890,24 +1176,30 @@ namespace bevo.Controllers
                 }
             }
 
-            IRAccount iraAccount = user.IRAccount;
-            if (iraAccount != null)
+            List<IRAccount> iraAccounts = db.IRAccounts.ToList();
+            if (iraAccounts != null)
             {
-                if (accountNum == iraAccount.AccountNum)
+                foreach (var i in iraAccounts)
                 {
-                    accountType = "IRA";
-                    return accountType;
+                  if (accountNum == i.AccountNum)
+                    {
+                        accountType = "IRA";
+                        return accountType;
+                    }
                 }
             }
 
 
-            StockPortfolio stockPortfolio = user.StockPortfolio;
-            if (stockPortfolio != null)
+            List<StockPortfolio> stockPortfolios = db.StockPortfolios.ToList();
+            if (iraAccounts != null)
             {
-                if (accountNum == stockPortfolio.AccountNum)
+                foreach (var s in stockPortfolios)
                 {
-                    accountType = "STOCKPORTFOLIO";
-                    return accountType;
+                    if (accountNum == s.AccountNum)
+                    {
+                        accountType = "STOCKPORTFOLIO";
+                        return accountType;
+                    }
                 }
             }
 

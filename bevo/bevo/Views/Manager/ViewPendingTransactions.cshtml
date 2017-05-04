@@ -1,4 +1,4 @@
-﻿@model IEnumerable<bevo.Models.Transaction>
+﻿@model IEnumerable<bevo.Models.TransViewModel>
 @{
     ViewBag.Title = "pending transactions";
 }
@@ -12,13 +12,25 @@
                 Date
             </th>
             <th>
-                Transaction Type
+                First Name
+            </th>
+            <th>
+                Last Name
+            </th>
+            <th>
+                Transaction Number
+            </th>
+            <th>
+                Type
             </th>
             <th>
                 Amount
             </th>
             <th>
-                Approve
+                Description
+            </th>
+            <th>
+                Action
             </th>
 
         </tr>
@@ -29,15 +41,38 @@
                     @(t.Date.ToShortDateString())
                 </td>
                 <td>
-                    @t.TransType
+                    @(t.FirstName)
+                </td>
+                <td>
+                    @(t.LastName)
+                </td>
+                <td>
+                    @(t.TransactionNum)
+                </td>
+                <td>
+                    @(t.TransType)
                 </td>
                 <td>
                     $@t.Amount
                 </td>
                 <td>
+                    @(t.Description)
+                </td>
+                <td>
+                    @t.TransType
+                </td>
+                <td>
                     @Html.ActionLink(
-                linkText: "Dispute",
+                linkText: "Accept",
                 actionName: "ApprovePendingTransactions",
+                controllerName: "Manager",
+                routeValues: new { id = t.TransactionID },
+                htmlAttributes: null)
+                </td>
+                <td>
+                    @Html.ActionLink(
+                linkText: "Reject",
+                actionName: "RejectPendingTransactions",
                 controllerName: "Manager",
                 routeValues: new { id = t.TransactionID },
                 htmlAttributes: null)
