@@ -29,6 +29,11 @@ namespace bevo.Controllers
                 return HttpNotFound();
             }
 
+            if (transaction.Dispute != null)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Error: Cannot dispute transaction more than once.'); window.location='../../Customer/Home';</script>");
+            }
+
             DisputeTransactionViewModel d = new DisputeTransactionViewModel();
             d.TransactionID = Convert.ToInt32(id);
 
@@ -40,6 +45,7 @@ namespace bevo.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Message,DisputedAmount,TransactionID")] DisputeTransactionViewModel dt)
         {
+
             UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
             var user = userManager.FindById(User.Identity.GetUserId());
 
