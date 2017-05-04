@@ -290,6 +290,7 @@ namespace bevo.Controllers
             foreach (Stock s in stocksList)
             {
                 AvailableStock avail = new AvailableStock();
+                avail.StockID = s.StockID;
                 avail.Type = s.TypeOfStock;
                 avail.Name = s.StockName;
                 avail.Ticker = s.StockTicker;

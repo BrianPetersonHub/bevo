@@ -40,7 +40,8 @@ namespace bevo.Models
 
     //Used when displaying information about a POTENTIALLY PURCHASABLE stock
     public class AvailableStock
-    {
+    {   
+        public Int32? StockID { get; set; }
         public StockType Type { get; set; }
         public String Name { get; set; }
         public String Ticker { get; set; }
