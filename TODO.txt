@@ -4,6 +4,7 @@ DONE [BP] Update balance of accounts after dispute is accepted/rejected/adjusted
 DONE (huge number for annatwo sp value bc of those mis calculations earlier) [BP] Update portfolio balance after process stock portfolio
 DONE [BP] Cannot double dispute transaction
 [JA] Customer inactive state, can only use GET methods 
+[JA] Employee: can't do anything when they're fired
 [BP] Transfer: Customer has option to add $30 service fee to withdrawal amount or have total amount entered include the fee
 [BP] Initial deposits, opeing accounts > $5000 approved by manager before being added to customer account
 [BP] Get pending transactions (awaiting approval)
@@ -15,12 +16,13 @@ DONE [BP] Cannot double dispute transaction
 	- Enable/Disable customer accounts
 	- Transaction Search
 	- Access transaction detail pages, cannot dispute transactions
-[ ] Manager Controller:
+[JA] Manager Controller:
 	- Resolved disputes show manager email on transaction detail page
 	- Write methods to Re-enable customers 
 	- DONE [AW] EditDispute method- make new viewmodel 
 [ ] *Add role authentication markers
 DONE [AW] *Publish
+[JA] Customers can only purchase stocks once their account has been approved by a manager 
 
 
 Views - 

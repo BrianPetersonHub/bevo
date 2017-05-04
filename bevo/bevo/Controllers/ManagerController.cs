@@ -1031,6 +1031,30 @@ namespace bevo.Controllers
             return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully changed employee password!'); window.location='../Manager/Home';</script>");
         }
 
+        //Approve a stock portfolio for trading 
+        public ActionResult ApprovePortfolio()
+        {
+            ViewBag.PortfoliosToApprove = GetStockPortfolios();
+            ViewBag.SelectPortfolios = MultiSelectStockPortfolios();
+
+            return View();
+        }
+        //Post Method for approving portfolios
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ApprovePortfolio(String[] selectedPortfolios)
+        {
+            foreach(String p in selectedPortfolios)
+            {
+                StockPortfolio portfolioInQuestion = db.StockPortfolios.Find(p);
+                portfolioInQuestion.Disabled = true;
+
+                db.SaveChanges();
+            }
+
+            return View();
+        }
+
 
 
 
@@ -1359,6 +1383,29 @@ namespace bevo.Controllers
             }
 
             return listToReturn;
+        }
+
+        public List<StockPortfolio> PortfoliosToApprove()
+        {
+            List<StockPortfolio> returnList = db.StockPortfolios.Where(s => s.Disabled == true).ToList();
+
+            return returnList;
+        }
+
+        public MultiSelectList MultiSelectStockPortfolios()
+        {
+            List<StockPortfolio> portfolios = PortfoliosToApprove();
+
+            List<String> selectPortfolios = new List<String>();
+
+            foreach (StockPortfolio p in portfolios)
+            {
+                selectPortfolios.Add(p.StockPortfolioID);
+            }
+
+            MultiSelectList selectPortfolioList = new MultiSelectList(portfolios, "StockPortfolioID", "AccountName", selectPortfolios);
+
+            return selectPortfolioList;
         }
 
     }
