@@ -213,6 +213,7 @@ namespace bevo.Controllers
             return transactions;
         }
 
+
         //Get method for chanign employee to a manager 
         public ActionResult PromoteEmployee()
         {
@@ -684,8 +685,12 @@ namespace bevo.Controllers
                     {
                         disToChange.Message = disToChange.Message + "\n" + comment;
                     }
+                    else
+                    {
+                        disToChange.Message = comment;
+                    }
                     transToChange.Amount = (decimal)adjustedAmount;
-                    transToChange.Description = "Dispute [Accepted] " + transToChange.Description + comment;
+                    transToChange.Description = "Dispute [Adjusted] " + transToChange.Description + comment;
                     disToChange.ManResolvedEmail = user.Email;
 
                     db.Entry(disToChange).State = EntityState.Modified;

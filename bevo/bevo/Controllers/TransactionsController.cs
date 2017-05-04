@@ -232,7 +232,12 @@ namespace bevo.Controllers
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             //initialize list and add all transactions in the user's IRA
-            List<Transaction> allTransactions = user.IRAccount.Transactions.ToList();
+            List<Transaction> allTransactions = new List<Transaction>();
+
+            foreach (Transaction t in user.IRAccount.Transactions.ToList())
+            {
+                allTransactions.Add(t);
+            }
 
             //add all checking account transactions
             foreach (CheckingAccount c in user.CheckingAccounts)
