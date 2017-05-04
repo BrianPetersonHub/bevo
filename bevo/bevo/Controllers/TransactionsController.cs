@@ -102,9 +102,37 @@ namespace bevo.Controllers
             {
                 foreach (SelectListItem type in transTypeList)
                 {
-                    if (transTypeList.IndexOf(type) == selectedTransType)
+                    if (selectedTransType == 0)
                     {
-                        query = query.Where(t => t.TransType.Equals(type));
+                        query = query.Where(t => t.TransType == TransType.Deposit);
+                    }
+                    else if(selectedTransType == 1)
+                    {
+                        query = query.Where(t => t.TransType == TransType.Withdrawal);
+                    }
+                    else if (selectedTransType == 2)
+                    {
+                        query = query.Where(t => t.TransType == TransType.Transfer);
+                    }
+                    else if (selectedTransType == 3)
+                    {
+                        query = query.Where(t => t.TransType == TransType.Purchase_Stock);
+                    }
+                    else if (selectedTransType == 4)
+                    {
+                        query = query.Where(t => t.TransType == TransType.Sell_Stock);
+                    }
+                    else if (selectedTransType == 5)
+                    {
+                        query = query.Where(t => t.TransType == TransType.Pay_Payee);
+                    }
+                    else if (selectedTransType == 6)
+                    {
+                        query = query.Where(t => t.TransType == TransType.Fee);
+                    }
+                    else if (selectedTransType == 7)
+                    {
+                        query = query.Where(t => t.TransType == TransType.Bonus);
                     }
                 }
             }
@@ -170,7 +198,11 @@ namespace bevo.Controllers
 
             //TODO: query orderby
 
-            List<Transaction> SelectedTransactions = query.ToList();
+            List<Transaction> SelectedTransactions = new List<Models.Transaction>();
+            foreach(Transaction t in query)
+            {
+                SelectedTransactions.Add(t);
+            }
             ViewBag.TransTypeSelectList = GetAllTransTypesSL();
             return View("SearchResults", SelectedTransactions);
 
@@ -200,7 +232,7 @@ namespace bevo.Controllers
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             //initialize list and add all transactions in the user's IRA
-            List<Transaction> allTransactions = user.IRAccount.Transactions;
+            List<Transaction> allTransactions = user.IRAccount.Transactions.ToList();
 
             //add all checking account transactions
             foreach (CheckingAccount c in user.CheckingAccounts)
