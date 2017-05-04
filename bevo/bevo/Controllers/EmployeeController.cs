@@ -107,6 +107,7 @@ namespace bevo.Controllers
         public ActionResult FreezeCustomer()
         {
             ViewBag.AllCustomers = GetCustomers();
+            ViewBag.SelectCustomer = SelectCustomer();
             return View();
         }
 
@@ -131,12 +132,40 @@ namespace bevo.Controllers
             db.Entry(userInQuestion).State = EntityState.Modified;
             db.SaveChanges();
 
-            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully froze customer account!'); window.location='../Customer/Home';</script>");
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully froze customer account!'); window.location='../Employee/Home';</script>");
         }
 
+        //Go to the view for selecting which customer you want to change the password for 
         public ActionResult ChangeCustomerPassword()
         {
-            ViewBag.AllCustomers
+            ViewBag.AllCustomers = GetCustomers();
+            ViewBag.SelectCustomer = SelectCustomer();
+
+            return View();
+        }
+
+        //Post method for changing a customer's password 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeCustomerPassword(String id, String newPassword)
+        {
+            AppDbContext db = new AppDbContext();
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+
+            //Get the user we want 
+            var query = from user in db.Users
+                        select user;
+            query = query.Where(user => user.Id == id);
+            List<AppUser> queryList = query.ToList();
+            AppUser userInQuestion = queryList[0];
+
+            String resetToken = userManager.GeneratePasswordResetToken(id);
+            userManager.ResetPassword(id, resetToken, newPassword);
+
+            db.Entry(userInQuestion).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully changed customer password!'); window.location='../Employee/Home';</script>");
         }
 
 
