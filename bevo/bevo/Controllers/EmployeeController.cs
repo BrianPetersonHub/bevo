@@ -19,7 +19,7 @@ namespace bevo.Controllers
         // GET: Employee
         public ActionResult Index()
         {
-            var appUsers = db.AppUsers.Include(a => a.IRAccount).Include(a => a.StockPortfolio);
+            var appUsers = db.Users.Include(a => a.IRAccount).Include(a => a.StockPortfolio);
             return View(appUsers.ToList());
         }
 
@@ -30,7 +30,7 @@ namespace bevo.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AppUser appUser = db.AppUsers.Find(id);
+            AppUser appUser = db.Users.Find(id);
             if (appUser == null)
             {
                 return HttpNotFound();
@@ -55,7 +55,7 @@ namespace bevo.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.AppUsers.Add(appUser);
+                db.Users.Add(appUser);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -72,7 +72,7 @@ namespace bevo.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AppUser appUser = db.AppUsers.Find(id);
+            AppUser appUser = db.Users.Find(id);
             if (appUser == null)
             {
                 return HttpNotFound();
@@ -107,7 +107,7 @@ namespace bevo.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AppUser appUser = db.AppUsers.Find(id);
+            AppUser appUser = db.Users.Find(id);
             if (appUser == null)
             {
                 return HttpNotFound();
@@ -120,8 +120,8 @@ namespace bevo.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            AppUser appUser = db.AppUsers.Find(id);
-            db.AppUsers.Remove(appUser);
+            AppUser appUser = db.Users.Find(id);
+            db.Users.Remove(appUser);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
