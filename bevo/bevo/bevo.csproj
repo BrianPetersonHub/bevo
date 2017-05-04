@@ -267,7 +267,9 @@
     <EmbeddedResource Include="SeedData\IRAccount.csv" />
     <EmbeddedResource Include="SeedData\SavingAccount.csv" />
     <EmbeddedResource Include="SeedData\StockPortfolio.csv" />
+    <None Include="Properties\PublishProfiles\bevo-final - FTP %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\bevo-final - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\bevo-final - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\bevo-final - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
