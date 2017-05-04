@@ -76,18 +76,16 @@ namespace bevo.Controllers
         // GET: Manager/Edit/5
         public ActionResult Edit(string id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AppUser appUser = db.Users.Find(id);
-            if (appUser == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.Id = new SelectList(db.IRAccounts, "IRAccountID", "AccountName", appUser.Id);
-            ViewBag.Id = new SelectList(db.StockPortfolios, "StockPortfolioID", "AccountName", appUser.Id);
-            return View(appUser);
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            EditEmployeeViewModel eevm = new EditEmployeeViewModel();
+            eevm.City = user.City;
+            eevm.Email = user.Email;
+            eevm.PhoneNumber = user.PhoneNumber;
+            eevm.State = user.State;
+            eevm.Street = user.Street;
+            eevm.ZipCode = user.ZipCode;
+
+            return View(eevm);
         }
 
         // POST: Manager/Edit/5
@@ -95,43 +93,25 @@ namespace bevo.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Enabled,FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Active,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName")] AppUser appUser)
+        public ActionResult Edit([Bind(Include = "Street,City,State,ZipCode,Email,PhoneNumber")] EditEmployeeViewModel eevm)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(appUser).State = EntityState.Modified;
+                //Get the db record for the user who is logged in 
+                AppUser user = db.Users.Find(User.Identity.GetUserId());
+
+                user.Street = eevm.Street;
+                user.City = eevm.City;
+                user.State = eevm.State;
+                user.ZipCode = eevm.ZipCode;
+                user.Email = eevm.Email;
+                user.PhoneNumber = eevm.PhoneNumber;
+
+                db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
-                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: .'); window.location='../Manager/Home';</script>");
+                return RedirectToAction("Index");
             }
-            ViewBag.Id = new SelectList(db.IRAccounts, "IRAccountID", "AccountName", appUser.Id);
-            ViewBag.Id = new SelectList(db.StockPortfolios, "StockPortfolioID", "AccountName", appUser.Id);
-            return View(appUser);
-        }
-
-        // GET: Manager/Delete/5
-        public ActionResult Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AppUser appUser = db.Users.Find(id);
-            if (appUser == null)
-            {
-                return HttpNotFound();
-            }
-            return View(appUser);
-        }
-
-        // POST: Manager/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
-        {
-            AppUser appUser = db.Users.Find(id);
-            db.Users.Remove(appUser);
-            db.SaveChanges();
-            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully deleted account!'); window.location='../Manager/Home';</script>");
+            return View(eevm);
         }
 
         protected override void Dispose(bool disposing)

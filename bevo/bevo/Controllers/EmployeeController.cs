@@ -275,7 +275,7 @@ namespace bevo.Controllers
             return customerList;
         }
 
-        public SelectList SelectDisabledCustomer()
+        public IEnumerable<SelectListItem> SelectDisabledCustomer()
         {
             List<AppUser> customers = GetDisabledCustomers();
             SelectList selectCustomer = new SelectList(customers, "Id", "Email");
@@ -312,7 +312,7 @@ namespace bevo.Controllers
         }
 
         //Make a select list for all of the customeres an employee could choose 
-        public SelectList SelectCustomer()
+        public IEnumerable<SelectListItem> SelectCustomer()
         {
             List<AppUser> customers = GetCustomers();
             SelectList selectCustomer = new SelectList(customers, "Id", "Email");
