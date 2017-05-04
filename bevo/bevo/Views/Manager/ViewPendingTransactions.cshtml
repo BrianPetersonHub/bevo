@@ -1,0 +1,49 @@
+﻿@model IEnumerable<bevo.Models.Transaction>
+@{
+    ViewBag.Title = "pending transactions";
+}
+<h2>current disputes</h2>
+
+<div class="homepage-container col-lg-9">
+    <h3>List of Transactions</h3>
+    <table class="table">
+        <tr>
+            <th>
+                Date
+            </th>
+            <th>
+                Transaction Type
+            </th>
+            <th>
+                Amount
+            </th>
+            <th>
+                Approve
+            </th>
+
+        </tr>
+        @foreach (var t in ViewBag.PendingTransactions)
+            {
+            <tr>
+                <td>
+                    @(t.Date.ToShortDateString())
+                </td>
+                <td>
+                    @t.TransType
+                </td>
+                <td>
+                    $@t.Amount
+                </td>
+                <td>
+                    @Html.ActionLink(
+                linkText: "Dispute",
+                actionName: "ApprovePendingTransactions",
+                controllerName: "Manager",
+                routeValues: new { id = t.TransactionID },
+                htmlAttributes: null)
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+

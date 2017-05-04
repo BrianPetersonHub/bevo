@@ -522,6 +522,8 @@
     <Content Include="Views\Manager\AllDisputes.cshtml" />
     <Content Include="Views\Transactions\DetailedSearch.cshtml" />
     <Content Include="Views\Transactions\SearchResults.cshtml" />
+    <Content Include="Views\Manager\ViewPendingTransactions.cshtml" />
+    <Content Include="Views\Manager\ApprovePendingTransactions.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

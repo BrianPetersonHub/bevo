@@ -60,9 +60,16 @@ namespace bevo.Controllers
                     return Content("<script language'javascript' type = 'text/javascript'> alert('Error: Your starting balance must be positive.'); window.location='../StockPortfolio/Create';</script>");
                 }
 
+                if (stockPortfolio.Balance > 5000)
+                {
+                    t.NeedsApproval = true;
+                    stockPortfolio.Balance = 0;
+                }
+
                 stockPortfolio.Transactions = new List<Transaction>();
                 stockPortfolio.Transactions.Add(t);
                 user.StockPortfolio = stockPortfolio;
+
                 db.SaveChanges();
                 return RedirectToAction("Home", "Customer");
             }

@@ -143,8 +143,75 @@ namespace bevo.Controllers
             base.Dispose(disposing);
         }
 
+        //TODO: finsh this
         //Get method for seeing account initial deposit approvals
+        public ActionResult ViewPendingTransactions()
+        {
+            ViewBag.PendingTransactions = GetPendingTransactions();
+            return View();
+        }
 
+        [HttpPost]
+        public ActionResult ApprovePendingTransactions(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Transaction transaction = db.Transactions.Find(id);
+            if (transaction == null)
+            {
+                return HttpNotFound();
+            }
+            return View(transaction);
+        }
+
+        public List<Transaction> GetPendingTransactions()
+        {
+            List<Transaction> transactions = new List<Transaction>();
+            foreach (CheckingAccount a in db.CheckingAccounts)
+            {
+                foreach (Transaction t in a.Transactions)
+                {
+                    if (t.NeedsApproval == true)
+                    {
+                        transactions.Add(t);
+                    }
+                }
+            }
+            foreach (SavingAccount a in db.SavingAccounts)
+            {
+                foreach (Transaction t in a.Transactions)
+                {
+                    if (t.NeedsApproval == true)
+                    {
+                        transactions.Add(t);
+                    }
+                }
+            }
+            foreach (IRAccount a in db.IRAccounts)
+            {
+                foreach (Transaction t in a.Transactions)
+                {
+                    if (t.NeedsApproval == true)
+                    {
+                        transactions.Add(t);
+                    }
+                }
+            }
+            foreach (StockPortfolio a in db.StockPortfolios)
+            {
+                foreach (Transaction t in a.Transactions)
+                {
+                    if (t.NeedsApproval == true)
+                    {
+                        transactions.Add(t);
+                    }
+                }
+            }
+
+            return transactions;
+        }
 
         //Get method for chanign employee to a manager 
         public ActionResult PromoteEmployee()
