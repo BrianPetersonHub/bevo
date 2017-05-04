@@ -22,7 +22,63 @@ namespace bevo.Controllers
             List<AccountsViewModel> allAccounts = GetAccounts();
             SelectList selectAccounts = new SelectList(allAccounts.OrderBy(q => q.AccountName), "AccountNum", "AccountName");
             ViewBag.allAccounts = selectAccounts;
+            ViewBag.listAccounts = GetListAccounts();
             return View();
+        }
+
+        public List<AccountsViewModel> GetListAccounts()
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            List<AccountsViewModel> allAccounts = new List<AccountsViewModel>();
+            if (user.CheckingAccounts != null)
+            {
+                List<CheckingAccount> checkingAccounts = user.CheckingAccounts.ToList<CheckingAccount>();
+                // get checkings
+                foreach (var c in checkingAccounts)
+                {
+                    AccountsViewModel accountToAdd = new AccountsViewModel();
+                    accountToAdd.AccountNum = c.AccountNum;
+                    accountToAdd.AccountName = c.AccountName;
+                    accountToAdd.Balance = c.Balance;
+                    allAccounts.Add(accountToAdd);
+                }
+            }
+
+            if (user.IRAccount != null)
+            {
+                IRAccount i = user.IRAccount;
+                // get checkings
+                AccountsViewModel accountToAdd = new AccountsViewModel();
+                accountToAdd.AccountNum = i.AccountNum;
+                accountToAdd.AccountName = i.AccountName;
+                accountToAdd.Balance = i.Balance;
+                allAccounts.Add(accountToAdd); 
+            }
+
+            if (user.SavingAccounts != null)
+            {
+                List<SavingAccount> savingAccounts = user.SavingAccounts.ToList<SavingAccount>();
+                // get savings
+                foreach (var s in savingAccounts)
+                {
+                    AccountsViewModel accountToAdd = new AccountsViewModel();
+                    accountToAdd.AccountNum = s.AccountNum;
+                    accountToAdd.AccountName = s.AccountName;
+                    accountToAdd.Balance = s.Balance;
+                    allAccounts.Add(accountToAdd);
+                }
+            }
+            if (user.StockPortfolio != null)
+            {
+                StockPortfolio stockPortfolio = user.StockPortfolio;
+                // get cash portion stock portfolio
+                AccountsViewModel p = new AccountsViewModel();
+                p.AccountNum = stockPortfolio.AccountNum;
+                p.AccountName = stockPortfolio.AccountName;
+                p.Balance = stockPortfolio.Balance;
+                allAccounts.Add(p);
+            }
+            return allAccounts;
         }
 
         //POST: Create/Transfer
@@ -386,6 +442,7 @@ namespace bevo.Controllers
 
         public ActionResult CreateAutoCorrect()
         {
+            ViewBag.listAccounts = GetListAccounts();
             return View();
         }
 

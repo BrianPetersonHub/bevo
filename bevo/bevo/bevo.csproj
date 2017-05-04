@@ -450,6 +450,7 @@
     <Compile Include="Models\StockViewModel.cs" />
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Models\TransactionSearchViewModel.cs" />
+    <Compile Include="Models\TransViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\Email.cs" />
     <Compile Include="Utilities\GetQuote.cs" />
@@ -534,6 +535,7 @@
     <Content Include="Views\Manager\ApprovePendingTransactions.cshtml" />
     <Content Include="Views\Manager\FreezeCustomer.cshtml" />
     <Content Include="Views\Manager\FireEmployee.cshtml" />
+    <Content Include="Views\Manager\ReactivateCustomer.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

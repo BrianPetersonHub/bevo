@@ -107,6 +107,7 @@ namespace bevo.Controllers
         public ActionResult FreezeCustomer()
         {
             ViewBag.AllCustomers = GetCustomers();
+            ViewBag.SelectCustomer = SelectCustomer();
             return View();
         }
 
@@ -131,14 +132,155 @@ namespace bevo.Controllers
             db.Entry(userInQuestion).State = EntityState.Modified;
             db.SaveChanges();
 
-            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully froze customer account!'); window.location='../Customer/Home';</script>");
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully froze customer account!'); window.location='../Employee/Home';</script>");
         }
 
-       // public ActionResult ChangeCustomerPassword()
-       // {
-       //     ViewBag.AllCustomers
-       // }
+        //Get method to reactivate customer accounts 
+        public ActionResult ReactivateCustomer()
+        {
+            ViewBag.SelectCustomers = SelectDisabledCustomer();
+            ViewBag.AllCustomers = GetDisabledCustomers();
+            List<AppUser> customers = GetDisabledCustomers();
+            return View(customers);
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ReactivateCustomer(String id)
+        {
+            AppDbContext db = new AppDbContext();
+
+            //Get the user we want 
+            var query = from user in db.Users
+                        select user;
+            query = query.Where(user => user.Id == id);
+            List<AppUser> queryList = query.ToList();
+            AppUser userInQuestion = queryList[0];
+
+            //change the user's disabled variable to true 
+            userInQuestion.Disabled = false;
+
+            //Save Changes
+            db.Entry(userInQuestion).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully reactivated customer account!'); window.location='../Employee/Home';</script>");
+
+        }
+
+
+
+        //Go to the view for selecting which customer you want to change the password for 
+        public ActionResult ChangeCustomerPassword()
+        {
+            ViewBag.AllCustomers = GetCustomers();
+            ViewBag.SelectCustomer = SelectCustomer();
+
+            return View();
+        }
+
+        //Post method for changing a customer's password 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeCustomerPassword(String id, String newPassword)
+        {
+            AppDbContext db = new AppDbContext();
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+
+            //Get the user we want 
+            var query = from user in db.Users
+                        select user;
+            query = query.Where(user => user.Id == id);
+            List<AppUser> queryList = query.ToList();
+            AppUser userInQuestion = queryList[0];
+
+            String resetToken = userManager.GeneratePasswordResetToken(id);
+            userManager.ResetPassword(id, resetToken, newPassword);
+
+            db.Entry(userInQuestion).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully changed customer password!'); window.location='../Employee/Home';</script>");
+        }
+
+        //Go to page to edit a customer's account 
+        public ActionResult ChangeCustomerInfo()
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+
+            ViewBag.AllCustomers = GetCustomers();
+            ViewBag.SelectCustomer = SelectCustomer();
+
+            EditUserViewModel evm = new EditUserViewModel();
+            evm.Birthday = user.Birthday;
+            evm.City = user.City;
+            evm.Email = user.Email;
+            evm.FirstName = user.FirstName;
+            evm.LastName = user.LastName;
+            evm.MiddleInitial = user.MiddleInitial;
+            evm.PhoneNumber = user.PhoneNumber;
+            evm.State = user.State;
+            evm.Street = user.Street;
+            evm.ZipCode = user.ZipCode;
+            
+
+            return View(evm);
+        }
+
+        //Post method for editing the customer's account 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeCustomerInfo([Bind(Include = "FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Email,PhoneNumber")] EditUserViewModel evm, String id)
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+
+            if(ModelState.IsValid)
+            {
+                user.Birthday = evm.Birthday;
+                user.City = evm.City;
+                user.Email = evm.Email;
+                user.FirstName = evm.FirstName;
+                user.LastName = evm.LastName;
+                user.MiddleInitial = evm.MiddleInitial;
+                user.PhoneNumber = evm.PhoneNumber;
+                user.State = evm.State;
+                user.Street = evm.Street;
+                user.ZipCode = evm.ZipCode;
+
+                db.SaveChanges();
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Successfully updated customer info!'); window.location='../Employee/Home';</script>");
+
+            }
+
+            return View(evm);
+
+        }
+
+        public List<AppUser> GetDisabledCustomers()
+        {
+            AppDbContext db = new AppDbContext();
+
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+            List<AppUser> customerList = new List<AppUser>();
+
+            foreach (AppUser user in db.Users)
+            {
+                if (userManager.GetRoles(user.Id).Contains("Customer") && user.Disabled == true)
+                {
+                    customerList.Add(user);
+                }
+            }
+
+
+            return customerList;
+        }
+
+        public SelectList SelectDisabledCustomer()
+        {
+            List<AppUser> customers = GetDisabledCustomers();
+            SelectList selectCustomer = new SelectList(customers, "Id", "Email");
+            return selectCustomer;
+        }
 
 
 

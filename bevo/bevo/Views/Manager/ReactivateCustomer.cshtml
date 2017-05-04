@@ -1,22 +1,22 @@
 ﻿@model IEnumerable<bevo.Models.AppUser>
 
 @{
-    ViewBag.Title = "manage employees";
+    ViewBag.Title = "reactivate customers";
 }
 
 <div class="row">
     <div class="homepage-top">
-        <h2>manage employees</h2>
+        <h2>reactivate customers</h2>
     </div>
 </div>
 
 
-@using (Html.BeginForm("FireEmpoyees", "Manager", FormMethod.Post))
+@using (Html.BeginForm("ReactivateCustomer", "Manager", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     <div class="row">
         <div class="form-table-container col-lg-7">
-            <p>All Employees</p>
+            <p>All Customers</p>
             <div class="form-display-table">
                 <table class="table">
                     <tr>
@@ -57,7 +57,7 @@
         <div class="form-container col-lg-4">
             <div class="form-group">
                 <p>
-                    Select Customer to Disable @Html.DropDownList("id", (SelectList)ViewBag.SelectCustomers, new { @class = "form-control" }) <br />
+                    Select Customer to Reactivate @Html.DropDownList("id", (SelectList)ViewBag.SelectCustomers, new { @class = "form-control" }) <br />
                     <input type="submit" value="Submit" class="btn btn-default color" />
                 </p>
             </div>
