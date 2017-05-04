@@ -252,6 +252,26 @@ namespace bevo.Migrations
             db.SaveChanges();
         }
 
+        public static void SeedStock(AppDbContext db, String[] stock)
+        {
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+
+            StockType myType = (StockType)Enum.Parse(typeof(StockType), stock[1].ToString(), true);
+            Int32? myFee = Int32.Parse(stock[3]);
+
+
+            var stockRecord = new Stock()
+            {
+                StockTicker = stock[0].ToString(),
+                TypeOfStock = myType,
+                StockName = stock[2].ToString(),
+                feeAmount = myFee,
+            };
+
+            db.Stocks.AddOrUpdate(a => a.StockID, stockRecord);
+            db.SaveChanges();
+        }
+
 
 
 
@@ -321,6 +341,16 @@ namespace bevo.Migrations
             {
                 String[] record = line.Split(',');
                 SeedStockAccount(db, record);
+            }
+        }
+
+        public static void ReadStocksCSV()
+        {
+            string[] allLines = File.ReadAllLines(@"C:\Users\James Abbott\Desktop\MIS 333 Seed Data\Stocks.csv");
+            foreach(String line in allLines)
+            {
+                String[] record = line.Split(',');
+                SeedStock(db, record);
             }
         }
 

@@ -18,6 +18,11 @@ namespace bevo.Controllers
         //GET: CheckingAccount/Create
         public ActionResult Create()
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: Your account has been disabled. You are in a view-only mode.'); window.location='../Customer/Home';</script>");
+            }
+
             CheckingAccount ca = new CheckingAccount();
             ca.AccountName = "Longhorn Checking";
             return View(ca);
@@ -85,6 +90,11 @@ namespace bevo.Controllers
         [HttpGet]
         public ActionResult EditName(int? id)
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: Your account has been disabled. You are in a view-only mode.'); window.location='../Customer/Home';</script>");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

@@ -110,7 +110,7 @@ namespace bevo.Controllers
 
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Home");
             }
             return View(eevm);
         }
@@ -141,15 +141,15 @@ namespace bevo.Controllers
 
         public ActionResult ApprovePendingTransactions(int? id)
         {
-            //if (id == null)
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
             Transaction transToChange = db.Transactions.Find(id);
-            //if (transToChange == null)
-            //{
-            //    return HttpNotFound();
-            //}
+            if (transToChange == null)
+            {
+                return HttpNotFound();
+            }
 
             //for transfers, have to chagne two accounts balances
             if (transToChange.TransType == TransType.Transfer || transToChange.TransType == TransType.Deposit || transToChange.TransType == TransType.Sell_Stock || transToChange.TransType == TransType.Bonus)
@@ -262,7 +262,8 @@ namespace bevo.Controllers
                 return HttpNotFound();
             }
 
-            String accountType = GetAccountType(transaction.ToAccount);
+            String toAccountType = GetAccountType(transaction.ToAccount);
+            String fromAccountType = GetAccountType(transaction.FromAccount);
 
             AppUser user = new AppUser();
             if (GetAccountType(transaction.ToAccount) == "CHECKING" || GetAccountType(transaction.FromAccount) == "CHECKING")
@@ -314,7 +315,7 @@ namespace bevo.Controllers
 
             bevo.Messaging.EmailMessaging.SendEmail(user.Email, "Dispute Rejected", bodyForEmail);
 
-            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully rejected pending transactions!'); window.location='../Manager/Home';</script>");
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully rejected pending transactions!'); window.location='../Home';</script>");
         }
 
 
@@ -549,10 +550,6 @@ namespace bevo.Controllers
             return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully reactivated customer account!'); window.location='../Manager/Home';</script>");
 
         }
-
-
-
-
 
         //Make a get method for editing the dispute
         //The view for this method should be bound to the disputeviewmodel class 
@@ -894,6 +891,173 @@ namespace bevo.Controllers
             return View(stock);
         }
 
+        //Go to page to edit a customer's account 
+        public ActionResult ChangeCustomerInfo()
+        {
+            ViewBag.AllCustomers = GetCustomers();
+            ViewBag.SelectCustomer = SelectCustomer();
+
+            return View();
+        }
+
+        //Post method for editing the customer's account 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeCustomerInfo([Bind(Include = "FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Email,PhoneNumber")] EditUserViewModel evm, String id)
+        {
+            AppUser user = db.Users.Find(id);
+
+            if (ModelState.IsValid)
+            {
+                user.Birthday = evm.Birthday;
+                user.City = evm.City;
+                user.Email = evm.Email;
+                user.FirstName = evm.FirstName;
+                user.LastName = evm.LastName;
+                user.MiddleInitial = evm.MiddleInitial;
+                user.PhoneNumber = evm.PhoneNumber;
+                user.State = evm.State;
+                user.Street = evm.Street;
+                user.ZipCode = evm.ZipCode;
+
+                db.SaveChanges();
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Successfully updated customer info!'); window.location='../Manager/Home';</script>");
+
+            }
+
+            return View(evm);
+
+        }
+
+        //Go to the view for selecting which customer you want to change the password for 
+        public ActionResult ChangeCustomerPassword()
+        {
+            ViewBag.AllCustomers = GetCustomers();
+            ViewBag.SelectCustomer = SelectCustomer();
+
+            return View();
+        }
+
+        //Post method for changing a customer's password 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeCustomerPassword(String id, String newPassword)
+        {
+            AppDbContext db = new AppDbContext();
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+
+            //Get the user we want 
+            var query = from user in db.Users
+                        select user;
+            query = query.Where(user => user.Id == id);
+            List<AppUser> queryList = query.ToList();
+            AppUser userInQuestion = queryList[0];
+
+            String resetToken = userManager.GeneratePasswordResetToken(id);
+            userManager.ResetPassword(id, resetToken, newPassword);
+
+            db.Entry(userInQuestion).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully changed customer password!'); window.location='../Manager/Home';</script>");
+        }
+
+        //Go to page to edit a customer's account 
+        public ActionResult ChangeEmployeeInfo()
+        {
+            ViewBag.AllEmployees = GetEmployees();
+            ViewBag.SelectEmployee = SelectEmployee();
+
+            return View();
+        }
+
+        //Post method for editing the customer's account 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeEmployeeInfo([Bind(Include = "FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Email,PhoneNumber")] EditUserViewModel evm, String id)
+        {
+            AppUser user = db.Users.Find(id);
+
+            if (ModelState.IsValid)
+            {
+                user.Birthday = evm.Birthday;
+                user.City = evm.City;
+                user.Email = evm.Email;
+                user.FirstName = evm.FirstName;
+                user.LastName = evm.LastName;
+                user.MiddleInitial = evm.MiddleInitial;
+                user.PhoneNumber = evm.PhoneNumber;
+                user.State = evm.State;
+                user.Street = evm.Street;
+                user.ZipCode = evm.ZipCode;
+
+                db.SaveChanges();
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Successfully updated employee info!'); window.location='../Manager/Home';</script>");
+
+            }
+
+            return View(evm);
+
+        }
+
+        //Go to the view for selecting which customer you want to change the password for 
+        public ActionResult ChangeEmployeePassword()
+        {
+            ViewBag.AllEmployees = GetEmployees();
+            ViewBag.SelectEmployee = SelectEmployee();
+
+            return View();
+        }
+
+        //Post method for changing a customer's password 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeEmployeePassword(String id, String newPassword)
+        {
+            AppDbContext db = new AppDbContext();
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+
+            //Get the user we want 
+            var query = from user in db.Users
+                        select user;
+            query = query.Where(user => user.Id == id);
+            List<AppUser> queryList = query.ToList();
+            AppUser userInQuestion = queryList[0];
+
+            String resetToken = userManager.GeneratePasswordResetToken(id);
+            userManager.ResetPassword(id, resetToken, newPassword);
+
+            db.Entry(userInQuestion).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully changed employee password!'); window.location='../Manager/Home';</script>");
+        }
+
+        //Approve a stock portfolio for trading 
+        public ActionResult ApprovePortfolio()
+        {
+            ViewBag.PortfoliosToApprove = GetStockPortfolios();
+            ViewBag.SelectPortfolios = MultiSelectStockPortfolios();
+
+            return View();
+        }
+        //Post Method for approving portfolios
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ApprovePortfolio(String[] selectedPortfolios)
+        {
+            foreach(String p in selectedPortfolios)
+            {
+                StockPortfolio portfolioInQuestion = db.StockPortfolios.Find(p);
+                portfolioInQuestion.Disabled = true;
+
+                db.SaveChanges();
+            }
+
+            return View();
+        }
+
+
 
 
 
@@ -1221,6 +1385,29 @@ namespace bevo.Controllers
             }
 
             return listToReturn;
+        }
+
+        public List<StockPortfolio> PortfoliosToApprove()
+        {
+            List<StockPortfolio> returnList = db.StockPortfolios.Where(s => s.Disabled == true).ToList();
+
+            return returnList;
+        }
+
+        public MultiSelectList MultiSelectStockPortfolios()
+        {
+            List<StockPortfolio> portfolios = PortfoliosToApprove();
+
+            List<String> selectPortfolios = new List<String>();
+
+            foreach (StockPortfolio p in portfolios)
+            {
+                selectPortfolios.Add(p.StockPortfolioID);
+            }
+
+            MultiSelectList selectPortfolioList = new MultiSelectList(portfolios, "StockPortfolioID", "AccountName", selectPortfolios);
+
+            return selectPortfolioList;
         }
 
     }

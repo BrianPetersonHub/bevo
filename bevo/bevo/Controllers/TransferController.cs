@@ -18,6 +18,11 @@ namespace bevo.Controllers
         //GET: Create/Transfer
         public ActionResult Create()
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: Your account has been disabled. You are in a view-only mode.'); window.location='../Customer/Home';</script>");
+            }
+
             // for the dropbox
             List<AccountsViewModel> allAccounts = GetAccounts();
             SelectList selectAccounts = new SelectList(allAccounts.OrderBy(q => q.AccountName), "AccountNum", "AccountName");

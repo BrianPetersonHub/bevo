@@ -18,6 +18,11 @@ namespace bevo.Controllers
         // GET: Withdraw
         public ActionResult Create()
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: Your account has been disabled. You are in a view-only mode.'); window.location='../Customer/Home';</script>");
+            }
+
             // pass account numbers, names, and balances for dropdown list
             List<AccountsViewModel> allAccounts = GetAccounts();
             SelectList selectAccounts = new SelectList(allAccounts.OrderBy(q => q.AccountName), "AccountNum", "AccountName");
@@ -52,46 +57,21 @@ namespace bevo.Controllers
                     Int32 accountID = query.First();
                     CheckingAccount account = db.CheckingAccounts.Find(accountID);
                     //check if account is already overdrafted
-                    if (account.Balance < 0)
+                    if (account.Balance - transaction.Amount < 0)
                     {
-                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You can't transfer money out of an overdrawn account.'); window.location='../Customer/Home';</script>");
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot withdraw more than is in your account.'); window.location='../Customer/Home';</script>");
                     }
-                    //check for overdraft strarts. if transaction will make balance <-50, return new view with error and autofilled max transaction
-                    if (account.Balance - transaction.Amount < -50)
-                    {
-                        transaction.Amount = 50 + account.Balance;
-                        ModelState.Clear();
-                        return View("CreateAutoCorrect", transaction);
-                    }
-                    //if transaction makes balance between 0 and -50, add transaction, make new fee transaction of $30 on top of overdraft
-                    else if (account.Balance - transaction.Amount < 0 && account.Balance - transaction.Amount >= -50)
-                    {
-                        account.Transactions.Add(transaction);
 
-                        Transaction feeTransaction = new Transaction();
-                        feeTransaction.TransType = TransType.Fee;
-                        feeTransaction.Amount = 30;
-                        feeTransaction.Date = DateTime.Today;
-                        feeTransaction.FromAccount = account.AccountNum;
-                        feeTransaction.Description = "$30 fee from overdrafting";
-
-                        account.Transactions.Add(feeTransaction);
-
-                        account.Balance = account.Balance - transaction.Amount - feeTransaction.Amount;
-
-                        //send email
-                        string userId = User.Identity.GetUserId();
-                        AppUser user = db.Users.Find(userId);
-                        string userEmail = user.Email;
-
-                        Messaging.EmailMessaging.SendEmail(userEmail, "Overdraft on " + account.AccountName, account.AccountName + " is overdrawn and a $30.00 fee was added to your account. Your current balance on the account is -$" + (account.Balance * -1).ToString() + ".");
-                    }
                     else
                     {
                         account.Transactions.Add(transaction);
                         account.Balance = account.Balance - transaction.Amount;
+
+                        db.SaveChanges();
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot withdraw more than is in your account.'); window.location='../Customer/Home';</script>");
+
                     }
-                    
+
                 }
 
                 //FOR SAVING
@@ -105,45 +85,18 @@ namespace bevo.Controllers
                     SavingAccount account = db.SavingAccounts.Find(accountID);
 
                     //check if account is already overdrafted
-                    if (account.Balance < 0)
+                    if (account.Balance - transaction.Amount < 0)
                     {
-                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You can't transfer money out of an overdrawn account.'); window.location='../Customer/Home';</script>");
-                    }
-                    //check for overdraft strarts. if transaction will make balance <-50, return new view with error and autofilled max transaction
-                    if (account.Balance - transaction.Amount < -50)
-                    {
-                        transaction.Amount = 50 + account.Balance;
-                        ModelState.Clear();
-                        return View("CreateAutoCorrect", transaction);
-                    }
-                    //if transaction makes balance between 0 and -50, add transaction, make new fee transaction of $30 on top of overdraft
-                    else if (account.Balance - transaction.Amount < 0 && account.Balance - transaction.Amount >= -50)
-                    {
-                        account.Transactions.Add(transaction);
-
-                        Transaction feeTransaction = new Transaction();
-                        feeTransaction.TransType = TransType.Fee;
-                        feeTransaction.Amount = 30;
-                        feeTransaction.Date = DateTime.Today;
-                        feeTransaction.FromAccount = account.AccountNum;
-                        feeTransaction.Description = "$30 fee from overdrafting";
-
-                        account.Transactions.Add(feeTransaction);
-
-                        account.Balance = account.Balance - transaction.Amount - feeTransaction.Amount;
-
-                        //send email
-
-                        string userId = User.Identity.GetUserId();
-                        AppUser user = db.Users.Find(userId);
-                        string userEmail = user.Email;
-
-                        Messaging.EmailMessaging.SendEmail(userEmail, "Overdraft on " + account.AccountName, account.AccountName + " is overdrawn and a $30.00 fee was added to your account. Your current balance on the account is -$" + (account.Balance * -1).ToString() + ".");
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot withdraw more than is in your account.'); window.location='../Customer/Home';</script>");
                     }
                     else
                     {
                         account.Transactions.Add(transaction);
                         account.Balance = account.Balance - transaction.Amount;
+
+                        db.SaveChanges();
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Withdraw successfull.'); window.location='../Customer/Home';</script>");
+
                     }
 
                 }
@@ -166,36 +119,12 @@ namespace bevo.Controllers
                         }
                         else
                         {
-                            if (account.Balance < 0)
+                            if (account.Balance - transaction.Amount < 0)
                             {
-                                return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You can't transfer money out of an overdrawn account.'); window.location='../Customer/Home';</script>");
+                                return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot withdraw more than is in your account.'); window.location='../Customer/Home';</script>");
                             }
-                            if (account.Balance - transaction.Amount < -50)
+                            else
                             {
-                                transaction.Amount = 50 + account.Balance;
-                                ModelState.Clear();
-                                return View("CreateAutoCorrect", transaction);
-                            }
-                            else if (account.Balance - transaction.Amount < 0 && account.Balance - transaction.Amount >= -50)
-                            {
-                                account.Transactions.Add(transaction);
-
-                                Transaction ODfeeTransaction = new Transaction();
-                                ODfeeTransaction.TransType = TransType.Fee;
-                                ODfeeTransaction.Amount = 30;
-                                ODfeeTransaction.Date = DateTime.Today;
-                                ODfeeTransaction.FromAccount = account.AccountNum;
-                                ODfeeTransaction.Description = "$30 fee from overdrafting";
-                                account.Transactions.Add(ODfeeTransaction);
-
-                                //send email
-                                string userId = User.Identity.GetUserId();
-                                AppUser user = db.Users.Find(userId);
-                                string userEmail = user.Email;
-
-                                Messaging.EmailMessaging.SendEmail(userEmail, "Overdraft on " + account.AccountName, account.AccountName + " is overdrawn and a $30.00 fee was added to your account. Your current balance on the account is -$" + (account.Balance * -1).ToString() + ".");
-
-
                                 Transaction feeTransaction = new Transaction();
                                 feeTransaction.TransType = TransType.Fee;
                                 feeTransaction.Date = DateTime.Now;
@@ -203,8 +132,11 @@ namespace bevo.Controllers
                                 feeTransaction.Amount = 30;
                                 feeTransaction.Description = "$30 Fee for transfering funds out of IRA when under 65 years old";
                                 account.Transactions.Add(feeTransaction);
+                                account.Transactions.Add(transaction);
+                                account.Balance = account.Balance - transaction.Amount - feeTransaction.Amount;
 
-                                account.Balance = account.Balance - transaction.Amount - ODfeeTransaction.Amount - feeTransaction.Amount;
+                                db.SaveChanges();
+                                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: You withdraw was successful with a fee.'); window.location='../Customer/Home';</script>");
                             }
                         }
                     }
@@ -212,37 +144,17 @@ namespace bevo.Controllers
                     {
                         if (account.Balance - transaction.Amount <= -50)
                         {
-                            transaction.Amount = 50 + account.Balance;
-                            ModelState.Clear();
-                            return View("CreateAutoCorrect", transaction);
+                            return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot withdraw more than is in your account.'); window.location='../Customer/Home';</script>");
                         }
-                        else if (account.Balance - transaction.Amount < 0 && account.Balance - transaction.Amount >= -50)
-                        {
-                            account.Transactions.Add(transaction);
 
-                            Transaction feeTransaction = new Transaction();
-                            feeTransaction.TransType = TransType.Fee;
-                            feeTransaction.Amount = 30;
-                            feeTransaction.Date = DateTime.Today;
-                            feeTransaction.FromAccount = account.AccountNum;
-                            feeTransaction.Description = "$30 fee from overdrafting";
-
-                            account.Transactions.Add(feeTransaction);
-
-                            account.Balance = account.Balance - transaction.Amount - feeTransaction.Amount;
-
-                            //send email
-
-                            string userId = User.Identity.GetUserId();
-                            AppUser user = db.Users.Find(userId);
-                            string userEmail = user.Email;
-
-                            Messaging.EmailMessaging.SendEmail(userEmail, "Overdraft on " + account.AccountName, account.AccountName + " is overdrawn and a $30.00 fee was added to your account. Your current balance on the account is -$" + (account.Balance * -1).ToString() + ".");
-                        }
                         else
                         {
                             account.Transactions.Add(transaction);
                             account.Balance = account.Balance - transaction.Amount;
+
+                            db.SaveChanges();
+                            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: You withdraw was successful.'); window.location='../Customer/Home';</script>");
+
                         }
                     }
                 
@@ -256,49 +168,22 @@ namespace bevo.Controllers
                     //gets first (only) thing from query list
                     String accountID = query.First();
                     StockPortfolio account = db.StockPortfolios.Find(accountID);
-                    if (account.Balance < 0)
+                    if (account.Balance - transaction.Amount < 0)
                     {
-                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You can't transfer money out of an overdrawn account.'); window.location='../Customer/Home';</script>");
-                    }
-                    if (account.Balance - transaction.Amount < -50)
-                    {
-                        transaction.Amount = 50 + account.Balance;
-                        ModelState.Clear();
-                        return View("CreateAutoCorrect", transaction);
-                    }
-                    else if (account.Balance - transaction.Amount < 0 && account.Balance - transaction.Amount >= -50)
-                    {
-                        account.Transactions.Add(transaction);
-
-                        Transaction feeTransaction = new Transaction();
-                        feeTransaction.TransType = TransType.Fee;
-                        feeTransaction.Amount = 30;
-                        feeTransaction.Date = DateTime.Today;
-                        feeTransaction.FromAccount = account.AccountNum;
-                        feeTransaction.Description = "$30 fee from overdrafting";
-
-                        account.Transactions.Add(feeTransaction);
-
-                        account.Balance = account.Balance - transaction.Amount - feeTransaction.Amount;
-
-                        //send email
-
-                        string userId = User.Identity.GetUserId();
-                        AppUser user = db.Users.Find(userId);
-                        string userEmail = user.Email;
-
-                        Messaging.EmailMessaging.SendEmail(userEmail, "Overdraft on " + account.AccountName, account.AccountName + " is overdrawn and a $30.00 fee was added to your account. Your current balance on the account is -$" + (account.Balance * -1).ToString() + ".");
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot overdraft a withdraw.'); window.location='../Customer/Home';</script>");
                     }
                     else
                     {
                         account.Transactions.Add(transaction);
                         account.Balance = account.Balance - transaction.Amount;
+
+                        db.SaveChanges();
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Withdraw successfull!'); window.location='../Customer/Home';</script>");
+
                     }
                 }
                 
                 db.SaveChanges();
-
-                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Withdraw successfull!'); window.location='../Customer/Home';</script>");
             }
 
             List<AccountsViewModel> allAccounts = GetAccounts();

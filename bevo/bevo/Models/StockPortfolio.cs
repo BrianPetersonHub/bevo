@@ -26,7 +26,7 @@ namespace bevo.Models
         {
             AccountNum = GetAcctNum();
             Balance = 0;
-            Disabled = false;
+            Disabled = true;
         }
 
         //Stock portfolio can have many Persons

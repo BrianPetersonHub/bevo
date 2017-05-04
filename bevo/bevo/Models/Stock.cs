@@ -22,7 +22,7 @@ namespace bevo.Models
         public StockType TypeOfStock { get; set; }
 
         [Display(Name = "Fee Amount")]
-        public int? feeAmount { get; set; }
+        public Int32? feeAmount { get; set; }
 
 
         //Stock can have one stock detail

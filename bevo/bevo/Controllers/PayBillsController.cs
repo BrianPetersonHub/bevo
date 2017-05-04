@@ -18,6 +18,11 @@ namespace bevo.Controllers
         // GET: PayBills
         public ActionResult Index()
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: Your account has been disabled. You are in a view-only mode.'); window.location='../Customer/Home';</script>");
+            }
+
             ViewBag.CustomerPayees = GetCustomerPayees();
             ViewBag.AllAccounts = GetAccounts();
             ViewBag.SelectAccount = SelectAccount();
@@ -28,6 +33,11 @@ namespace bevo.Controllers
         // Go to Add Payee page 
         public ActionResult AddPayeeIndex()
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: Your account has been disabled. You are in a view-only mode.'); window.location='../Customer/Home';</script>");
+            }
+
             ViewBag.AvailablePayees = GetPayees();
             ViewBag.CustomerPayees = GetCustomerPayees();
             ViewBag.SelectPayee = SelectAvailablePayees();
@@ -48,6 +58,8 @@ namespace bevo.Controllers
         // Add payee to customer from list of payees 
         public ActionResult AddPayee(Int32 selectedPayee)
         {
+            
+
             Payee payeeToAdd = new Payee();
             //Get the curent user
             UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
@@ -180,6 +192,10 @@ namespace bevo.Controllers
         // POST: Pay bill, make payment 
         public ActionResult PayBill(Int32 selectedPayee, Int32 selectedAccount, Decimal paymentAmount, DateTime dateEntered)
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: Your account has been disabled. You are in a view-only mode.'); window.location='../Customer/Home';</script>");
+            }
 
             //Make a transaction to store this info
             Transaction trans = new Transaction();
