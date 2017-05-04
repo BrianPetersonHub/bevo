@@ -29,6 +29,14 @@ namespace bevo.Controllers
         {
             if (ModelState.IsValid)
             {
+                Transaction t = new Transaction();
+                t.Date = DateTime.Today;
+                t.FromAccount = 0;
+                t.ToAccount = 0;
+                t.TransType = TransType.Deposit;
+                t.Description = "Initial deposit";
+                t.Amount = savingAccount.Balance;
+
                 if (savingAccount.Balance <= 0)
                 {
                     return Content("<script language'javascript' type = 'text/javascript'> alert('Error: Your starting balance must be positive.'); window.location='../SavingAccounts/Create';</script>");
@@ -38,6 +46,13 @@ namespace bevo.Controllers
                 {
                     savingAccount.AccountName = "Longhorn Saving";
                 }
+                if (savingAccount.Balance > 5000)
+                {
+                    t.NeedsApproval = true;
+                    savingAccount.Balance = 0;
+                }
+                savingAccount.Transactions = new List<Transaction>();
+                savingAccount.Transactions.Add(t);
                 user.SavingAccounts.Add(savingAccount);
                 db.SaveChanges();
                 return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully added new Savings Account!'); window.location='../Customer/Home';</script>");

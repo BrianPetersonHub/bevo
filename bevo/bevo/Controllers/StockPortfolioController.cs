@@ -40,13 +40,29 @@ namespace bevo.Controllers
         {
             if (ModelState.IsValid)
             {
+                AppUser user = db.Users.Find(User.Identity.GetUserId());
+
+                if (user.StockPortfolio != null)
+                {
+                    return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot have more than one Stock Portfolio'); window.location='../Customer/Home';</script>");
+                }
+
+                Transaction t = new Transaction();
+                t.Date = DateTime.Today;
+                t.FromAccount = 0;
+                t.ToAccount = 0;
+                t.TransType = TransType.Deposit;
+                t.Description = "Initial deposit";
+                t.Amount = stockPortfolio.Balance;
+
                 if (stockPortfolio.Balance <= 0)
                 {
                     return Content("<script language'javascript' type = 'text/javascript'> alert('Error: Your starting balance must be positive.'); window.location='../StockPortfolio/Create';</script>");
                 }
-                AppUser user = db.Users.Find(User.Identity.GetUserId());
+
+                stockPortfolio.Transactions = new List<Transaction>();
+                stockPortfolio.Transactions.Add(t);
                 user.StockPortfolio = stockPortfolio;
-                //TODO: error here bc adding duplicate primary key
                 db.SaveChanges();
                 return RedirectToAction("Home", "Customer");
             }

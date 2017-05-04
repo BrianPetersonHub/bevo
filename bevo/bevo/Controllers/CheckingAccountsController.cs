@@ -32,6 +32,14 @@ namespace bevo.Controllers
         {
             if (ModelState.IsValid)
             {
+                Transaction t = new Transaction();
+                t.Date = DateTime.Today;
+                t.FromAccount = 0;
+                t.ToAccount = 0;
+                t.TransType = TransType.Deposit;
+                t.Description = "Initial deposit";
+                t.Amount = checkingAccount.Balance;
+
                 if (checkingAccount.Balance <= 0)
                 {
                     return Content("<script language'javascript' type = 'text/javascript'> alert('Error: Your starting balance must be positive.'); window.location='../CheckingAccounts/Create';</script>");
@@ -41,7 +49,15 @@ namespace bevo.Controllers
                 {
                     checkingAccount.AccountName = "Longhorn Checking";
                 }
+                if (checkingAccount.Balance > 5000)
+                {
+                    t.NeedsApproval = true;
+                    checkingAccount.Balance = 0;
+                }
+                checkingAccount.Transactions = new List<Transaction>();
+                checkingAccount.Transactions.Add(t);
                 user.CheckingAccounts.Add(checkingAccount);
+                
                 db.SaveChanges();
 
                 return Content("<script language'javascript' type = 'text/javascript'> alert('You have successfully created a new checking account!'); window.location='../Customer/Home';</script>");
@@ -63,6 +79,7 @@ namespace bevo.Controllers
             }
             ViewBag.Balance = GetValue(id);
             ViewBag.Transactions = GetAllTransactions(id);
+            //ViewBag.PendingTransactions = GetPendingTransactions(id);
             return View(checkingAccount);
         }
 
@@ -107,7 +124,22 @@ namespace bevo.Controllers
         {
             CheckingAccount checkingAccount = db.CheckingAccounts.Find(id);
             List<Transaction> transactions = checkingAccount.Transactions;
-            return transactions;
+            var query = from t in transactions
+                        //where t.NeedsApproval != true
+                        select t;
+            List<Transaction> transaction = query.ToList();
+            return transaction;
+        }
+
+        public List<Transaction> GetPendingTransactions(int? id)
+        {
+            CheckingAccount checkingAccount = db.CheckingAccounts.Find(id);
+            List<Transaction> transactions = checkingAccount.Transactions;
+            var query = from t in transactions
+                        where t.NeedsApproval == true
+                        select t;
+            List<Transaction> transaction = query.ToList();
+            return transaction;
         }
 
         public Decimal GetValue(int? id)
