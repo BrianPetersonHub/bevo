@@ -157,6 +157,17 @@ namespace bevo.Controllers
             portfolioInfo.Balanced = false;
             portfolioInfo.StockMarketValue = 0;
 
+            AppUser currentUser = db.Users.Find(User.Identity.GetUserId());
+
+            //find total of bonuses
+            foreach (Transaction t in currentUser.StockPortfolio.Transactions)
+            {
+                if (t.TransType == TransType.Bonus)
+                {
+                    portfolioInfo.TotalBonuses += t.Amount;
+                }
+            }
+
             //Look at all of the fee transactions associated with the stock portfolio and add to the FEES PORTION
             //of the portfolio's value 
             foreach(Transaction tr in user.StockPortfolio.Transactions)

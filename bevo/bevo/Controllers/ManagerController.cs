@@ -288,6 +288,7 @@ namespace bevo.Controllers
                     account.Balance = account.Balance + t.Amount;
                 }
             }
+            //ViewBag.TotalBonuses
             db.SaveChanges();
             return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully added bonuses to Customers with balanced stock portfolios!'); window.location='../Manager/Home';</script>");
         }
