@@ -140,15 +140,15 @@ namespace bevo.Controllers
 
         public ActionResult ApprovePendingTransactions(int? id)
         {
-            //if (id == null)
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
             Transaction transToChange = db.Transactions.Find(id);
-            //if (transToChange == null)
-            //{
-            //    return HttpNotFound();
-            //}
+            if (transToChange == null)
+            {
+                return HttpNotFound();
+            }
 
             //for transfers, have to chagne two accounts balances
             if (transToChange.TransType == TransType.Transfer || transToChange.TransType == TransType.Deposit || transToChange.TransType == TransType.Sell_Stock || transToChange.TransType == TransType.Bonus)
@@ -261,7 +261,8 @@ namespace bevo.Controllers
                 return HttpNotFound();
             }
 
-            String accountType = GetAccountType(transaction.ToAccount);
+            String toAccountType = GetAccountType(transaction.ToAccount);
+            String fromAccountType = GetAccountType(transaction.FromAccount);
 
             AppUser user = new AppUser();
             if (GetAccountType(transaction.ToAccount) == "CHECKING" || GetAccountType(transaction.FromAccount) == "CHECKING")
