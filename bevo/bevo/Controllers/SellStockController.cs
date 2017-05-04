@@ -52,6 +52,9 @@ namespace bevo.Controllers
             //Find the portfolio belonging to this user 
             StockPortfolio portfolio = user.StockPortfolio;
 
+            //Make sure the date they entered for the date of stale is today's date
+            
+
             ///SUMMARY OF THIS METHOD
             //Get a list of all the transactions for buying that stock and then determine the purchase
             //price based upon that information. Subtract however many shares you need going to the first
