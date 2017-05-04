@@ -8,6 +8,7 @@ using bevo.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc.Html;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace bevo.Controllers
 {
@@ -81,7 +82,7 @@ namespace bevo.Controllers
                                             int? transactionNumber,
                                             Date selectedDate )
         {
-            var query = from t in db.Transactions
+            var query = from t in GetQueryRange()
                         select t;
             
             //DONE: description textbox search
@@ -208,6 +209,27 @@ namespace bevo.Controllers
 
         } // end of SearchTransaction
 
+
+        //Determines whether the user should be allowed to search over all transactions
+        //or if they should only be allowed to search from transactions connected to their
+        //account
+        public List<Transaction> GetQueryRange()
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+
+            if (userManager.GetRoles(user.Id).Contains("Customer"))
+            {
+                List<Transaction> queryRange = GetAllTransactions();
+                return queryRange;
+            }
+            else
+            {
+                List<Transaction> queryRange = db.Transactions.ToList();
+                return queryRange;
+            }
+        }
 
 
         //returns select list of drop down options for trans type

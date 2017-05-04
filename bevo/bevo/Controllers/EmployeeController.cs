@@ -38,48 +38,19 @@ namespace bevo.Controllers
             return View(appUser);
         }
 
-        // GET: Employee/Create
-        public ActionResult Create()
-        {
-            ViewBag.Id = new SelectList(db.IRAccounts, "IRAccountID", "AccountName");
-            ViewBag.Id = new SelectList(db.StockPortfolios, "StockPortfolioID", "AccountName");
-            return View();
-        }
-
-        // POST: Employee/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Enabled,FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Disabled,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName")] AppUser appUser)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Users.Add(appUser);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.Id = new SelectList(db.IRAccounts, "IRAccountID", "AccountName", appUser.Id);
-            ViewBag.Id = new SelectList(db.StockPortfolios, "StockPortfolioID", "AccountName", appUser.Id);
-            return View(appUser);
-        }
-
         // GET: Employee/Edit/5
         public ActionResult Edit(string id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AppUser appUser = db.Users.Find(id);
-            if (appUser == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.Id = new SelectList(db.IRAccounts, "IRAccountID", "AccountName", appUser.Id);
-            ViewBag.Id = new SelectList(db.StockPortfolios, "StockPortfolioID", "AccountName", appUser.Id);
-            return View(appUser);
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            EditEmployeeViewModel eevm = new EditEmployeeViewModel();
+            eevm.City = user.City;
+            eevm.Email = user.Email;
+            eevm.PhoneNumber = user.PhoneNumber;
+            eevm.State = user.State;
+            eevm.Street = user.Street;
+            eevm.ZipCode = user.ZipCode;
+
+            return View(eevm);
         }
 
         // POST: Employee/Edit/5
@@ -87,43 +58,25 @@ namespace bevo.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Enabled,FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Disabled,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName")] AppUser appUser)
+        public ActionResult Edit([Bind(Include = "Street,City,State,ZipCode,Email,PhoneNumber")] EditEmployeeViewModel eevm)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(appUser).State = EntityState.Modified;
+                //Get the db record for the user who is logged in 
+                AppUser user = db.Users.Find(User.Identity.GetUserId());
+
+                user.Street = eevm.Street;
+                user.City = eevm.City;
+                user.State = eevm.State;
+                user.ZipCode = eevm.ZipCode;
+                user.Email = eevm.Email;
+                user.PhoneNumber = eevm.PhoneNumber;
+
+                db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Id = new SelectList(db.IRAccounts, "IRAccountID", "AccountName", appUser.Id);
-            ViewBag.Id = new SelectList(db.StockPortfolios, "StockPortfolioID", "AccountName", appUser.Id);
-            return View(appUser);
-        }
-
-        // GET: Employee/Delete/5
-        public ActionResult Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AppUser appUser = db.Users.Find(id);
-            if (appUser == null)
-            {
-                return HttpNotFound();
-            }
-            return View(appUser);
-        }
-
-        // POST: Employee/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
-        {
-            AppUser appUser = db.Users.Find(id);
-            db.Users.Remove(appUser);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            return View(eevm);
         }
 
         protected override void Dispose(bool disposing)
@@ -157,7 +110,7 @@ namespace bevo.Controllers
             return View();
         }
 
-        //Make the post edit method to fire the employee
+        //Make the post edit method to freeze customer account
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult FreezeCustomer(String id)
@@ -181,6 +134,18 @@ namespace bevo.Controllers
             return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully froze customer account!'); window.location='../Customer/Home';</script>");
         }
 
+        public ActionResult ChangeCustomerPassword()
+        {
+            ViewBag.AllCustomers
+        }
+
+
+
+
+
+
+
+
 
 
 
@@ -202,6 +167,14 @@ namespace bevo.Controllers
 
 
             return customerList;
+        }
+
+        //Make a select list for all of the customeres an employee could choose 
+        public SelectList SelectCustomer()
+        {
+            List<AppUser> customers = GetCustomers();
+            SelectList selectCustomer = new SelectList(customers, "Id", "Email");
+            return selectCustomer;
         }
 
 
