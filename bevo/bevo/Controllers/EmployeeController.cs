@@ -19,6 +19,11 @@ namespace bevo.Controllers
         // GET: Employee
         public ActionResult Home()
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: You have been terminated. Hasta la vista.'); window.location='../Home/Index';</script>");
+            }
+
             var appUsers = db.Users.Include(a => a.IRAccount).Include(a => a.StockPortfolio);
             return View(appUsers.ToList());
         }
@@ -26,6 +31,11 @@ namespace bevo.Controllers
         // GET: Employee/Details/5
         public ActionResult Details(string id)
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: You have been terminated. Hasta la vista.'); window.location='../Home/Index';</script>");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -41,6 +51,11 @@ namespace bevo.Controllers
         // GET: Employee/Edit/5
         public ActionResult Edit(string id)
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: You have been terminated. Hasta la vista.'); window.location='../Home/Index';</script>");
+            }
+
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             EditEmployeeViewModel eevm = new EditEmployeeViewModel();
             eevm.City = user.City;
@@ -99,6 +114,11 @@ namespace bevo.Controllers
         //Go to transaction search page 
         public ActionResult GoToTransactionSearch()
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: You have been terminated. Hasta la vista.'); window.location='../Home/Index';</script>");
+            }
+
             return RedirectToAction("Home", "Transactions");
         }
 
@@ -106,6 +126,11 @@ namespace bevo.Controllers
         //Make a method to get a list of all the customers and puts it in the viewbag for the freeze customer view
         public ActionResult FreezeCustomer()
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: You have been terminated. Hasta la vista.'); window.location='../Home/Index';</script>");
+            }
+
             ViewBag.AllCustomers = GetCustomers();
             ViewBag.SelectCustomer = SelectCustomer();
             return View();
@@ -138,6 +163,11 @@ namespace bevo.Controllers
         //Get method to reactivate customer accounts 
         public ActionResult ReactivateCustomer()
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: You have been terminated. Hasta la vista.'); window.location='../Home/Index';</script>");
+            }
+
             ViewBag.SelectCustomers = SelectDisabledCustomer();
             ViewBag.AllCustomers = GetDisabledCustomers();
             List<AppUser> customers = GetDisabledCustomers();
@@ -173,6 +203,11 @@ namespace bevo.Controllers
         //Go to the view for selecting which customer you want to change the password for 
         public ActionResult ChangeCustomerPassword()
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: You have been terminated. Hasta la vista.'); window.location='../Home/Index';</script>");
+            }
+
             ViewBag.AllCustomers = GetCustomers();
             ViewBag.SelectCustomer = SelectCustomer();
 
@@ -206,6 +241,11 @@ namespace bevo.Controllers
         //Go to page to edit a customer's account 
         public ActionResult ChangeCustomerInfo()
         {
+            if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
+            {
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: You have been terminated. Hasta la vista.'); window.location='../Home/Index';</script>");
+            }
+
             ViewBag.AllCustomers = GetCustomers();
             ViewBag.SelectCustomer = SelectCustomer();
             
@@ -241,6 +281,14 @@ namespace bevo.Controllers
 
         }
 
+
+
+
+
+
+
+
+
         public List<AppUser> GetDisabledCustomers()
         {
             AppDbContext db = new AppDbContext();
@@ -266,14 +314,6 @@ namespace bevo.Controllers
             SelectList selectCustomer = new SelectList(customers, "Id", "Email");
             return selectCustomer;
         }
-
-
-
-
-
-
-
-
 
 
         //Get list of customers from the db 
