@@ -1161,7 +1161,7 @@ namespace bevo.Controllers
         public IEnumerable<SelectListItem> SelectEmployee()
         {
             List<AppUser> employees = GetEmployees();
-            SelectList selectEmployee = new SelectList(employees, "Id", "Email");
+            SelectList selectEmployee = new SelectList(employees.OrderBy(e => e.Email), "Id", "Email");
             return selectEmployee;
         }
 

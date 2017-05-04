@@ -248,6 +248,7 @@ namespace bevo.Controllers
                     {
                         fromAccount.Transactions.Add(trans);
                         //Assign the from account as that account's AccountNum
+                        trans.FromAccount = fromAccount.AccountNum;
                         fromAccount.Transactions.Add(trans);
                         fromAccount.Balance = fromAccount.Balance - trans.Amount;
 

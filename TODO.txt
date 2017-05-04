@@ -26,10 +26,9 @@ DONE [AW] *Publish
 Views - 
 DONE [AW] Stock Details Views (220 - 224)
 [ ] Add pending transactions to account detail page
-DONE [AW] Employee Views
+[AW] Employee Views
 DONE [AW] Transfer: display account name, number, current balance
-DONE [AW] Manager: Index page of customers
-	[ ] can choose to activate/deactivate account 
+DONE [AW] Manager: Index page of customers, can choose to activate/deactivate account 
 DONE [AW] Manager: Index page of employees- terminate employees (select list) / promote employees to manager 
 [ ] Summary view selling stock: confirm transaction or cancel
 [ ] Transfer confirmation page: confirm or cancel transfer
@@ -49,7 +48,8 @@ Test
 	DONE- Password
 	- Large deposit approved
 [ ] Accounts with negative balance cannot be used to make transfers or payments
-UI (not required but would be nice to get to)
 
-Errors:
-[ ] When transactions dealing with Payees are viewed, the "from account" is not filled in
+
+
+
+UI (not required but would be nice to get to)
