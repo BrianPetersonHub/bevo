@@ -8,8 +8,7 @@
         <h2>transfer between accounts</h2>
     </div>
 </div>
-
-You cannot withdraw more than @Model.Amount, becuase you cannot overdraft account under -$50.
+@*@using (Html.BeginForm("Create", "Transfer", FormMethod.Post))*@
 
 @using (Html.BeginForm())
 {
@@ -25,7 +24,7 @@ You cannot withdraw more than @Model.Amount, becuase you cannot overdraft accoun
                         <th>Number</th>
                         <th>Balance</th>
                     </tr>
-                    @foreach(var m in ViewBag.listAccounts)
+                    @foreach (var m in ViewBag.listAccounts)
                     {
                         <tr>
                             <td>@m.AccountName</td>
@@ -37,16 +36,18 @@ You cannot withdraw more than @Model.Amount, becuase you cannot overdraft accoun
             </div>
         </div>
 
-        <div class="form-container">
+        <div class="form-container col-lg-4">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label" })
-                <div>
-                    @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
-                </div>
-            </div>
+            @*@Html.HiddenFor(model => model.TransactionID)*@
+            
+            @Html.HiddenFor(model => model.TransactionID)
+            @Html.HiddenFor(model => model.TransactionNum)
+            @Html.HiddenFor(model => model.Date)
             @Html.HiddenFor(model => model.FromAccount)
+            @Html.HiddenFor(model => model.ToAccount)
+            @Html.HiddenFor(model => model.TransType)
+            @Html.HiddenFor(model => model.Description)
+
             <div class="form-group">
                 @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label" })
                 <div>
@@ -54,20 +55,14 @@ You cannot withdraw more than @Model.Amount, becuase you cannot overdraft accoun
                     @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
                 </div>
             </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
-                <div>
-                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-                </div>
-            </div>
+
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <input type="submit" value="Submit" class="btn btn-default" />
                 </div>
             </div>
         </div>
-    </div>        
+    </div>
 }
 <div>
     @Html.ActionLink(
