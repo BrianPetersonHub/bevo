@@ -47,7 +47,7 @@ namespace bevo.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (stockPortfolio.Balance <= 0)
+                if (stockPortfolio.Balance < 0)
                 {
                     return Content("<script language'javascript' type = 'text/javascript'> alert('Error: Your starting balance must be positive.'); window.location='../StockPortfolio/Create';</script>");
                 }

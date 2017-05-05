@@ -46,7 +46,7 @@ namespace bevo.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (irAccount.Balance <= 0)
+                if (irAccount.Balance < 0)
                 {
                     return Content("<script language'javascript' type = 'text/javascript'> alert('Error: Your starting balance must be positive.'); window.location='../IRAccount/Create';</script>");
                 }
