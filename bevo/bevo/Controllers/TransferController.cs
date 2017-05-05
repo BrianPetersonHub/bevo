@@ -97,9 +97,12 @@ namespace bevo.Controllers
             {
                 transaction.FromAccount = fromAccount1;
             }
+            if (toAccount1 != null)
+            {
+                transaction.ToAccount = toAccount1;
+            }
 
-            transaction.ToAccount = toAccount1;
-            transaction.FromAccount = fromAccount1;
+
             if (ModelState.IsValid)
             {
                 Int32? fromAccountNum = transaction.FromAccount;
@@ -215,7 +218,12 @@ namespace bevo.Controllers
                         string userId = User.Identity.GetUserId();
                         AppUser user = db.Users.Find(userId);
                         string userEmail = user.Email;
-                        CheckingAccount account = db.CheckingAccounts.Find(transaction.FromAccount);
+
+                        var query2 = from account2 in db.CheckingAccounts
+                                    where account2.AccountNum == transaction.FromAccount
+                                    select account2.CheckingAccountID;
+                        Int32 fromAccountID = query.First();
+                        CheckingAccount account = db.CheckingAccounts.Find(fromAccountID);
 
                         Messaging.EmailMessaging.SendEmail(userEmail, "Overdraft on " + account.AccountName, account.AccountName + " is overdrawn and a $30.00 fee was added to your account. Your current balance on the account is -$" + (account.Balance * -1).ToString() + ".");
                     }
@@ -266,9 +274,15 @@ namespace bevo.Controllers
                         string userId = User.Identity.GetUserId();
                         AppUser user = db.Users.Find(userId);
                         string userEmail = user.Email;
-                        SavingAccount account = db.SavingAccounts.Find(transaction.FromAccount);
 
-                        Messaging.EmailMessaging.SendEmail(userEmail, "Overdraft on " + account.AccountName, account.AccountName + " is overdrawn and a $30.00 fee was added to your account. Your current balance on the account is -$" + (account.Balance * -1).ToString() + ".");
+                        var query3 = from account in db.SavingAccounts
+                                    where account.AccountNum == transaction.FromAccount
+                                    select account.SavingAccountID;
+                        //gets first (only) thing from query list
+                        Int32 accountID3 = query.First();
+                        SavingAccount a = db.SavingAccounts.Find(accountID);
+
+                        Messaging.EmailMessaging.SendEmail(userEmail, "Overdraft on " + a.AccountName, a.AccountName + " is overdrawn and a $30.00 fee was added to your account. Your current balance on the account is -$" + (a.Balance * -1).ToString() + ".");
                     }
                     else
                     {
@@ -322,6 +336,14 @@ namespace bevo.Controllers
                                 string userId = User.Identity.GetUserId();
                                 AppUser user = db.Users.Find(userId);
                                 string userEmail = user.Email;
+
+                                var query4 = from account4 in db.IRAccounts
+                                            where account4.AccountNum == transaction.FromAccount
+                                            select account4.IRAccountID;
+                                //gets first (only) thing from query list
+                                String accountID4 = query4.First();
+                                IRAccount a = db.IRAccounts.Find(accountID);
+
                                 IRAccount account = db.IRAccounts.Find(transaction.FromAccount);
 
                                 Messaging.EmailMessaging.SendEmail(userEmail, "Overdraft on " + account.AccountName, account.AccountName + " is overdrawn and a $30.00 fee was added to your account. Your current balance on the account is -$" + (account.Balance * -1).ToString() + ".");
@@ -370,6 +392,12 @@ namespace bevo.Controllers
                             string userId = User.Identity.GetUserId();
                             AppUser user = db.Users.Find(userId);
                             string userEmail = user.Email;
+
+                            var query4 = from account4 in db.IRAccounts
+                                         where account4.AccountNum == transaction.FromAccount
+                                         select account4.IRAccountID;
+                            //gets first (only) thing from query list
+                            String accountID4 = query4.First();
                             IRAccount account = db.IRAccounts.Find(transaction.FromAccount);
 
                             Messaging.EmailMessaging.SendEmail(userEmail, "Overdraft on " + account.AccountName, account.AccountName + " is overdrawn and a $30.00 fee was added to your account. Your current balance on the account is -$" + (account.Balance * -1).ToString() + ".");
@@ -424,7 +452,13 @@ namespace bevo.Controllers
                         string userId = User.Identity.GetUserId();
                         AppUser user = db.Users.Find(userId);
                         string userEmail = user.Email;
-                        StockPortfolio account = db.StockPortfolios.Find(transaction.FromAccount);
+
+                        var query4 = from account4 in db.StockPortfolios
+                                     where account4.AccountNum == transaction.FromAccount
+                                     select account4.StockPortfolioID;
+                        //gets first (only) thing from query list
+                        String accountID4 = query4.First();
+                        StockPortfolio account = db.StockPortfolios.Find(accountID);
 
                         Messaging.EmailMessaging.SendEmail(userEmail, "Overdraft on " + account.AccountName, account.AccountName + " is overdrawn and a $30.00 fee was added to your account. Your current balance on the account is -$" + (account.Balance * -1).ToString() + ".");
                     }
