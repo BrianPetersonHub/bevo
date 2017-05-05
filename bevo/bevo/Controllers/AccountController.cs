@@ -10,7 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using bevo.Models;
 using bevo.Messaging;
-
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace bevo.Controllers
 {
@@ -86,7 +86,7 @@ namespace bevo.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToAction("Index", "Customer");
+                        return RedirectToAction("Index", "Customer");
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");

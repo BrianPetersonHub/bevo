@@ -17,6 +17,14 @@ namespace bevo.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            if (User.IsInRole("Manager"))
+            {
+                return RedirectToAction("Home", "Manager");
+            }
+            else if (User.IsInRole("Employee"))
+            {
+                return RedirectToAction("Home", "Employee");
+            }
             return RedirectToAction("CheckAccounts");
         }
 
