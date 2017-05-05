@@ -60,6 +60,16 @@
                 htmlAttributes: new { @class = "quick-actions" })
             </p>
         </div>
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
+                linkText: "Search Transactions",
+                actionName: "Home",
+                controllerName: "Transactions",
+                routeValues: new { id = Model.CheckingAccountID },
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
 </div>
     <div class="homepage-container col-lg-9">
         <h3>List of Pending Transactions</h3>

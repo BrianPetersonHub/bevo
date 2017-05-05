@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using bevo.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin.Security.DataProtection;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace bevo.Controllers
 {
@@ -240,6 +242,10 @@ namespace bevo.Controllers
             query = query.Where(user => user.Id == id);
             List<AppUser> queryList = query.ToList();
             AppUser userInQuestion = queryList[0];
+
+            //Stuff from stackoverflow
+            var provider = new DpapiDataProtectionProvider("Sample");
+            userManager.UserTokenProvider = new DataProtectorTokenProvider<AppUser>(provider.Create("GeneratePassword"));
 
             String resetToken = userManager.GeneratePasswordResetToken(id);
             userManager.ResetPassword(id, resetToken, newPassword);

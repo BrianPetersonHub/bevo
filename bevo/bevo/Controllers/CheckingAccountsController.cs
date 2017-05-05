@@ -31,7 +31,7 @@ namespace bevo.Controllers
             String mystring = myint.ToString();
         }
 
-        //POST: ChechingAccount/Create
+        //POST: CheckingAccount/Create
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
