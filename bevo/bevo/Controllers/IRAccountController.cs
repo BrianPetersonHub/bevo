@@ -97,7 +97,14 @@ namespace bevo.Controllers
         public List<Transaction> GetAllTransactions(String id)
         {
             IRAccount irAccount = db.IRAccounts.Find(id);
-            List<Transaction> transactions = irAccount.Transactions;
+            List<Transaction> transactions = new List<Transaction>();
+            foreach (Transaction t in irAccount.Transactions)
+            {
+                if (t.NeedsApproval != true)
+                {
+                    transactions.Add(t);
+                }
+            }
             return transactions;
         }
 

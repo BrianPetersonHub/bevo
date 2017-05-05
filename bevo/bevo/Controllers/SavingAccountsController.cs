@@ -92,7 +92,15 @@ namespace bevo.Controllers
         public List<Transaction> GetAllTransactions(int? id)
         {
             SavingAccount savingAccount = db.SavingAccounts.Find(id);
-            List<Transaction> transactions = savingAccount.Transactions;
+            List<Transaction> transactions = new List<Transaction>();
+            foreach (Transaction t in savingAccount.Transactions)
+            {
+                if (t.NeedsApproval != true)
+                {
+                    transactions.Add(t);
+                }
+            }
+
             return transactions;
         }
 

@@ -132,7 +132,14 @@ namespace bevo.Controllers
         public List<Transaction> GetAllTransactions(int? id)
         {
             CheckingAccount checkingAccount = db.CheckingAccounts.Find(id);
-            List<Transaction> transactions = checkingAccount.Transactions;
+            List<Transaction> transactions = new List<Transaction>();
+            foreach (Transaction t in checkingAccount.Transactions)
+            {
+                if (t.NeedsApproval != true)
+                {
+                    transactions.Add(t);
+                }
+            }
             return transactions;
         }
 

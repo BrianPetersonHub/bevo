@@ -280,7 +280,14 @@ namespace bevo.Controllers
             string id = user.Id;
 
             StockPortfolio stockPortfolio = db.StockPortfolios.Find(id);
-            List<Transaction> transactions = stockPortfolio.Transactions;
+            List<Transaction> transactions = new List<Transaction>();
+            foreach (Transaction t in stockPortfolio.Transactions)
+            {
+                if (t.NeedsApproval != true)
+                {
+                    transactions.Add(t);
+                }
+            }
             return transactions;
         }
 
