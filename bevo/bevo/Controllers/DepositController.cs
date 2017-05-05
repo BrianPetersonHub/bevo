@@ -16,6 +16,7 @@ namespace bevo.Controllers
         AppDbContext db = new AppDbContext();
 
         //GET: Create/Deposit
+        [Authorize]
         public ActionResult Create()
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -32,6 +33,7 @@ namespace bevo.Controllers
 
         //POST: Create/Deposit
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description")] Transaction transaction, int? toAccount)
         {
@@ -181,6 +183,7 @@ namespace bevo.Controllers
         }
 
         //method returns string (CHECKING, SAVING, IRA, STOCK PORTFOLIO) depending on what type of account 
+        [Authorize]
         public String GetAccountType(Int32? accountNum)
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
@@ -231,6 +234,7 @@ namespace bevo.Controllers
         }
 
         //method returns true if user is under age max
+        [Authorize]
         public Boolean UnderAgeLimt()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
@@ -330,6 +334,7 @@ namespace bevo.Controllers
         }
 
         //method returns the users total deposits after this transaction
+        [Authorize]
         public Decimal TotalContributions(Decimal transactionAmount)
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
@@ -348,7 +353,9 @@ namespace bevo.Controllers
             return sumDeposits;
 
         }
+
         // get all accounts
+        [Authorize]
         public List<AccountsViewModel> GetAccounts()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());

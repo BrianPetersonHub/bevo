@@ -14,6 +14,7 @@ namespace bevo.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: PurchaseStock
+        [Authorize]
         public ActionResult Index()
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -42,6 +43,7 @@ namespace bevo.Controllers
         //purchase and the account that they wanted to execute the purchase
         //POST METHOD
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult PurchaseStock(Int32 numShares, Int32 selectedAccount, Int32 selectedStock, DateTime enteredDate)
         {
@@ -278,6 +280,7 @@ namespace bevo.Controllers
 
 
         //Get information for all the stocks they are allowed to buy based on which stocks are in the DB 
+        [Authorize]
         public List<AvailableStock> GetStocks()
         {
             List<AvailableStock> allStocks = new List<AvailableStock>();
@@ -303,6 +306,7 @@ namespace bevo.Controllers
         }
 
         //Get all the accounts for that user that they could use to buy stocks 
+        [Authorize]
         public List<AccountsViewModel> GetAccounts()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
@@ -348,6 +352,7 @@ namespace bevo.Controllers
 
         //Create a select list of all the accoutns for the user  
         //BASED ON ACCOUNTSVIEWMODEL OBJECTS
+        [Authorize]
         public IEnumerable<SelectListItem> SelectAccount()
         {
             List<AccountsViewModel> allAccounts = GetAccounts();
@@ -357,6 +362,7 @@ namespace bevo.Controllers
 
         //Create a select list of all the available stocks for the user
         //BAED ON STOCK OBJECTS
+        [Authorize]
         public IEnumerable<SelectListItem> SelectStock()
         {
             var query = from s in db.Stocks
@@ -370,6 +376,7 @@ namespace bevo.Controllers
         }
 
         // get account type
+        [Authorize]
         public String GetAccountType(Int32? accountNum)
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());

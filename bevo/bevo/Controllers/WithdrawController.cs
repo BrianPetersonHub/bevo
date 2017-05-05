@@ -16,6 +16,7 @@ namespace bevo.Controllers
         AppDbContext db = new AppDbContext();
 
         // GET: Withdraw
+        [Authorize]
         public ActionResult Create()
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -32,6 +33,7 @@ namespace bevo.Controllers
 
         //POST: Create/Withdraw
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description,Dispute")] Transaction transaction, int? selectedAccount)
         {
@@ -193,12 +195,14 @@ namespace bevo.Controllers
         }
 
 
+        [Authorize]
         public ActionResult MaxOverdraftError()
         {
             return View();
         }
 
         //method returns string (CHECKING, SAVING, IRA, STOCK PORTFOLIO) depending on what type of account 
+        [Authorize]
         public String GetAccountType(Int32? accountNum)
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
@@ -249,6 +253,7 @@ namespace bevo.Controllers
         }
 
         //returns false if not over 65
+        [Authorize]
         public Boolean OverAgeLimt()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
@@ -346,7 +351,9 @@ namespace bevo.Controllers
             }
 
         }
+
         //find all accounts a user owns
+        [Authorize]
         public List<AccountsViewModel> GetAccounts()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());

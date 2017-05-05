@@ -17,6 +17,7 @@ namespace bevo.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: Dispute
+        [Authorize]
         public ActionResult Create(int? id)  //this is an id for a transaction (which will also be the disputes id)
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -47,6 +48,7 @@ namespace bevo.Controllers
 
         //POST: Create/Dispute
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Message,DisputedAmount,TransactionID")] DisputeTransactionViewModel dt)
         {

@@ -15,6 +15,7 @@ namespace bevo.Controllers
         private AppDbContext db = new AppDbContext();
 
         //GET: SavingsAccount/Create
+        [Authorize]
         public ActionResult Create()
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -29,6 +30,7 @@ namespace bevo.Controllers
 
         //POST: SavingAccount/Create
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "SavingAccountID,AccountNum,AccountName,Balance")] SavingAccount savingAccount)
         {
@@ -67,6 +69,7 @@ namespace bevo.Controllers
         }
 
         //GET: SavingAccounts/Details/#
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -84,11 +87,14 @@ namespace bevo.Controllers
             return View(savingAccount);
         }
 
+        [Authorize]
         public Decimal GetValue(int? id)
         {
             SavingAccount savingAccount = db.SavingAccounts.Find(id);
             return savingAccount.Balance;
         }
+
+        [Authorize]
         public List<Transaction> GetAllTransactions(int? id)
         {
             SavingAccount savingAccount = db.SavingAccounts.Find(id);
@@ -106,6 +112,7 @@ namespace bevo.Controllers
 
         //GET: SavingAccounts/EditName/#
         [HttpGet]
+        [Authorize]
         public ActionResult EditName(int? id)
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -132,6 +139,7 @@ namespace bevo.Controllers
 
         //POST: SavingAccounts/EditName/#
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult EditName([Bind(Include = "AccountName")] EditAccountNameViewModel vm, int? id)
         {
@@ -145,6 +153,7 @@ namespace bevo.Controllers
             return View(vm);
         }
 
+        [Authorize]
         public List<TransViewModel> GetPendingTransactions(int? id)
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());

@@ -18,6 +18,7 @@ namespace bevo.Controllers
 
 
         //GET: StockPortfolio/Create
+        [Authorize]
         public ActionResult Create()
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -40,6 +41,7 @@ namespace bevo.Controllers
 
         //POST: StockPortfolio/Create
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "StockPortfolioID,AccountNum,AccountName,Balance")] StockPortfolio stockPortfolio)
         {
@@ -76,6 +78,7 @@ namespace bevo.Controllers
         }
 
         //GET: StockPortfolio/Details/#
+        [Authorize]
         public ActionResult Details()
         {
 
@@ -102,6 +105,7 @@ namespace bevo.Controllers
 
         //GET: StockPortfolio/EditName/#
         [HttpGet]
+        [Authorize]
         public ActionResult EditName(String id)
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -128,6 +132,7 @@ namespace bevo.Controllers
 
         //POST: StockPortfolio/EditName/#
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult EditName([Bind(Include = "AccountName")] EditAccountNameViewModel vm, String id)
         {
@@ -143,6 +148,7 @@ namespace bevo.Controllers
 
 
         //Get all stocks into stockviewmodel
+        [Authorize]
         public List<StockViewModel> GetStocks()
         {
             List<StockViewModel> allStocks = new List<StockViewModel>();
@@ -166,6 +172,7 @@ namespace bevo.Controllers
 
         //Get all total values associated with the portfolio. 
         //Return a stockportfolioviewmodel object with all of the relevant values for the current user's account 
+        [Authorize]
         public StockPortfolioViewModel GetPortfolioInfo()
         {
             //Get userID for the user who is currently logged in 
@@ -273,6 +280,7 @@ namespace bevo.Controllers
         }
 
         //Finds list of transactions based on the ID of the user who is currently logged in
+        [Authorize]
         public List<Transaction> GetAllTransactions()
         {
             UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
@@ -294,6 +302,7 @@ namespace bevo.Controllers
 
 
         //Method to check if portfolio is balanced
+        [Authorize]
         public Boolean BalanceCheck()
         {
             //TODO: Make it so the manager can look at balance checks for all customers at once
@@ -349,6 +358,7 @@ namespace bevo.Controllers
 
         //Make a method to get all the info for the current account stocks (using stockviewmodels)
         //TODO: Again, this method only works for the user who is currently logged in
+        [Authorize]
         public List<StockViewModel> PortfolioSnapshot()
         {
             //Get the ID of the user who is currently logged in
@@ -389,6 +399,7 @@ namespace bevo.Controllers
         //Method that returns quotes for each stock appearing in the current user's account
         //This is similar to the snapshot method except that it looks at the stocks in themselves
         //rather than looking at how much the user has of each stock.
+        [Authorize]
         public List<StockQuote> StockQuotes()
         {
             UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
@@ -419,6 +430,7 @@ namespace bevo.Controllers
         }
 
         //Get a list of the account numbers for each of the user's accountis 
+        [Authorize]
         public List<AccountsViewModel> GetAccounts()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
@@ -458,6 +470,7 @@ namespace bevo.Controllers
             return allAccounts;
         }
 
+        [Authorize]
         public List<Int32?> GetAccountNumbers()
         {
             List<Int32?> AcctNums = new List<Int32?>();
@@ -469,6 +482,7 @@ namespace bevo.Controllers
             return AcctNums;
         }
 
+        [Authorize]
         public List<DisputeViewModel> GetUnresolvedDisputes()
         {
             AppDbContext db = new AppDbContext();
@@ -499,6 +513,7 @@ namespace bevo.Controllers
             return dvmList;
         }
 
+        [Authorize]
         public List<TransViewModel> GetPendingTransactions()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());

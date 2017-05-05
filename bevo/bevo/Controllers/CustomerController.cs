@@ -14,12 +14,14 @@ namespace bevo.Controllers
     {
         private AppDbContext db = new AppDbContext();
 
+        [Authorize]
         public ActionResult Index()
         {
             return RedirectToAction("CheckAccounts");
         }
 
         // GET: Customer/Home
+        [Authorize]
         public ActionResult Home()
         {
 
@@ -33,6 +35,7 @@ namespace bevo.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult CheckAccounts()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
@@ -50,12 +53,14 @@ namespace bevo.Controllers
                 return RedirectToAction("Home");
         }
 
+        [Authorize]
         public String GetUserName()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             return user.FirstName;
         }
 
+        [Authorize]
         public bool OverdraftStatus()
         {   
             // get all accounts
@@ -98,24 +103,31 @@ namespace bevo.Controllers
             return isOverdraft;
         }
 
+        [Authorize]
         public List<CheckingAccount> GetAllCheckingAccts()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             List<CheckingAccount> checkingAccounts = user.CheckingAccounts;
             return checkingAccounts;
         }
+
+        [Authorize]
         public List<SavingAccount> GetAllSavingAccts()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             List<SavingAccount> savingAccounts = user.SavingAccounts;
             return savingAccounts;
         }
+
+        [Authorize]
         public IRAccount GetIRAccount()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             IRAccount irAccount = user.IRAccount;
             return irAccount;
         }
+
+        [Authorize]
         public StockPortfolio GetStockPortfolio()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
@@ -124,6 +136,7 @@ namespace bevo.Controllers
         }
 
         //GET: Customer/ManageAccount
+        [Authorize]
         public ActionResult ViewInfo()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
@@ -131,6 +144,7 @@ namespace bevo.Controllers
         }
 
         //GET: Customer/Edit
+        [Authorize]
         public ActionResult EditInfo()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
@@ -156,6 +170,7 @@ namespace bevo.Controllers
 
         //GET: Customer/Edit
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult EditInfo([Bind(Include = "FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Email,PhoneNumber")] EditUserViewModel vm)
         {
