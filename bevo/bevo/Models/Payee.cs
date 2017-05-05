@@ -45,8 +45,8 @@ namespace bevo.Models
 
         [Required(ErrorMessage = "Phone Number is a Required field.")]
         [Display(Order = 6, Name = "Phone Number")]
-        [RegularExpression("^[01]?[- .]?\\(?[2-9]\\d{2}\\)?[- .]?\\d{3}[- .]?\\d{4}$",
-            ErrorMessage = "Phone must be a valid format")]
+        //[RegularExpression("^[01]?[- .]?\\(?[2-9]\\d{2}\\)?[- .]?\\d{3}[- .]?\\d{4}$",
+            //ErrorMessage = "Phone must be a valid format")]
         public String PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Please enter Payee Type")]
