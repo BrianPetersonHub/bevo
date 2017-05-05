@@ -29,7 +29,8 @@ namespace bevo.Migrations
             //SeedIdentity.ReadPayeeCSV();
             //SeedIdentity.ReadSavingAccountCSV();
             //SeedIdentity.ReadStockAcctCSV();
-            
+            //SeedIdentity.ReadStocksCSV();
+
         }
 
 
