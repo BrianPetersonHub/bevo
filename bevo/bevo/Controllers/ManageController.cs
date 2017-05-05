@@ -108,7 +108,7 @@ namespace bevo.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                return RedirectToAction("Confirmation", new { Message = ManageMessageId.ChangePasswordSuccess });
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Confrimation: Changed password succsesful'); window.location='../Customer/Home';</script>");
             }
             AddErrors(result);
             return View(model);

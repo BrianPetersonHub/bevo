@@ -161,7 +161,7 @@ namespace bevo.Controllers
             foreach (StockDetail s in stocks )
             {
                 StockViewModel stockToAdd = new StockViewModel();
-
+                stockToAdd.StockID = s.Stock.StockID;
                 stockToAdd.Ticker = s.Stock.StockTicker;
                 stockToAdd.NumInAccount = s.Quantity;
                 stockToAdd.CurrentPrice = Utilities.GetQuote.GetStock(s.Stock.StockTicker).LastTradePrice;

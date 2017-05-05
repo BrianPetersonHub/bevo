@@ -123,7 +123,8 @@ namespace bevo.Controllers
                   City = model.City,
                   State = model. State,
                   ZipCode = model.ZipCode,
-                  Birthday = model.Birthday
+                  Birthday = model.Birthday,
+                  PhoneNumber = model.PhoneNumber
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
 

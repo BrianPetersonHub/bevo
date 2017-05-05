@@ -9,6 +9,7 @@ namespace bevo.Models
     //Used when evaluating an EXISTING stock portfolio as a whole 
     public class StockPortfolioViewModel
     {
+        public Int32? StockID { get; set; }
         public Decimal? CurrentValue { get; set; }
         public bool Balanced { get; set; }
         public Decimal? TotalGains { get; set; }
