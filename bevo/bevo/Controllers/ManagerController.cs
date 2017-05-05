@@ -246,6 +246,7 @@ namespace bevo.Controllers
                     a.Balance = a.Balance - transToChange.Amount;
                 }
             }
+            transToChange.NeedsApproval = false;
             db.SaveChanges();
 
             AppUser user = db.Users.Find(User.Identity.GetUserId());
@@ -312,7 +313,7 @@ namespace bevo.Controllers
                 StockPortfolio a = db.StockPortfolios.Find(accountID);
                 user = a.AppUser;
             }
-
+            transaction.NeedsApproval = false;
             db.SaveChanges();
             //Send an email to the user in question 
             String bodyForEmail = null;
@@ -641,7 +642,6 @@ namespace bevo.Controllers
                 //based on whether the dispute was accepted, rejected, or adjusted
                 if (edvm.Status == DisputeStatus.Accepted)
                 {
-                    //for transfers, have to chagne two accounts balances
                     if (transToChange.TransType == TransType.Transfer || transToChange.TransType == TransType.Deposit || transToChange.TransType == TransType.Sell_Stock || transToChange.TransType == TransType.Bonus)
                     {
                         //to accounts
@@ -782,6 +782,103 @@ namespace bevo.Controllers
                 }
                 if (edvm.Status == DisputeStatus.Adjusted)
                 {
+                    //for transfers, have to chagne two accounts balances
+                    if (transToChange.TransType == TransType.Transfer || transToChange.TransType == TransType.Deposit || transToChange.TransType == TransType.Sell_Stock || transToChange.TransType == TransType.Bonus)
+                    {
+                        //to accounts
+                        if (GetAccountType(transToChange.ToAccount) == "CHECKING")
+                        {
+                            var query = from account in db.CheckingAccounts
+                                        where account.AccountNum == transToChange.ToAccount
+                                        select account.CheckingAccountID;
+                            //gets first (only) thing from query list
+                            Int32 accountID = query.First();
+                            CheckingAccount a = db.CheckingAccounts.Find(accountID);
+                            a.Balance = a.Balance + dvm.CorrectAmount - transToChange.Amount;
+                        }
+
+                        else if (GetAccountType(transToChange.ToAccount) == "SAVING")
+                        {
+                            var query = from account in db.SavingAccounts
+                                        where account.AccountNum == transToChange.ToAccount
+                                        select account.SavingAccountID;
+                            //gets first (only) thing from query list
+                            Int32 accountID = query.First();
+                            SavingAccount a = db.SavingAccounts.Find(accountID);
+                            a.Balance = a.Balance + dvm.CorrectAmount - transToChange.Amount;
+                        }
+
+                        else if (GetAccountType(transToChange.ToAccount) == "IRA")
+                        {
+                            var query = from account in db.IRAccounts
+                                        where account.AccountNum == transToChange.ToAccount
+                                        select account.IRAccountID;
+                            //gets first (only) thing from query list
+                            String accountID = query.First();
+                            IRAccount a = db.IRAccounts.Find(accountID);
+                            a.Balance = a.Balance + dvm.CorrectAmount - transToChange.Amount;
+                        }
+
+                        else if (GetAccountType(transToChange.ToAccount) == "STOCKPORTFOLIO")
+                        {
+                            var query = from account in db.StockPortfolios
+                                        where account.AccountNum == transToChange.ToAccount
+                                        select account.StockPortfolioID;
+                            //gets first (only) thing from query list
+                            String accountID = query.First();
+                            StockPortfolio a = db.StockPortfolios.Find(accountID);
+                            a.Balance = a.Balance + dvm.CorrectAmount - transToChange.Amount;
+                        }
+                    }
+                    else
+                    {
+                        //from accounts
+                        if (GetAccountType(transToChange.FromAccount) == "CHECKING")
+                        {
+                            var query = from account in db.CheckingAccounts
+                                        where account.AccountNum == transToChange.FromAccount
+                                        select account.CheckingAccountID;
+                            //gets first (only) thing from query list
+                            Int32 accountID = query.First();
+                            CheckingAccount a = db.CheckingAccounts.Find(accountID);
+                            a.Balance = a.Balance - dvm.CorrectAmount + transToChange.Amount;
+                        }
+
+                        else if (GetAccountType(transToChange.FromAccount) == "SAVING")
+                        {
+                            var query = from account in db.SavingAccounts
+                                        where account.AccountNum == transToChange.FromAccount
+                                        select account.SavingAccountID;
+                            //gets first (only) thing from query list
+                            Int32 accountID = query.First();
+                            SavingAccount a = db.SavingAccounts.Find(accountID);
+                            a.Balance = a.Balance - dvm.CorrectAmount + transToChange.Amount;
+                        }
+
+                        else if (GetAccountType(transToChange.FromAccount) == "IRA")
+                        {
+                            var query = from account in db.IRAccounts
+                                        where account.AccountNum == transToChange.FromAccount
+                                        select account.IRAccountID;
+                            //gets first (only) thing from query list
+                            String accountID = query.First();
+                            IRAccount a = db.IRAccounts.Find(accountID);
+                            a.Balance = a.Balance - dvm.CorrectAmount + transToChange.Amount;
+                        }
+
+                        else if (GetAccountType(transToChange.FromAccount) == "STOCKPORTFOLIO")
+                        {
+                            var query = from account in db.StockPortfolios
+                                        where account.AccountNum == transToChange.FromAccount
+                                        select account.StockPortfolioID;
+                            //gets first (only) thing from query list
+                            String accountID = query.First();
+                            StockPortfolio a = db.StockPortfolios.Find(accountID);
+                            a.Balance = a.Balance - dvm.CorrectAmount + transToChange.Amount;
+                        }
+                    }
+
+
                     disToChange.DisputeStatus = edvm.Status;
                     if (edvm.Comment != null)
                     {
