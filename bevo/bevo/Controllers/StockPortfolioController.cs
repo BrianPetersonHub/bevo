@@ -68,6 +68,8 @@ namespace bevo.Controllers
                 stockPortfolio.Transactions = new List<Transaction>();
                 stockPortfolio.Transactions.Add(t);
 
+                user.StockPortfolio = new StockPortfolio();
+                user.StockPortfolio = stockPortfolio;
 
                 db.SaveChanges();
                 return RedirectToAction("Home", "Customer");

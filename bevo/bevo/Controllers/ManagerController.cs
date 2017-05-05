@@ -1190,6 +1190,7 @@ namespace bevo.Controllers
                 db.SaveChanges();
             }
 
+            ViewBag.PortfoliosToApprove = PortfoliosToApprove();
             return View();
         }
 
