@@ -100,14 +100,14 @@ namespace bevo.Controllers
                     trans.FromAccount = fromAccount.AccountNum;
                     //If there isn't enough money in the account, send them back to the purchase stock page
                     //Otherwise, subtract the cost of the transaction from the appropriate account balance 
-                    if (fromAccount.Balance < (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice))
+                    if (fromAccount.Balance < (numShares * bevo.Utilities.GetQuote.HistoricalStockPrice(stockInQuestion.StockTicker, enteredDate)))
                     {
                         return Content("<script language'javascript' type = 'text/javascript'> alert('Error: The checking account you selected does not have enough funds'); window.location='Index';</script>");
 
                     }
                     else
                     {
-                        fromAccount.Balance -= (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice);
+                        fromAccount.Balance -= (numShares * bevo.Utilities.GetQuote.HistoricalStockPrice(stockInQuestion.StockTicker, enteredDate));
                     }
                 }
             }
@@ -124,14 +124,14 @@ namespace bevo.Controllers
                 {
                     fromAccount.Transactions.Add(trans);
                     trans.FromAccount = fromAccount.AccountNum;
-                    if (fromAccount.Balance < (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice))
+                    if (fromAccount.Balance < (numShares * bevo.Utilities.GetQuote.HistoricalStockPrice(stockInQuestion.StockTicker, enteredDate)))
                     {
                         return Content("<script language'javascript' type = 'text/javascript'> alert('Error: The saving account you selected does not have enough funds!'); window.location='Index';</script>");
 
                     }
                     else
                     {
-                        fromAccount.Balance -= (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice);
+                        fromAccount.Balance -= (numShares * bevo.Utilities.GetQuote.HistoricalStockPrice(stockInQuestion.StockTicker, enteredDate));
                     }
 
                 }
@@ -149,14 +149,14 @@ namespace bevo.Controllers
                 {
                     fromAccount.Transactions.Add(trans);
                     trans.FromAccount = fromAccount.AccountNum;
-                    if (fromAccount.Balance < (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice))
+                    if (fromAccount.Balance < (numShares * bevo.Utilities.GetQuote.HistoricalStockPrice(stockInQuestion.StockTicker, enteredDate)))
                     {
                         return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You do not have enough funds in your stock portfolio'); window.location='Index';</script>");
 
                     }
                     else
                     {
-                        fromAccount.Balance -= (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice);
+                        fromAccount.Balance -= (numShares * bevo.Utilities.GetQuote.HistoricalStockPrice(stockInQuestion.StockTicker, enteredDate));
                     }
                 }
 
@@ -166,7 +166,8 @@ namespace bevo.Controllers
             trans.NumShares = numShares;
 
             //Set transaction amount 
-            trans.Amount = (numShares * bevo.Utilities.GetQuote.GetStock(stockInQuestion.StockTicker).LastTradePrice);
+            trans.Amount = (numShares * bevo.Utilities.GetQuote.HistoricalStockPrice(stockInQuestion.StockTicker, enteredDate));
+            trans.Amount.ToString();
 
             //Give a description of the transaction
             trans.Description = "Bought " + numShares.ToString() + " shares of " + stockInQuestion.StockName +
