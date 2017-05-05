@@ -144,33 +144,18 @@ namespace bevo.Controllers
         }
 
         [Authorize]
-        public List<TransViewModel> GetPendingTransactions(String id)
+        public List<Transaction> GetPendingTransactions(String id)
         {
-            AppUser user = db.Users.Find(User.Identity.GetUserId());
-            List<TransViewModel> tvms = new List<TransViewModel>();
-            List<Transaction> transactions = GetAllTransactions(id);
-
-            foreach (Transaction t in transactions)
+            IRAccount irAccount = db.IRAccounts.Find(id);
+            List<Transaction> transactions = new List<Transaction>();
+            foreach (Transaction t in irAccount.Transactions)
             {
                 if (t.NeedsApproval == true)
                 {
-                    TransViewModel tvm = new TransViewModel();
-                    tvm.TransactionID = t.TransactionID;
-                    tvm.TransactionNum = t.TransactionNum;
-                    tvm.TransType = t.TransType;
-                    tvm.Amount = t.Amount;
-                    tvm.toAccount = t.ToAccount;
-                    tvm.fromAccount = t.FromAccount;
-                    tvm.Date = t.Date;
-                    tvm.Description = t.Description;
-                    tvm.FirstName = user.FirstName;
-                    tvm.LastName = user.LastName;
-
-                    tvms.Add(tvm);
+                    transactions.Add(t);
                 }
             }
-
-            return tvms;
+            return transactions;
         }
 
         [Authorize]

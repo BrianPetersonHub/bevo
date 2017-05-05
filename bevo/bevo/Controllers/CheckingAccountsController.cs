@@ -15,6 +15,7 @@ namespace bevo.Controllers
     {
         private AppDbContext db = new AppDbContext();
 
+
         //GET: CheckingAccount/Create
         [Authorize]
         public ActionResult Create()
@@ -157,33 +158,18 @@ namespace bevo.Controllers
         }
 
         [Authorize]
-        public List<TransViewModel> GetPendingTransactions(int? id)
+        public List<Transaction> GetPendingTransactions(int? id)
         {
-            AppUser user = db.Users.Find(User.Identity.GetUserId());
-            List<TransViewModel> tvms = new List<TransViewModel>();
-            List<Transaction> transactions = GetAllTransactions(id);
-
-            foreach (Transaction t in transactions)
+            CheckingAccount checkingAccount = db.CheckingAccounts.Find(id);
+            List<Transaction> transactions = new List<Transaction>();
+            foreach (Transaction t in checkingAccount.Transactions)
             {
                 if (t.NeedsApproval == true)
                 {
-                    TransViewModel tvm = new TransViewModel();
-                    tvm.TransactionID = t.TransactionID;
-                    tvm.TransactionNum = t.TransactionNum;
-                    tvm.TransType = t.TransType;
-                    tvm.Amount = t.Amount;
-                    tvm.toAccount = t.ToAccount;
-                    tvm.fromAccount = t.FromAccount;
-                    tvm.Date = t.Date;
-                    tvm.Description = t.Description;
-                    tvm.FirstName = user.FirstName;
-                    tvm.LastName = user.LastName;
-
-                    tvms.Add(tvm);
+                    transactions.Add(t);
                 }
             }
-
-            return tvms;
+            return transactions;
         }
 
     }

@@ -123,7 +123,8 @@ namespace bevo.Controllers
                   City = model.City,
                   State = model. State,
                   ZipCode = model.ZipCode,
-                  Birthday = model.Birthday
+                  Birthday = model.Birthday,
+                  PhoneNumber = model.PhoneNumber
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
 
@@ -254,14 +255,14 @@ namespace bevo.Controllers
             if (user == null)
             {
                 // Don't reveal that the user does not exist
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
+                return View("Error");
             }
             //NOTE: Stan added this
             var token= UserManager.GeneratePasswordResetToken(user.Id); //token = model.Code; 
             var result = await UserManager.ResetPasswordAsync(user.Id, token, model.Password);
             if (result.Succeeded)
             {
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully changed password.'); window.location='../';</script>");
             }
             AddErrors(result);
             return View();

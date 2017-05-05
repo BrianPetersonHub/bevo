@@ -75,6 +75,10 @@ namespace bevo.Models
         [Display(Order = 10, Name = "Date of Birth")]
         [DataType(DataType.Date)]
         public String Birthday { get; set; }
+
+        [Required(ErrorMessage = "PhoneNumber is a required field")]
+        [Display(Name = "Phon Number")]
+        public String PhoneNumber { get; set; }
     }
 
     public class ResetPasswordViewModel

@@ -161,7 +161,7 @@ namespace bevo.Controllers
             foreach (StockDetail s in stocks )
             {
                 StockViewModel stockToAdd = new StockViewModel();
-
+                stockToAdd.StockID = s.Stock.StockID;
                 stockToAdd.Ticker = s.Stock.StockTicker;
                 stockToAdd.NumInAccount = s.Quantity;
                 stockToAdd.CurrentPrice = Utilities.GetQuote.GetStock(s.Stock.StockTicker).LastTradePrice;
@@ -516,33 +516,22 @@ namespace bevo.Controllers
         }
 
         [Authorize]
-        public List<TransViewModel> GetPendingTransactions()
+        public List<Transaction> GetPendingTransactions()
         {
-            AppUser user = db.Users.Find(User.Identity.GetUserId());
-            List<TransViewModel> tvms = new List<TransViewModel>();
-            List<Transaction> transactions = GetAllTransactions();
+            UserManager<AppUser> userManager = new UserManager<AppUser>(new UserStore<AppUser>(db));
+            var user = userManager.FindById(User.Identity.GetUserId());
+            string id = user.Id;
 
-            foreach (Transaction t in transactions)
+            StockPortfolio stockPortfolio = db.StockPortfolios.Find(id);
+            List<Transaction> transactions = new List<Transaction>();
+            foreach (Transaction t in stockPortfolio.Transactions)
             {
                 if (t.NeedsApproval == true)
                 {
-                    TransViewModel tvm = new TransViewModel();
-                    tvm.TransactionID = t.TransactionID;
-                    tvm.TransactionNum = t.TransactionNum;
-                    tvm.TransType = t.TransType;
-                    tvm.Amount = t.Amount;
-                    tvm.toAccount = t.ToAccount;
-                    tvm.fromAccount = t.FromAccount;
-                    tvm.Date = t.Date;
-                    tvm.Description = t.Description;
-                    tvm.FirstName = user.FirstName;
-                    tvm.LastName = user.LastName;
-
-                    tvms.Add(tvm);
+                    transactions.Add(t);
                 }
             }
-
-            return tvms;
+            return transactions;
         }
     }
 }
