@@ -123,7 +123,7 @@ namespace bevo.Migrations
                     City = seedPerson[6],
                     State = seedPerson[7],
                     ZipCode = seedPerson[8],
-                    Birthday = seedPerson[10],
+                    Birthday = seedPerson[10].ToString(),
                     PhoneNumber = seedPerson[9]
                     //PasswordHash = hashedPassword
                 };
