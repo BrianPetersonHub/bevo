@@ -1223,26 +1223,16 @@ namespace bevo.Controllers
             foreach(String p in selectedPortfolios)
             {
                 StockPortfolio portfolioInQuestion = db.StockPortfolios.Find(p);
-                portfolioInQuestion.Disabled = true;
+                portfolioInQuestion.Disabled = false;
 
                 db.SaveChanges();
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully approved portfolio.'); window.location='../Manager/Home';</script>");
             }
 
             ViewBag.PortfoliosToApprove = PortfoliosToApprove();
+            ViewBag.SelectPortfolios = MultiSelectStockPortfolios();
             return View();
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         //Get a list of all transactions 
