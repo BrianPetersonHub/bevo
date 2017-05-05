@@ -16,6 +16,7 @@ namespace bevo.Controllers
         AppDbContext db = new AppDbContext();
 
         //GET: Create/Transfer
+        [Authorize]
         public ActionResult Create()
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -33,6 +34,7 @@ namespace bevo.Controllers
             return View();
         }
 
+        [Authorize]
         public List<AccountsViewModel> GetListAccounts()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
@@ -90,6 +92,7 @@ namespace bevo.Controllers
 
         //POST: Create/Transfer
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description")] Transaction transaction, int? toAccount1, int? fromAccount1)
         {
@@ -481,7 +484,7 @@ namespace bevo.Controllers
             return View(transaction);
         }
 
-
+        [Authorize]
         public ActionResult CreateAutoCorrect()
         {
             List<AccountsViewModel> allAccounts = GetAccounts();
@@ -491,12 +494,14 @@ namespace bevo.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult MaxOverdrafError()
         {
             return View();
         }
 
         //method returns string (CHECKING, SAVING, IRA, STOCK PORTFOLIO) depending on what type of account 
+        [Authorize]
         public String GetAccountType(Int32? accountNum)
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
@@ -547,6 +552,7 @@ namespace bevo.Controllers
         }
 
         //method returns true if user is under age max
+        [Authorize]
         public Boolean UnderAgeLimt()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
@@ -646,6 +652,7 @@ namespace bevo.Controllers
         }
 
         //method returns the users total deposits after this transaction
+        [Authorize]
         public Decimal TotalContributions(Decimal transactionAmount)
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
@@ -666,6 +673,7 @@ namespace bevo.Controllers
         }
 
         //returns false if not over 65
+        [Authorize]
         public Boolean OverAgeLimt()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
@@ -765,6 +773,7 @@ namespace bevo.Controllers
         }
 
         //find all accounts a user owns
+        [Authorize]
         public List<AccountsViewModel> GetAccounts()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
