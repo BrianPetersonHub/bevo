@@ -15,6 +15,11 @@ namespace bevo.Controllers
     {
         private AppDbContext db = new AppDbContext();
 
+        public ActionResult AddThis()
+        {
+            return View();
+        }
+
         //GET: CheckingAccount/Create
         [Authorize]
         public ActionResult Create()
