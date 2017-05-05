@@ -27,8 +27,7 @@ namespace bevo.Controllers
                 return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: You have been terminated. Hasta la vista.'); window.location='../Home/Index';</script>");
             }
 
-            var appUsers = db.Users.Include(a => a.IRAccount).Include(a => a.StockPortfolio);
-            return View(appUsers.ToList());
+            return View();
         }
 
         [Authorize(Roles = "Employee")]
@@ -142,7 +141,8 @@ namespace bevo.Controllers
 
             ViewBag.AllCustomers = GetCustomers();
             ViewBag.SelectCustomer = SelectCustomer();
-            return View();
+            List<AppUser> customers = GetCustomers();
+            return View(customers);
         }
 
         //Make the post edit method to freeze customer account

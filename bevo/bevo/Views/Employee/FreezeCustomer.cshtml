@@ -1,0 +1,100 @@
+﻿@model IEnumerable<bevo.Models.AppUser>
+
+@{
+    ViewBag.Title = "manage customers";
+}
+
+<div class="row">
+    <div class="homepage-top">
+        <h2>Manage customers</h2>
+    </div>
+</div>
+
+
+@using (Html.BeginForm("FreezeCustomer", "Employee", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+<div class="row">
+    <div class="form-table-container col-lg-7">
+        <p>All Customers</p>
+        <div class="form-display-table">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Disabled)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LastName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        @{ 
+                            if (item.Disabled == true)
+                            {
+                                <td>Y</td>;
+                            }
+                            else
+                            {
+                                <td>N</td>;
+                            }
+                        }
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }) 
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+
+    <div class="form-container col-lg-4">
+        <div class="form-group">
+            <p>
+                Select Customer to Disable @Html.DropDownList("Id", (SelectList)ViewBag.SelectCustomer, new { @class = "form-control" }) <br />
+                <input type="submit" value="Submit" class="btn btn-default color" />
+            </p>
+        </div>
+    </div>
+</div>
+}
+<div class="row nav-footer">
+    <p>
+        @Html.ActionLink(
+     linkText: "See Disabled Customers",
+     actionName: "ReActivateCustomers",
+     controllerName: "Manager",
+     routeValues: null,
+     htmlAttributes: null)
+    </p>
+</div>
+
+<div class="row nav-footer">
+    <p>
+        @Html.ActionLink(
+     linkText: "<< Back to Home",
+     actionName: "Home",
+     controllerName: "Manager",
+     routeValues: null,
+     htmlAttributes: null)
+    </p>
+</div>
