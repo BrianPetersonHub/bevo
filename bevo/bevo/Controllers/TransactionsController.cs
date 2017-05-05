@@ -65,7 +65,7 @@ namespace bevo.Controllers
 
             if (SearchString == null)
             {
-                return View(GetAllTransactions());
+                return View(GetQueryRange());
             }
             else
             {
@@ -80,7 +80,7 @@ namespace bevo.Controllers
             {
                 return Content("<script language'javascript' type = 'text/javascript'> alert('Access Denied: Your account has been disabled. You are in a view-only mode.'); window.location='../Customer/Home';</script>");
             }
-
+            ViewBag.CountAllTransactions = GetAllTransactions().Count();
             ViewBag.TransTypeSelectList = GetAllTransTypesSL();
 
             return View();
@@ -95,17 +95,20 @@ namespace bevo.Controllers
                                             int? transactionNumber,
                                             Date selectedDate )
         {
+
             var query = from t in GetQueryRange()
                         select t;
-            
-            //DONE: description textbox search
-            if (description != null && description != "")
-            {
-                query = query.Where(t => t.Description.Contains(description));
-            }
+
 
             //DONE: Dropdown selected transaction type
             var transTypeList = EnumHelper.GetSelectList(typeof(TransType));
+
+            //Description
+            if (description != null && description != "")
+            {
+                query = query.Where(t => t.Description != null && t.Description != "");
+                query = query.Where(t => t.Description.Contains(description));
+            }
 
             if (selectedTransType == 8)
             {
@@ -217,6 +220,8 @@ namespace bevo.Controllers
             {
                 SelectedTransactions.Add(t);
             }
+ 
+
             ViewBag.TransTypeSelectList = GetAllTransTypesSL();
             return View("SearchResults", SelectedTransactions);
 
@@ -348,6 +353,7 @@ namespace bevo.Controllers
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             List<Transaction> list = new List<Transaction>();
+
             //make list of users transactions
             if (user.IRAccount != null)
             {
@@ -373,8 +379,7 @@ namespace bevo.Controllers
             }
 
             var query = (from t in list
-                         where (t.FromAccount == transaction.FromAccount && transaction.FromAccount != 0)
-                         where  (t.ToAccount == transaction.ToAccount && transaction.ToAccount != 0)
+                         where (t.FromAccount == transaction.FromAccount && transaction.FromAccount != 0) ||  (t.ToAccount == transaction.ToAccount && transaction.ToAccount != 0)
                          where t.TransType == transaction.TransType
                          orderby t.Date descending
                          select t).Take(5);
@@ -384,8 +389,7 @@ namespace bevo.Controllers
             if (listTransaction.Count() < 5)
             {
                 var query2 = (from t in list
-                             where (t.FromAccount == transaction.FromAccount && transaction.FromAccount != 0)
-                             where (t.ToAccount == transaction.ToAccount && transaction.ToAccount != 0)
+                             where (t.FromAccount == transaction.FromAccount && transaction.FromAccount != 0) || (t.ToAccount == transaction.ToAccount && transaction.ToAccount != 0)
                              where t.TransType != transaction.TransType
                              orderby t.Date descending
                              select t).Take(5 - listTransaction.Count());
@@ -397,5 +401,55 @@ namespace bevo.Controllers
              
             return listTransaction;
         }
+
+        public String GetAccountType(Int32? accountNum)
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            String accountType;
+
+            List<CheckingAccount> checkingAccounts = user.CheckingAccounts;
+            foreach (var c in checkingAccounts)
+            {
+                if (accountNum == c.AccountNum)
+                {
+                    accountType = "CHECKING";
+                    return accountType;
+                }
+            }
+
+            List<SavingAccount> savingAccounts = user.SavingAccounts;
+            foreach (var s in savingAccounts)
+            {
+                if (accountNum == s.AccountNum)
+                {
+                    accountType = "SAVING";
+                    return accountType;
+                }
+            }
+
+            IRAccount iraAccount = user.IRAccount;
+            if (iraAccount != null)
+            {
+                if (accountNum == iraAccount.AccountNum)
+                {
+                    accountType = "IRA";
+                    return accountType;
+                }
+            }
+
+
+            StockPortfolio stockPortfolio = user.StockPortfolio;
+            if (stockPortfolio != null)
+            {
+                if (accountNum == stockPortfolio.AccountNum)
+                {
+                    accountType = "STOCKPORTFOLIO";
+                    return accountType;
+                }
+            }
+
+            return "NOT FOUND";
+        }
+
     }
 }
