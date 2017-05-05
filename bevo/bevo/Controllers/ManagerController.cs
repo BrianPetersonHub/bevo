@@ -247,7 +247,13 @@ namespace bevo.Controllers
                 }
             }
             db.SaveChanges();
-            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully approved transactions!'); window.location='Home';</script>");
+
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            String bodyForEmail = null;
+            bodyForEmail = "Your pending transaction, transaction number " + transToChange.TransactionID + ", has been accepted.";
+
+            bevo.Messaging.EmailMessaging.SendEmail(user.Email, "Transaction Accepted", bodyForEmail);
+            return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully accepted pending transaction!'); window.location='../Home';</script>");
         }
 
         public ActionResult RejectPendingTransactions(int? id)

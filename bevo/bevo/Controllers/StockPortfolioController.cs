@@ -91,6 +91,7 @@ namespace bevo.Controllers
             }
 
             //Bag up pertinent information about this account 
+            ViewBag.PendingTransactions = GetPendingTransactions();
             ViewBag.Transactions = GetAllTransactions();
             ViewBag.PortfolioSnapshot = PortfolioSnapshot();
             ViewBag.IsBalanced = BalanceCheck();
@@ -491,5 +492,33 @@ namespace bevo.Controllers
             return dvmList;
         }
 
+        public List<TransViewModel> GetPendingTransactions()
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            List<TransViewModel> tvms = new List<TransViewModel>();
+            List<Transaction> transactions = GetAllTransactions();
+
+            foreach (Transaction t in transactions)
+            {
+                if (t.NeedsApproval == true)
+                {
+                    TransViewModel tvm = new TransViewModel();
+                    tvm.TransactionID = t.TransactionID;
+                    tvm.TransactionNum = t.TransactionNum;
+                    tvm.TransType = t.TransType;
+                    tvm.Amount = t.Amount;
+                    tvm.toAccount = t.ToAccount;
+                    tvm.fromAccount = t.FromAccount;
+                    tvm.Date = t.Date;
+                    tvm.Description = t.Description;
+                    tvm.FirstName = user.FirstName;
+                    tvm.LastName = user.LastName;
+
+                    tvms.Add(tvm);
+                }
+            }
+
+            return tvms;
+        }
     }
 }

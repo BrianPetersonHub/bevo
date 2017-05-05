@@ -78,6 +78,7 @@ namespace bevo.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.PendingTransactions = GetPendingTransactions(id);
             ViewBag.Balance = GetValue(id);
             ViewBag.Transactions = GetAllTransactions(id);
             return View(savingAccount);
@@ -134,6 +135,35 @@ namespace bevo.Controllers
                 return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully upadated savings account name!'); window.location='../Customer/Home';</script>");
             }
             return View(vm);
+        }
+
+        public List<TransViewModel> GetPendingTransactions(int? id)
+        {
+            AppUser user = db.Users.Find(User.Identity.GetUserId());
+            List<TransViewModel> tvms = new List<TransViewModel>();
+            List<Transaction> transactions = GetAllTransactions(id);
+
+            foreach (Transaction t in transactions)
+            {
+                if (t.NeedsApproval == true)
+                {
+                    TransViewModel tvm = new TransViewModel();
+                    tvm.TransactionID = t.TransactionID;
+                    tvm.TransactionNum = t.TransactionNum;
+                    tvm.TransType = t.TransType;
+                    tvm.Amount = t.Amount;
+                    tvm.toAccount = t.ToAccount;
+                    tvm.fromAccount = t.FromAccount;
+                    tvm.Date = t.Date;
+                    tvm.Description = t.Description;
+                    tvm.FirstName = user.FirstName;
+                    tvm.LastName = user.LastName;
+
+                    tvms.Add(tvm);
+                }
+            }
+
+            return tvms;
         }
     }
 }
