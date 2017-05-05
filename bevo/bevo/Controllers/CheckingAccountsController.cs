@@ -128,7 +128,7 @@ namespace bevo.Controllers
                 CheckingAccount checkingAccount = db.CheckingAccounts.Find(id);
                 checkingAccount.AccountName = vm.AccountName;
                 db.SaveChanges();
-                return Content("<script language'javascript' type = 'text/javascript'> alert('Your checking account name has been updated'); window.location='../Customer/Home;</script>");
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Your checking account name has been updated'); window.location='../../Customer/Home';</script>");
             }
             return View(vm);
         }
