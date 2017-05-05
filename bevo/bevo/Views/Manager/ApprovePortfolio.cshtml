@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "approve portfolio";
+}
+
+<div class="row">
+    <div class="homepage-top">
+        <h2>approve portfolio</h2>
+    </div>
+</div>
+
+@using (Html.BeginForm("ApprovePortfolio", "Manager", FormMethod.Post))
+{
+
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="form-table-container col-lg-7">
+            <p>Portfolios needing approval</p>
+            <div class="form-display-table">
+                <table class="table">
+                    <tr>
+                        <th>Account Name</th>
+                        <th>Number</th>
+                        <th>Balance</th>
+                    </tr>
+                    @foreach (var p in ViewBag.PortfoliosToApprove)
+                    {
+                        <tr>
+                            <td>@p.AccountName</td>
+                            <td>@p.AccountNum</td>
+                            <td>@p.Balance</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        <div class="form-container col-lg-4">
+            <p class="form-group">
+                @Html.DropDownList("selectedPortfolios", (SelectList)ViewBag.SelectPortfolios, new { @class = "form-control"})
+                <input type="submit" value="Submit" class="btn btn-default color" />
+            </p>
+        </div>
+
+    </div>
+}
+

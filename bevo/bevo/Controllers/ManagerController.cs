@@ -252,8 +252,8 @@ namespace bevo.Controllers
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             String bodyForEmail = null;
             bodyForEmail = "Your pending transaction, transaction number " + transToChange.TransactionID + ", has been accepted.";
-
             bevo.Messaging.EmailMessaging.SendEmail(user.Email, "Transaction Accepted", bodyForEmail);
+
             return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully accepted pending transaction!'); window.location='../Home';</script>");
         }
 
@@ -1139,7 +1139,7 @@ namespace bevo.Controllers
         //Approve a stock portfolio for trading 
         public ActionResult ApprovePortfolio()
         {
-            ViewBag.PortfoliosToApprove = GetStockPortfolios();
+            ViewBag.PortfoliosToApprove = PortfoliosToApprove();
             ViewBag.SelectPortfolios = MultiSelectStockPortfolios();
 
             return View();
@@ -1497,18 +1497,11 @@ namespace bevo.Controllers
             return returnList;
         }
 
-        public MultiSelectList MultiSelectStockPortfolios()
+        public IEnumerable<SelectListItem> MultiSelectStockPortfolios()
         {
             List<StockPortfolio> portfolios = PortfoliosToApprove();
 
-            List<String> selectPortfolios = new List<String>();
-
-            foreach (StockPortfolio p in portfolios)
-            {
-                selectPortfolios.Add(p.StockPortfolioID);
-            }
-
-            MultiSelectList selectPortfolioList = new MultiSelectList(portfolios, "StockPortfolioID", "AccountName", selectPortfolios);
+            SelectList selectPortfolioList = new SelectList(portfolios, "StockPortfolioID", "AccountName");
 
             return selectPortfolioList;
         }

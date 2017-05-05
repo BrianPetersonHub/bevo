@@ -27,6 +27,16 @@
         <div class="quick-action-button">
             <p>
                 @Html.ActionLink(
+                linkText: "Approve Portfolios",
+                actionName: "ApprovePortfolios",
+                controllerName: "Manager",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
                 linkText: "Current Disputes",
                 actionName: "CurrentDisputes",
                 controllerName: "Manager",
