@@ -40,7 +40,7 @@ namespace bevo.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (checkingAccount.Balance <= 0)
+                if (checkingAccount.Balance < 0)
                 {
                     return Content("<script language'javascript' type = 'text/javascript'> alert('Error: Your starting balance must be positive.'); window.location='../CheckingAccounts/Create';</script>");
                 }
