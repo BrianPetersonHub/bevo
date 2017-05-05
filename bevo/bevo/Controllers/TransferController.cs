@@ -28,8 +28,9 @@ namespace bevo.Controllers
             SelectList selectAccounts = new SelectList(allAccounts.OrderBy(q => q.AccountName), "AccountNum", "AccountName");
             ViewBag.allAccounts = selectAccounts;
             ViewBag.listAccounts = GetListAccounts();
-            Transaction transaction = new Transaction();
-            return View(transaction);
+            //Transaction transaction = new Transaction();
+            //return View(transaction);
+            return View();
         }
 
         public List<AccountsViewModel> GetListAccounts()
@@ -90,9 +91,8 @@ namespace bevo.Controllers
         //POST: Create/Transfer
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description,Dispute")] Transaction transaction, int? toAccount1, int? fromAccount1)
+        public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description")] Transaction transaction, int? toAccount1, int? fromAccount1)
         {
-
             if (fromAccount1 != null)
             {
                 transaction.FromAccount = fromAccount1;
