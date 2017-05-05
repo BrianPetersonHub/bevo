@@ -63,6 +63,7 @@ namespace bevo.Controllers
 
             ViewBag.CountAllTransactions = GetAllTransactions().Count();
 
+
             if (SearchString == null)
             {
                 return View(GetQueryRange());
@@ -223,6 +224,7 @@ namespace bevo.Controllers
  
 
             ViewBag.TransTypeSelectList = GetAllTransTypesSL();
+            ViewBag.CountAllTransactions = GetQueryRange().Count();
             return View("SearchResults", SelectedTransactions);
 
         } // end of SearchTransaction
