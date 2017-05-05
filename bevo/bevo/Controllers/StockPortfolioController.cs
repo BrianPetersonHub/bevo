@@ -43,7 +43,7 @@ namespace bevo.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "StockPortfolioID,AccountNum,AccountName,Balance")] StockPortfolio stockPortfolio)
+        public ActionResult Create([Bind(Include = "StockPortfolioID,AccountNum,AccountName,Balance,Disabled")] StockPortfolio stockPortfolio)
         {
             if (ModelState.IsValid)
             {
