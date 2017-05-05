@@ -16,6 +16,7 @@ namespace bevo.Controllers
     {
         private AppDbContext db = new AppDbContext();
 
+        [Authorize(Roles = "Employee")]
         // GET: Employee
         public ActionResult Home()
         {
@@ -28,6 +29,7 @@ namespace bevo.Controllers
             return View(appUsers.ToList());
         }
 
+        [Authorize(Roles = "Employee")]
         // GET: Employee/Details/5
         public ActionResult Details(string id)
         {
@@ -48,6 +50,7 @@ namespace bevo.Controllers
             return View(appUser);
         }
 
+        [Authorize(Roles = "Employee")]
         // GET: Employee/Edit/5
         public ActionResult Edit(string id)
         {
@@ -72,6 +75,7 @@ namespace bevo.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Employee")]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Street,City,State,ZipCode,Email,PhoneNumber")] EditEmployeeViewModel eevm)
         {
@@ -94,6 +98,7 @@ namespace bevo.Controllers
             return View(eevm);
         }
 
+        [Authorize(Roles = "Employee")]
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -112,6 +117,7 @@ namespace bevo.Controllers
 
 
         //Go to transaction search page 
+        [Authorize(Roles = "Employee")]
         public ActionResult GoToTransactionSearch()
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -122,6 +128,7 @@ namespace bevo.Controllers
             return RedirectToAction("Home", "Transactions");
         }
 
+        [Authorize(Roles = "Employee")]
         //Enable and disable customer accounts 
         //Make a method to get a list of all the customers and puts it in the viewbag for the freeze customer view
         public ActionResult FreezeCustomer()
@@ -138,6 +145,7 @@ namespace bevo.Controllers
 
         //Make the post edit method to freeze customer account
         [HttpPost]
+        [Authorize(Roles = "Employee")]
         [ValidateAntiForgeryToken]
         public ActionResult FreezeCustomer(String id)
         {
@@ -161,6 +169,7 @@ namespace bevo.Controllers
         }
 
         //Get method to reactivate customer accounts 
+        [Authorize(Roles = "Employee")]
         public ActionResult ReactivateCustomer()
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -175,6 +184,7 @@ namespace bevo.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Employee")]
         [ValidateAntiForgeryToken]
         public ActionResult ReactivateCustomer(String id)
         {
@@ -201,6 +211,7 @@ namespace bevo.Controllers
 
 
         //Go to the view for selecting which customer you want to change the password for 
+        [Authorize(Roles = "Employee")]
         public ActionResult ChangeCustomerPassword()
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -216,6 +227,7 @@ namespace bevo.Controllers
 
         //Post method for changing a customer's password 
         [HttpPost]
+        [Authorize(Roles = "Employee")]
         [ValidateAntiForgeryToken]
         public ActionResult ChangeCustomerPassword(String id, String newPassword)
         {
@@ -239,6 +251,7 @@ namespace bevo.Controllers
         }
 
         //Go to page to edit a customer's account 
+        [Authorize(Roles = "Employee")]
         public ActionResult ChangeCustomerInfo()
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -254,6 +267,7 @@ namespace bevo.Controllers
 
         //Post method for editing the customer's account 
         [HttpPost]
+        [Authorize(Roles = "Employee")]
         [ValidateAntiForgeryToken]
         public ActionResult ChangeCustomerInfo([Bind(Include = "FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Email,PhoneNumber")] EditUserViewModel evm, String id)
         {

@@ -20,6 +20,7 @@ namespace bevo.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: Manager
+        [Authorize(Roles = "Manager")]
         public ActionResult Home()
         {
             //Put useful information in the viewbag
@@ -33,6 +34,7 @@ namespace bevo.Controllers
         }
 
         // GET: Manager/Details/5
+        [Authorize(Roles = "Manager")]
         public ActionResult Details(string id)
         {
             if (id == null)
@@ -48,6 +50,7 @@ namespace bevo.Controllers
         }
 
         // GET: Manager/Create
+        [Authorize(Roles = "Manager")]
         public ActionResult Create()
         {
             ViewBag.Id = new SelectList(db.IRAccounts, "IRAccountID", "AccountName");
@@ -59,6 +62,7 @@ namespace bevo.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Enabled,FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Active,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName")] AppUser appUser)
         {
@@ -75,6 +79,7 @@ namespace bevo.Controllers
         }
 
         // GET: Manager/Edit/5
+        [Authorize(Roles = "Manager")]
         public ActionResult Edit(string id)
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
@@ -93,6 +98,7 @@ namespace bevo.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Street,City,State,ZipCode,Email,PhoneNumber")] EditEmployeeViewModel eevm)
         {
@@ -115,6 +121,7 @@ namespace bevo.Controllers
             return View(eevm);
         }
 
+        [Authorize(Roles = "Manager")]
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -133,12 +140,14 @@ namespace bevo.Controllers
 
         //TODO: finsh this
         //Get method for seeing account initial deposit approvals
+        [Authorize(Roles = "Manager")]
         public ActionResult ViewPendingTransactions()
         {
             ViewBag.PendingTransactions = GetPendingTransactions();
             return View();
         }
 
+        [Authorize(Roles = "Manager")]
         public ActionResult ApprovePendingTransactions(int? id)
         {
             if (id == null)
@@ -257,6 +266,7 @@ namespace bevo.Controllers
             return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully accepted pending transaction!'); window.location='../Home';</script>");
         }
 
+        [Authorize(Roles = "Manager")]
         public ActionResult RejectPendingTransactions(int? id)
         {
             if (id == null)
@@ -325,7 +335,7 @@ namespace bevo.Controllers
             return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully rejected pending transactions!'); window.location='../Home';</script>");
         }
 
-
+        [Authorize(Roles = "Manager")]
         public List<TransViewModel> GetPendingTransactions()
         {
             List<TransViewModel> tvms = new List<TransViewModel>();
@@ -427,6 +437,7 @@ namespace bevo.Controllers
 
 
         //Get method for chanign employee to a manager 
+        [Authorize(Roles = "Manager")]
         public ActionResult PromoteEmployee()
         {
             ViewBag.AllEmployees = GetEmployees();
@@ -435,6 +446,7 @@ namespace bevo.Controllers
 
         //Post method for changing employee to a manager 
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken]
         public ActionResult PromoteEmployee(String id)
         {
@@ -461,6 +473,7 @@ namespace bevo.Controllers
 
 
         //Make a method to get a list of all the employees and puts in in the viewbag for the fire employees view
+        [Authorize(Roles = "Manager")]
         public ActionResult FireEmployee()
         {
             ViewBag.AllEmployees = GetEmployees();
@@ -471,6 +484,7 @@ namespace bevo.Controllers
 
         //Make the post edit method to fire the employee
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken]
         public ActionResult FireEmployee(String id)
         {
@@ -494,6 +508,7 @@ namespace bevo.Controllers
         }
 
         //Make a method to get a list of all the customers and puts it in the viewbag for the freeze customer view
+        [Authorize(Roles = "Manager")]
         public ActionResult FreezeCustomer()
         {
             ViewBag.SelectCustomers = SelectCustomer();
@@ -504,6 +519,7 @@ namespace bevo.Controllers
 
         //Make the post edit method to fire the employee
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken]
         public ActionResult FreezeCustomer(String id)
         {
@@ -526,6 +542,7 @@ namespace bevo.Controllers
             return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully froze customer account!'); window.location='../Manager/Home';</script>");
         }
 
+        [Authorize(Roles = "Manager")]
         public ActionResult ReactivateCustomer()
         {
             ViewBag.SelectCustomers = SelectDisabledCustomer();
@@ -535,6 +552,7 @@ namespace bevo.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken]
         public ActionResult ReactivateCustomer(String id)
         {
@@ -560,6 +578,7 @@ namespace bevo.Controllers
 
         //Make a get method for editing the dispute
         //The view for this method should be bound to the disputeviewmodel class 
+        [Authorize(Roles = "Manager")]
         public ActionResult EditDispute(int? id)
         {
             AppDbContext db = new AppDbContext();
@@ -605,6 +624,7 @@ namespace bevo.Controllers
 
         //Make a post method for editing disputes 
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken]
         public ActionResult EditDispute([Bind(Include = "DisputeID,AdjustedAmount,Comment,Status")] EditDisputeViewModel edvm)
         {
@@ -920,6 +940,7 @@ namespace bevo.Controllers
             return View(edvm);
         }
 
+        [Authorize(Roles = "Manager")]
         public ActionResult ProcessBalancedPortfolios()
         {
             List<StockPortfolio> stockPortfolios = GetStockPortfolios();
@@ -967,12 +988,14 @@ namespace bevo.Controllers
             return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully added bonuses to Customers with balanced stock portfolios!'); window.location='../Manager/Home';</script>");
         }
 
+        [Authorize(Roles = "Manager")]
         public ActionResult CreateStock()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "StockName,StockTicker,TypeOfStock,FeeAmount")] Stock stock)
         {
@@ -995,6 +1018,7 @@ namespace bevo.Controllers
         }
 
         //Go to page to edit a customer's account 
+        [Authorize(Roles = "Manager")]
         public ActionResult ChangeCustomerInfo()
         {
             ViewBag.AllCustomers = GetCustomers();
@@ -1005,6 +1029,7 @@ namespace bevo.Controllers
 
         //Post method for editing the customer's account 
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken]
         public ActionResult ChangeCustomerInfo([Bind(Include = "FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Email,PhoneNumber")] EditUserViewModel evm, String id)
         {
@@ -1033,6 +1058,7 @@ namespace bevo.Controllers
         }
 
         //Go to the view for selecting which customer you want to change the password for 
+        [Authorize(Roles = "Manager")]
         public ActionResult ChangeCustomerPassword()
         {
             ViewBag.AllCustomers = GetCustomers();
@@ -1043,6 +1069,7 @@ namespace bevo.Controllers
 
         //Post method for changing a customer's password 
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken]
         public ActionResult ChangeCustomerPassword(String id, String newPassword)
         {
@@ -1066,6 +1093,7 @@ namespace bevo.Controllers
         }
 
         //Go to page to edit a customer's account 
+        [Authorize(Roles = "Manager")]
         public ActionResult ChangeEmployeeInfo()
         {
             ViewBag.AllEmployees = GetEmployees();
@@ -1076,6 +1104,7 @@ namespace bevo.Controllers
 
         //Post method for editing the customer's account 
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken]
         public ActionResult ChangeEmployeeInfo([Bind(Include = "FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Email,PhoneNumber")] EditUserViewModel evm, String id)
         {
@@ -1104,6 +1133,7 @@ namespace bevo.Controllers
         }
 
         //Go to the view for selecting which customer you want to change the password for 
+        [Authorize(Roles = "Manager")]
         public ActionResult ChangeEmployeePassword()
         {
             ViewBag.AllEmployees = GetEmployees();
@@ -1114,6 +1144,7 @@ namespace bevo.Controllers
 
         //Post method for changing a customer's password 
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken]
         public ActionResult ChangeEmployeePassword(String id, String newPassword)
         {
@@ -1137,6 +1168,7 @@ namespace bevo.Controllers
         }
 
         //Approve a stock portfolio for trading 
+        [Authorize(Roles = "Manager")]
         public ActionResult ApprovePortfolio()
         {
             ViewBag.PortfoliosToApprove = PortfoliosToApprove();
@@ -1146,6 +1178,7 @@ namespace bevo.Controllers
         }
         //Post Method for approving portfolios
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken]
         public ActionResult ApprovePortfolio(String[] selectedPortfolios)
         {
