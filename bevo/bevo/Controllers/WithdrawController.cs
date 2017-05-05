@@ -68,7 +68,7 @@ namespace bevo.Controllers
                         account.Balance = account.Balance - transaction.Amount;
 
                         db.SaveChanges();
-                        return Content("<script language'javascript' type = 'text/javascript'> alert('Error: You cannot withdraw more than is in your account.'); window.location='../Customer/Home';</script>");
+                        return Content("<script language'javascript' type = 'text/javascript'> alert('Withdrawal Success!'); window.location='../Customer/Home';</script>");
 
                     }
 
