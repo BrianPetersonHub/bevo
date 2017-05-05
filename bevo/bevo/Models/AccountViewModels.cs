@@ -77,7 +77,7 @@ namespace bevo.Models
         public String Birthday { get; set; }
 
         [Required(ErrorMessage = "PhoneNumber is a required field")]
-        [Display(Name = "Phon Number")]
+        [Display(Name = "Phone Number")]
         public String PhoneNumber { get; set; }
     }
 
