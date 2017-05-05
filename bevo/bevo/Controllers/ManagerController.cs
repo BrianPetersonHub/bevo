@@ -1190,6 +1190,7 @@ namespace bevo.Controllers
                 db.SaveChanges();
             }
 
+            ViewBag.PortfoliosToApprove = PortfoliosToApprove();
             return View();
         }
 
@@ -1525,8 +1526,12 @@ namespace bevo.Controllers
 
         public List<StockPortfolio> PortfoliosToApprove()
         {
-            List<StockPortfolio> returnList = db.StockPortfolios.Where(s => s.Disabled == true).ToList();
-
+            List<StockPortfolio> returnList = new List<StockPortfolio>();
+            var query = from sp in db.StockPortfolios
+                        where sp.Disabled == true
+                        select sp;
+            returnList = query.ToList();
+            //List<StockPortfolio> returnList = db.StockPortfolios.Where(s => s.Disabled == true).ToList();
             return returnList;
         }
 

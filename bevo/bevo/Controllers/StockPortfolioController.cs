@@ -43,7 +43,7 @@ namespace bevo.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "StockPortfolioID,AccountNum,AccountName,Balance")] StockPortfolio stockPortfolio)
+        public ActionResult Create([Bind(Include = "StockPortfolioID,AccountNum,AccountName,Balance,Disabled")] StockPortfolio stockPortfolio)
         {
             if (ModelState.IsValid)
             {
@@ -68,6 +68,8 @@ namespace bevo.Controllers
                 stockPortfolio.Transactions = new List<Transaction>();
                 stockPortfolio.Transactions.Add(t);
 
+                user.StockPortfolio = new StockPortfolio();
+                user.StockPortfolio = stockPortfolio;
 
                 db.SaveChanges();
                 return RedirectToAction("Home", "Customer");
