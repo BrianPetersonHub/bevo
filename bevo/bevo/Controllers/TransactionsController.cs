@@ -364,11 +364,23 @@ namespace bevo.Controllers
             }
 
             var query = (from t in list
-                         where t.TransType == transaction.TransType
                          where (t.FromAccount == transaction.FromAccount && transaction.FromAccount != 0) || (t.ToAccount == transaction.ToAccount && transaction.ToAccount != 0)
+                         where t.TransType == transaction.TransType
                          orderby t.Date descending
                          select t).Take(5);
+
             List<Transaction> listTransaction = query.ToList();
+
+            if (listTransaction.Count() < 5)
+            {
+                var query2 =(from t in listTransaction
+                            where (t.FromAccount == transaction.FromAccount && transaction.FromAccount != 0) || (t.ToAccount == transaction.ToAccount && transaction.ToAccount != 0)
+                            where t.TransType != t.TransType
+                            orderby t.Date descending
+                            select t).Take(5-listTransaction.Count()); 
+            }
+             
+
             return listTransaction;
         }
     }
