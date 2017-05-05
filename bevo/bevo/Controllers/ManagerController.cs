@@ -1164,6 +1164,9 @@ namespace bevo.Controllers
             List<AppUser> queryList = query.ToList();
             AppUser userInQuestion = queryList[0];
 
+            var provider = new DpapiDataProtectionProvider("Sample");
+            userManager.UserTokenProvider = new DataProtectorTokenProvider<AppUser>(provider.Create("GeneratePassword"));
+
             String resetToken = userManager.GeneratePasswordResetToken(id);
             userManager.ResetPassword(id, resetToken, newPassword);
 
