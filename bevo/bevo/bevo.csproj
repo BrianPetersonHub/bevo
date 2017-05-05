@@ -540,6 +540,7 @@
     <Content Include="Views\Employee\ChangeCustomerPassword.cshtml" />
     <Content Include="Views\Employee\FreezeCustomer.cshtml" />
     <Content Include="Views\Employee\Edit.cshtml" />
+    <Content Include="Views\Employee\ReactivateCustomer.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
