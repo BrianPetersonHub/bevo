@@ -267,17 +267,39 @@ namespace bevo.Controllers
 
             ViewBag.AllCustomers = GetCustomers();
             ViewBag.SelectCustomer = SelectCustomer();
-            
-            return View();
+            List<AppUser> customers = GetCustomers();
+            return View(customers);
+        }
+
+        [Authorize(Roles = "Employee")]
+        public ActionResult EditCustomerInfo(string id)
+        {
+            AppUser user = db.Users.Find(id);
+            if (id == null )
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            EditUserViewModel edvm = new EditUserViewModel();
+            edvm.FirstName = user.FirstName;
+            edvm.LastName = user.LastName;
+            edvm.MiddleInitial = user.MiddleInitial;
+            edvm.PhoneNumber = user.PhoneNumber;
+            edvm.Birthday = user.Birthday;
+            edvm.City = user.City;
+            edvm.State = user.State;
+            edvm.Street = user.Street;
+            edvm.ZipCode = user.ZipCode;
+            edvm.Email = user.Email;
+            return View(edvm);
         }
 
         //Post method for editing the customer's account 
         [HttpPost]
         [Authorize(Roles = "Employee")]
         [ValidateAntiForgeryToken]
-        public ActionResult ChangeCustomerInfo([Bind(Include = "FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Email,PhoneNumber")] EditUserViewModel evm, String id)
+        public ActionResult EditCustomerInfo([Bind(Include = "Id,FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Email,PhoneNumber")] EditUserViewModel evm)
         {
-            AppUser user = db.Users.Find(id);
+            AppUser user = db.Users.Find(evm.Id);
 
             if(ModelState.IsValid)
             {
@@ -293,7 +315,7 @@ namespace bevo.Controllers
                 user.ZipCode = evm.ZipCode;
 
                 db.SaveChanges();
-                return Content("<script language'javascript' type = 'text/javascript'> alert('Successfully updated customer info!'); window.location='../Employee/Home';</script>");
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Successfully updated customer info!'); window.location='../../Employee/Home';</script>");
 
             }
 

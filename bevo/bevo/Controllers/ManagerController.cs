@@ -1025,17 +1025,44 @@ namespace bevo.Controllers
         {
             ViewBag.AllCustomers = GetCustomers();
             ViewBag.SelectCustomer = SelectCustomer();
+            List<AppUser> customers = GetCustomers();
+            List<AppUser> employees = GetEmployees();
+            foreach (AppUser u in employees)
+            {
+                customers.Add(u);
+            }
+            return View(customers);
+        }
 
-            return View();
+        [Authorize(Roles = "Manager")]
+        public ActionResult EditCustomerInfo(string id)
+        {
+            AppUser user = db.Users.Find(id);
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            EditUserViewModel edvm = new EditUserViewModel();
+            edvm.FirstName = user.FirstName;
+            edvm.LastName = user.LastName;
+            edvm.MiddleInitial = user.MiddleInitial;
+            edvm.PhoneNumber = user.PhoneNumber;
+            edvm.Birthday = user.Birthday;
+            edvm.City = user.City;
+            edvm.State = user.State;
+            edvm.Street = user.Street;
+            edvm.ZipCode = user.ZipCode;
+            edvm.Email = user.Email;
+            return View(edvm);
         }
 
         //Post method for editing the customer's account 
         [HttpPost]
         [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken]
-        public ActionResult ChangeCustomerInfo([Bind(Include = "FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Email,PhoneNumber")] EditUserViewModel evm, String id)
+        public ActionResult EditCustomerInfo([Bind(Include = "Id,FirstName,MiddleInitial,LastName,Street,City,State,ZipCode,Birthday,Email,PhoneNumber")] EditUserViewModel evm)
         {
-            AppUser user = db.Users.Find(id);
+            AppUser user = db.Users.Find(evm.Id);
 
             if (ModelState.IsValid)
             {
@@ -1051,7 +1078,7 @@ namespace bevo.Controllers
                 user.ZipCode = evm.ZipCode;
 
                 db.SaveChanges();
-                return Content("<script language'javascript' type = 'text/javascript'> alert('Successfully updated customer info!'); window.location='../Manager/Home';</script>");
+                return Content("<script language'javascript' type = 'text/javascript'> alert('Successfully updated customer info!'); window.location='../../Manager/Home';</script>");
 
             }
 
@@ -1063,8 +1090,10 @@ namespace bevo.Controllers
         [Authorize(Roles = "Manager")]
         public ActionResult ChangeCustomerPassword()
         {
+            
             ViewBag.AllCustomers = GetCustomers();
             ViewBag.SelectCustomer = SelectCustomer();
+            
 
             return View();
         }
@@ -1348,10 +1377,11 @@ namespace bevo.Controllers
 
             foreach (AppUser user in db.Users)
             {
-                if (userManager.GetRoles(user.Id).Contains("Customer"))
+                if (userManager.GetRoles(user.Id).Contains("Customer") || userManager.GetRoles(user.Id).Contains("Employee"))
                 {
                     customerList.Add(user);
                 }
+
             }
 
 

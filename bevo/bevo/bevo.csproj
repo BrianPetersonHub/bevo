@@ -541,6 +541,12 @@
     <Content Include="Views\Employee\FreezeCustomer.cshtml" />
     <Content Include="Views\Employee\Edit.cshtml" />
     <Content Include="Views\Employee\ReactivateCustomer.cshtml" />
+    <Content Include="Views\Employee\ChangeCustomerInfo.cshtml" />
+    <Content Include="Views\Employee\EditCustomerInfo.cshtml" />
+    <Content Include="Views\Manager\Edit.cshtml" />
+    <Content Include="Views\Manager\ChangeCustomerInfo.cshtml" />
+    <Content Include="Views\Manager\EditCustomerInfo.cshtml" />
+    <Content Include="Views\Manager\ChangeCustomerPassword.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -87,8 +87,38 @@
         <div class="quick-action-button">
             <p>
               @Html.ActionLink(
-              linkText: "Manage Customers",
+              linkText: "Disable Customers",
               actionName: "FreezeCustomer",
+              controllerName: "Manager",
+              routeValues: null,
+              htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
+              linkText: "Search Transactions",
+              actionName: "Home",
+              controllerName: "Transactions",
+              routeValues: null,
+              htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
+              linkText: "Edit User Info",
+              actionName: "ChangeCustomerInfo",
+              controllerName: "Manager",
+              routeValues: null,
+              htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
+              linkText: "Edit User Passwords",
+              actionName: "ChangeCustomerPassword",
               controllerName: "Manager",
               routeValues: null,
               htmlAttributes: new { @class = "quick-actions" })
@@ -98,7 +128,7 @@
     <div class="quick-action-button">
         <!--TODO: Move this somewhere else...-->
         <p>
-            @Html.ActionLink(linkText: "View Account Info", actionName: "ViewInfo", routeValues: null, htmlAttributes: new { @class = "quick-actions" })
+            @Html.ActionLink(linkText: "View Account Info", actionName: "Edit", routeValues: null, htmlAttributes: new { @class = "quick-actions" })
     </p>
 </div>
 </div>

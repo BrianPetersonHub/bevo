@@ -11,6 +11,8 @@ namespace bevo.Models
 {
     public class EditUserViewModel
     {
+        public String Id { get; set; }
+
         [Required(ErrorMessage = "First Name is a Required field.")]
         [Display(Order = 1, Name = "First Name")]
         public String FirstName { get; set; }
