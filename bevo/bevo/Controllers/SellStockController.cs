@@ -52,8 +52,6 @@ namespace bevo.Controllers
             var user = userManager.FindById(User.Identity.GetUserId());
             //Find the portfolio belonging to this user 
             StockPortfolio portfolio = user.StockPortfolio;
-
-            //Make sure the date they entered for the date of stale is today's date
             
 
             ///SUMMARY OF THIS METHOD
