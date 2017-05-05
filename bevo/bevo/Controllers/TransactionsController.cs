@@ -266,9 +266,12 @@ namespace bevo.Controllers
             //initialize list and add all transactions in the user's IRA
             List<Transaction> allTransactions = new List<Transaction>();
 
-            foreach (Transaction t in user.IRAccount.Transactions.ToList())
+            if (user.IRAccount != null)
             {
-                allTransactions.Add(t);
+                foreach (Transaction t in user.IRAccount.Transactions.ToList())
+                {
+                    allTransactions.Add(t);
+                }
             }
 
             //add all checking account transactions
@@ -289,12 +292,15 @@ namespace bevo.Controllers
                 }
             }
 
-            //add all stock portfolio transactions
-            foreach (Transaction t in user.StockPortfolio.Transactions)
+            if (user.StockPortfolio != null)
             {
-                allTransactions.Add(t);
+                //add all stock portfolio transactions
+                foreach (Transaction t in user.StockPortfolio.Transactions)
+                {
+                    allTransactions.Add(t);
+                }
             }
-
+          
             return allTransactions;
         }
 
@@ -358,11 +364,23 @@ namespace bevo.Controllers
             }
 
             var query = (from t in list
-                         where t.TransType == transaction.TransType
                          where (t.FromAccount == transaction.FromAccount && transaction.FromAccount != 0) || (t.ToAccount == transaction.ToAccount && transaction.ToAccount != 0)
+                         where t.TransType == transaction.TransType
                          orderby t.Date descending
                          select t).Take(5);
+
             List<Transaction> listTransaction = query.ToList();
+
+            if (listTransaction.Count() < 5)
+            {
+                var query2 =(from t in listTransaction
+                            where (t.FromAccount == transaction.FromAccount && transaction.FromAccount != 0) || (t.ToAccount == transaction.ToAccount && transaction.ToAccount != 0)
+                            where t.TransType != t.TransType
+                            orderby t.Date descending
+                            select t).Take(5-listTransaction.Count()); 
+            }
+             
+
             return listTransaction;
         }
     }

@@ -62,6 +62,42 @@
         </div>
     </div>
     <div class="homepage-container col-lg-9">
+        <h3>List of Pending Transactions</h3>
+        <table class="table">
+            <tr>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Transaction Type
+                </th>
+                <th>
+                    Amount
+                </th>
+                <th>
+                    Status
+                </th>
+            </tr>
+
+            @foreach (var t in ViewBag.PendingTransactions)
+            {
+                <tr>
+                    <td>
+                        @(t.Date.ToShortDateString())
+                    </td>
+                    <td>
+                        @t.TransType
+                    </td>
+                    <td>
+                        $@t.Amount
+                    </td>
+                    <td>
+                        Pending
+                    </td>
+                </tr>
+            }
+
+        </table>
         <h3>List of Transactions</h3>
         <table class="table">
             <tr>

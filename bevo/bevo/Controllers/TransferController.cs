@@ -28,6 +28,8 @@ namespace bevo.Controllers
             SelectList selectAccounts = new SelectList(allAccounts.OrderBy(q => q.AccountName), "AccountNum", "AccountName");
             ViewBag.allAccounts = selectAccounts;
             ViewBag.listAccounts = GetListAccounts();
+            //Transaction transaction = new Transaction();
+            //return View(transaction);
             return View();
         }
 
@@ -89,9 +91,8 @@ namespace bevo.Controllers
         //POST: Create/Transfer
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description,Dispute")] Transaction transaction, int? toAccount1, int? fromAccount1, bool? addFee)
+        public ActionResult Create([Bind(Include = "TransactionID,TransactionNum,Date,FromAccount,ToAccount,TransType,Amount,Description")] Transaction transaction, int? toAccount1, int? fromAccount1)
         {
-
             if (fromAccount1 != null)
             {
                 transaction.FromAccount = fromAccount1;
@@ -190,6 +191,7 @@ namespace bevo.Controllers
                     {
                         transaction.Amount = 50 + fromAccount.Balance;
                         ModelState.Clear();
+                        ViewBag.listAccounts = GetListAccounts();
                         return View("CreateAutoCorrect", transaction);
                     }
                     //if transaction makes balance between 0 and -50, add transaction, make new fee transaction of $30 on top of overdraft
@@ -441,12 +443,16 @@ namespace bevo.Controllers
             List<AccountsViewModel> allAccounts = GetAccounts();
             SelectList selectAccounts = new SelectList(allAccounts.OrderBy(q => q.AccountName), "AccountNum", "AccountName");
             ViewBag.allAccounts = selectAccounts;
+            ViewBag.listAccounts = GetListAccounts();
             return View(transaction);
         }
 
 
         public ActionResult CreateAutoCorrect()
         {
+            List<AccountsViewModel> allAccounts = GetAccounts();
+            SelectList selectAccounts = new SelectList(allAccounts.OrderBy(q => q.AccountName), "AccountNum", "AccountName");
+            ViewBag.allAccounts = selectAccounts;
             ViewBag.listAccounts = GetListAccounts();
             return View();
         }

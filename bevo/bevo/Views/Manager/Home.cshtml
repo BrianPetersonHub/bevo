@@ -27,6 +27,16 @@
         <div class="quick-action-button">
             <p>
                 @Html.ActionLink(
+                linkText: "Approve Portfolios",
+                actionName: "ApprovePortfolios",
+                controllerName: "Manager",
+                routeValues: null,
+                htmlAttributes: new { @class = "quick-actions" })
+            </p>
+        </div>
+        <div class="quick-action-button">
+            <p>
+                @Html.ActionLink(
                 linkText: "Current Disputes",
                 actionName: "CurrentDisputes",
                 controllerName: "Manager",
@@ -69,7 +79,7 @@
               @Html.ActionLink(
               linkText: "Manage Employees",
               actionName: "FireEmployee",
-              controllerName: "Employees",
+              controllerName: "Manager",
               routeValues: null,
               htmlAttributes: new { @class = "quick-actions" })
             </p>
@@ -79,16 +89,6 @@
               @Html.ActionLink(
               linkText: "Manage Customers",
               actionName: "FreezeCustomer",
-              controllerName: "Manager",
-              routeValues: null,
-              htmlAttributes: new { @class = "quick-actions" })
-            </p>
-        </div>
-        <div class="quick-action-button">
-            <p>
-                @Html.ActionLink(
-              linkText: "View Pending Transactions",
-              actionName: "ViewPendingTransactions",
               controllerName: "Manager",
               routeValues: null,
               htmlAttributes: new { @class = "quick-actions" })
@@ -166,6 +166,83 @@
             </tr>
         }
     </table>
+
+    <h3>Pending Transactions</h3>
+
+    <table class="table">
+        <tr>
+            <th>
+                Date
+            </th>
+            <th>
+                First Name
+            </th>
+            <th>
+                Last Name
+            </th>
+            <th>
+                Transaction
+            </th>
+            <th>
+                Type
+            </th>
+            <th>
+                Amount
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Action
+            </th>
+
+        </tr>
+        @foreach (var t in ViewBag.PendingTransactions)
+            {
+            <tr>
+                <td>
+                    @(t.Date.ToShortDateString())
+                </td>
+                <td>
+                    @(t.FirstName)
+                </td>
+                <td>
+                    @(t.LastName)
+                </td>
+                <td>
+                    @(t.TransactionNum)
+                </td>
+                <td>
+                    @(t.TransType)
+                </td>
+                <td>
+                    $@t.Amount
+                </td>
+                <td>
+                    @(t.Description)
+                </td>
+                <td>
+                    @t.TransType
+                </td>
+                <td>
+                    @Html.ActionLink(
+                linkText: "Accept",
+                actionName: "ApprovePendingTransactions",
+                controllerName: "Manager",
+                routeValues: new { id = t.TransactionID },
+                htmlAttributes: null)
+                </td>
+                <td>
+                    @Html.ActionLink(
+                linkText: "Reject",
+                actionName: "RejectPendingTransactions",
+                controllerName: "Manager",
+                routeValues: new { id = t.TransactionID },
+                htmlAttributes: null)
+                </td>
+            </tr>
+        }
+        </table>
 </div>
 
 </div>

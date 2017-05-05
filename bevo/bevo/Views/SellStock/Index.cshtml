@@ -58,11 +58,10 @@
         </div>
         <div class="form-container col-lg-4">
             <p class="form-group">
-                Date @Html.TextBox("dateEntered", null, new { @class = "form-control" }) <br />
+                Date 
                 Select Stock to Sell @Html.DropDownList("selectedStock", (SelectList)ViewBag.SelectStock, new { @class = "form-control" }) <br />
                 Number of Shares @Html.TextBox("numShares", null, new { @class = "form-control" }) <br />
-                <button type="submit" name ="SellStock" value="Submit" class="btn btn-default color"
-                       onclick="return confirm('@ViewBag.Message')">SaveUpdate and Message Button</button>
+                <input type="submit" name ="SellStock" value="Submit" class="btn btn-default color" />
             </p>
         </div>
 
