@@ -3,12 +3,12 @@ DONE [BP] 5 similar transactions: Currently pulling from entire db
 DONE [BP] Update balance of accounts after dispute is accepted/rejected/adjusted
 DONE (huge number for annatwo sp value bc of those mis calculations earlier) [BP] Update portfolio balance after process stock portfolio
 DONE [BP] Cannot double dispute transaction
-[JA] Customer inactive state, can only use GET methods 
-[JA] Employee: can't do anything when they're fired
+DONE [JA] Customer inactive state, can only use GET methods 
+DONE [JA] Employee: can't do anything when they're fired
 [BP] Transfer: Customer has option to add $30 service fee to withdrawal amount or have total amount entered include the fee
-[BP] Initial deposits, opeing accounts > $5000 approved by manager before being added to customer account
-[BP] Get pending transactions (awaiting approval)
-[JA] Sell Stock: customers cannot enter sale date prior to date of purchase
+DONE [BP] Initial deposits, opeing accounts > $5000 approved by manager before being added to customer account
+DONE [BP] Get pending transactions (awaiting approval)
+DONE [JA] Sell Stock: customers cannot enter sale date prior to date of purchase
 [JA] Employee Controller: 
 	- Modify their own account (new password requires entering old password),
 	- Index get list of all customers
@@ -18,11 +18,11 @@ DONE [BP] Cannot double dispute transaction
 	- Access transaction detail pages, cannot dispute transactions
 [JA] Manager Controller:
 	- Resolved disputes show manager email on transaction detail page
-	- DONE Write methods to Re-enable customers 
+	- Write methods to Re-enable customers 
 	- DONE [AW] EditDispute method- make new viewmodel 
 [ ] *Add role authentication markers
 DONE [AW] *Publish
-[JA] Customers can only purchase stocks once their account has been approved by a manager 
+DONE [JA] Customers can only purchase stocks once their account has been approved by a manager 
 
 
 Views - 
@@ -48,7 +48,7 @@ Test
 	DONE- Dispute --> discrepancy. do we need to add for other resolved disputes beside rejected?
 	DONE- Overdraft
 	DONE- Password
-	DONE - Large deposit approved
+	- Large deposit approved
 [ ] Accounts with negative balance cannot be used to make transfers or payments
 
 

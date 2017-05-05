@@ -359,23 +359,34 @@ namespace bevo.Controllers
             {
                 list = user.IRAccount.Transactions;
             }
-            foreach (CheckingAccount c in user.CheckingAccounts)
+            if (user.CheckingAccounts != null)
             {
-                foreach (Transaction t in c.Transactions)
+                foreach (CheckingAccount c in user.CheckingAccounts)
+                {
+                    foreach (Transaction t in c.Transactions)
+                    {
+                        list.Add(t);
+                    }
+                }
+            }
+            if (user.SavingAccounts != null)
+            {
+
+                foreach (SavingAccount s in user.SavingAccounts)
+                {
+                    foreach (Transaction t in s.Transactions)
+                    {
+                        list.Add(t);
+                    }
+                }
+            }
+            if (user.StockPortfolio != null)
+            {
+                foreach (Transaction t in user.StockPortfolio.Transactions)
                 {
                     list.Add(t);
                 }
-            }
-            foreach (SavingAccount s in user.SavingAccounts)
-            {
-                foreach (Transaction t in s.Transactions)
-                {
-                    list.Add(t);
-                }
-            }
-            foreach (Transaction t in user.StockPortfolio.Transactions)
-            {
-                list.Add(t);
+
             }
 
             var query = (from t in list
@@ -393,7 +404,8 @@ namespace bevo.Controllers
                              where t.TransType != transaction.TransType
                              orderby t.Date descending
                              select t).Take(5 - listTransaction.Count());
-                foreach (var t in query)
+
+                foreach (var t in query2)
                 {
                     listTransaction.Add(t);
                 }
