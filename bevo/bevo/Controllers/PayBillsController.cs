@@ -16,6 +16,7 @@ namespace bevo.Controllers
 
 
         // GET: PayBills
+        [Authorize]
         public ActionResult Index()
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -31,6 +32,7 @@ namespace bevo.Controllers
         }
 
         // Go to Add Payee page 
+        [Authorize]
         public ActionResult AddPayeeIndex()
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -45,17 +47,21 @@ namespace bevo.Controllers
         }
 
         //Go to confimration page
+        [Authorize]
         public ActionResult Confirmation()
         {
             return View();
         }
 
         //Go to error page
+        [Authorize]
         public ActionResult Error()
         {
             return View();
         }
+
         // Add payee to customer from list of payees 
+        [Authorize]
         public ActionResult AddPayee(Int32 selectedPayee)
         {
             
@@ -81,6 +87,7 @@ namespace bevo.Controllers
         }
 
         //Get ALL payees in db
+        [Authorize]
         public List<PayeeViewModel> GetPayees()
         {
             List<PayeeViewModel> allPayees = new List<PayeeViewModel>();
@@ -106,6 +113,7 @@ namespace bevo.Controllers
         }
 
         //Get ONLY payees that the customer has
+        [Authorize]
         public List<PayeeViewModel> GetCustomerPayees()
         {
             //Get the curent user
@@ -131,8 +139,9 @@ namespace bevo.Controllers
             
             return customerPayees;
         }
-        
+
         // SelectList to make drop down for select payee
+        [Authorize]
         public IEnumerable<SelectListItem> SelectPayee()
         {
             List<PayeeViewModel> allPayees = GetCustomerPayees();
@@ -140,13 +149,16 @@ namespace bevo.Controllers
             return selectPayee;
         }
 
+        [Authorize]
         public IEnumerable<SelectListItem> SelectAvailablePayees()
         {
             List<PayeeViewModel> allPayees = GetPayees();
             SelectList selectPayee = new SelectList(allPayees.OrderBy(p => p.PayeeID), "PayeeID", "PayeeName");
             return selectPayee;
         }
+
         // Get all checkings and savings accounts
+        [Authorize]
         public List<AccountsViewModel> GetAccounts()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
@@ -181,6 +193,7 @@ namespace bevo.Controllers
         }
 
         // Get select list of all accounts
+        [Authorize]
         public IEnumerable<SelectListItem> SelectAccount()
         {
             List<AccountsViewModel> allAccounts = GetAccounts();
@@ -190,6 +203,7 @@ namespace bevo.Controllers
 
 
         // POST: Pay bill, make payment 
+        [Authorize]
         public ActionResult PayBill(Int32 selectedPayee, Int32 selectedAccount, Decimal paymentAmount, DateTime dateEntered)
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -374,6 +388,7 @@ namespace bevo.Controllers
         }
 
         // get account type
+        [Authorize]
         public String GetAccountType(Int32? accountNum)
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());

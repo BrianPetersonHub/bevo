@@ -51,6 +51,7 @@ namespace bevo.Controllers
     {
         private AppDbContext db = new AppDbContext();
 
+        [Authorize]
         // GET: Transactions/Home  (this has a simple search box for search by description)
         // For employees and managers 
         public ActionResult Home(String SearchString)
@@ -72,6 +73,7 @@ namespace bevo.Controllers
             }
         }
 
+        [Authorize]
         public ActionResult DetailedSearch()
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -86,6 +88,7 @@ namespace bevo.Controllers
 
 
         // Search Results
+        [Authorize]
         public ActionResult SearchResults (String description,
                                             int? selectedTransType,
                                             Range selectedRange,
@@ -220,6 +223,7 @@ namespace bevo.Controllers
         } // end of SearchTransaction
 
 
+        [Authorize]
         //Determines whether the user should be allowed to search over all transactions
         //or if they should only be allowed to search from transactions connected to their
         //account
@@ -243,6 +247,7 @@ namespace bevo.Controllers
 
 
         //returns select list of drop down options for trans type
+        [Authorize]
         public SelectList GetAllTransTypesSL()
         {
 
@@ -259,8 +264,9 @@ namespace bevo.Controllers
             return listToReturn;
          }
 
-    // Get list of all transactions to view
-    public List<Transaction> GetAllTransactions()
+        // Get list of all transactions to view
+        [Authorize]
+        public List<Transaction> GetAllTransactions()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             //initialize list and add all transactions in the user's IRA
@@ -305,6 +311,7 @@ namespace bevo.Controllers
         }
 
         //Get list of selcted transactions to view
+        [Authorize]
         public List<Transaction> GetSelectedTransactions(String SearchString)
         {
             List<Transaction> allTransactions = GetAllTransactions();
@@ -318,6 +325,7 @@ namespace bevo.Controllers
         }
 
         // GET: Transactions/Detail/#
+        [Authorize]
         public ActionResult Detail(int? id)
         {
             if (id == null)
@@ -335,6 +343,7 @@ namespace bevo.Controllers
         }
 
         //returns a list of 5 most recent similar transactions
+        [Authorize]
         public List<Transaction> Get5SimilarTransactions(Transaction transaction)
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());

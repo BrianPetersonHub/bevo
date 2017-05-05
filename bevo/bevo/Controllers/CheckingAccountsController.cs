@@ -16,6 +16,7 @@ namespace bevo.Controllers
         private AppDbContext db = new AppDbContext();
 
         //GET: CheckingAccount/Create
+        [Authorize]
         public ActionResult Create()
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -32,6 +33,7 @@ namespace bevo.Controllers
 
         //POST: ChechingAccount/Create
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "CheckingAccountID,AccountNum,AccountName,Balance")] CheckingAccount checkingAccount)
         {
@@ -70,6 +72,7 @@ namespace bevo.Controllers
         }
 
         //GET: CheckingAccounts/Details/#
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -89,6 +92,7 @@ namespace bevo.Controllers
 
         //GET: CheckingAccounts/EditName/#
         [HttpGet]
+        [Authorize]
         public ActionResult EditName(int? id)
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -115,6 +119,7 @@ namespace bevo.Controllers
 
         //POST: SavingAccounts/EditName/#
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult EditName([Bind(Include = "AccountName")] EditAccountNameViewModel vm, int? id)
         {
@@ -129,6 +134,7 @@ namespace bevo.Controllers
         }
 
 
+        [Authorize]
         public List<Transaction> GetAllTransactions(int? id)
         {
             CheckingAccount checkingAccount = db.CheckingAccounts.Find(id);
@@ -143,12 +149,14 @@ namespace bevo.Controllers
             return transactions;
         }
 
+        [Authorize]
         public Decimal GetValue(int? id)
         {
             CheckingAccount checkingAccount = db.CheckingAccounts.Find(id);
             return checkingAccount.Balance;
         }
 
+        [Authorize]
         public List<TransViewModel> GetPendingTransactions(int? id)
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());

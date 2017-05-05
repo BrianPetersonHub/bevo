@@ -16,6 +16,7 @@ namespace bevo.Controllers
         private AppDbContext db = new AppDbContext();
 
         //GET: IRA/Create
+        [Authorize]
         public ActionResult Create()
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -39,6 +40,7 @@ namespace bevo.Controllers
 
         //POST: IRA/Create
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "IRAccountID,AccountNum,AccountName,Balance")] IRAccount irAccount)
         {
@@ -73,6 +75,7 @@ namespace bevo.Controllers
         }
 
         //GET: IRA/Details/#
+        [Authorize]
         public ActionResult Details(String id)
         {
             if (id == null)
@@ -89,11 +92,14 @@ namespace bevo.Controllers
             return View(irAccount);
         }
 
+        [Authorize]
         public Decimal GetValue(String id)
         {
             IRAccount irAccount = db.IRAccounts.Find(id);
             return irAccount.Balance;
         }
+
+        [Authorize]
         public List<Transaction> GetAllTransactions(String id)
         {
             IRAccount irAccount = db.IRAccounts.Find(id);
@@ -110,6 +116,7 @@ namespace bevo.Controllers
 
         //GET: IRAccount/EditName/#
         [HttpGet]
+        [Authorize]
         public ActionResult EditName(String id)
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -136,6 +143,7 @@ namespace bevo.Controllers
 
         //POST: IRAccount/EditName/#
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult EditName([Bind(Include = "AccountName")] EditAccountNameViewModel vm, String id)
         {

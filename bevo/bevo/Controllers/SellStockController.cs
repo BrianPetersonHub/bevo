@@ -15,6 +15,7 @@ namespace bevo.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: SellStock
+        [Authorize]
         public ActionResult Index()
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -35,6 +36,7 @@ namespace bevo.Controllers
 
         //TODO: Get stock changes
         //I'm not sure if this is necessary. Let's discuss it next time we meet. 
+        [Authorize]
         public List<StockViewModel> GetStockDetails()
         {
             List<StockViewModel> stockDetails = new List<StockViewModel>();
@@ -44,6 +46,7 @@ namespace bevo.Controllers
 
 
         //Create Purchase: Extensive description if you expand the method
+        [Authorize]
         public ActionResult SellStock(Int32 numShares, Int32 selectedStock)
         {
             DateTime dateEntered = System.DateTime.Now;
@@ -186,6 +189,7 @@ namespace bevo.Controllers
             return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully sold a stock!'); window.location='../../StockPortfolio/Details';</script>");
         }
 
+        [Authorize]
         public ActionResult SummaryScreen()
         {
             return View();
@@ -198,6 +202,7 @@ namespace bevo.Controllers
 
         //Get a list of all the stocks in the current user's stock portfolio and put them in 
         //Stock viwe model objects so they're easier to deal with. 
+        [Authorize]
         public List<StockViewModel> GetAcctStocks()
         {
             List<StockViewModel> acctStock = new List<StockViewModel>();
@@ -230,6 +235,7 @@ namespace bevo.Controllers
 
         //Make selectlist of all stocks that the user has available to sell 
         //BASED ON STOCK OBJECT
+        [Authorize]
         public IEnumerable<SelectListItem> SelectStock()
         {
             //Get a list of the tickers for each stock in the account 
@@ -251,6 +257,7 @@ namespace bevo.Controllers
         }
 
         //Get a list of transactions that purchased this stock from this account 
+        [Authorize]
         public List<Transaction> GetRelevantTransactions(StockDetail detailInQuestion)
         {
             //Only interested in purchases from this account 
@@ -296,6 +303,7 @@ namespace bevo.Controllers
         //Get all the accounts for that user that they could use to buy stocks 
         //This is relavent for getting all the transactions in which they purchased 
         //a given stock 
+        [Authorize]
         public List<AccountsViewModel> GetAccounts()
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());

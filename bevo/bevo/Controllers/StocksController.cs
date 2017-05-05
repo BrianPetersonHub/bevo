@@ -16,12 +16,14 @@ namespace bevo.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: Stocks
+        [Authorize]
         public ActionResult Index()
         {
             return View(db.Stocks.ToList());
         }
 
         // GET: Stocks/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -62,6 +64,7 @@ namespace bevo.Controllers
         }
 
         // GET: Stocks/Create
+        [Authorize]
         public ActionResult Create()
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -76,6 +79,7 @@ namespace bevo.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "StockID,StockName,StockTicker,TypeOfStock")] Stock stock)
         {
@@ -90,6 +94,7 @@ namespace bevo.Controllers
         }
 
         // GET: Stocks/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -113,6 +118,7 @@ namespace bevo.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "StockID,StockName,StockTicker,TypeOfStock")] Stock stock)
         {
@@ -126,6 +132,7 @@ namespace bevo.Controllers
         }
 
         // GET: Stocks/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -147,6 +154,7 @@ namespace bevo.Controllers
 
         // POST: Stocks/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
@@ -156,6 +164,7 @@ namespace bevo.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
         protected override void Dispose(bool disposing)
         {
             if (disposing)

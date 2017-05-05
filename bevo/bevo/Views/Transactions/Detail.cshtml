@@ -134,6 +134,12 @@
                     Amount
                 </th>
                 <th>
+                    Transaction Type
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
                     Description
                 </th>
                 <th>
@@ -145,6 +151,12 @@
                 <tr>
                     <td>
                         @t.Amount
+                    </td>
+                    <td>
+                        @t.TransType
+                    </td>
+                    <td>
+                        @t.Date.ToShortDateString()
                     </td>
                     <td>
                         @t.Description

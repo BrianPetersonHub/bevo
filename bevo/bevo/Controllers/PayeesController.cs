@@ -17,12 +17,14 @@ namespace bevo.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: Payees
+        [Authorize]
         public ActionResult Index()
         {
             return View(db.Payees.ToList());
         }
 
         // GET: Payees/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -38,6 +40,7 @@ namespace bevo.Controllers
         }
 
         // GET: Payees/Create
+        [Authorize]
         public ActionResult Create()
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -52,6 +55,7 @@ namespace bevo.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "PayeeID,Name,Street,City,State,Zipcode,PhoneNumber,PayeeType")] Payee payee)
         {
@@ -69,6 +73,7 @@ namespace bevo.Controllers
         }
 
         // GET: Payees/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -95,6 +100,7 @@ namespace bevo.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "PayeeID,Name,Street,City,State,Zipcode,PhoneNumber,PayeeType")] Payee payee)
         {
@@ -108,6 +114,7 @@ namespace bevo.Controllers
         }
 
         // GET: Payees/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (db.Users.Find(User.Identity.GetUserId()).Disabled == true)
@@ -129,6 +136,7 @@ namespace bevo.Controllers
 
         // POST: Payees/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
@@ -138,6 +146,7 @@ namespace bevo.Controllers
             return Content("<script language'javascript' type = 'text/javascript'> alert('Confirmation: Successfully deleted Payee!'); window.location='../Customer/Home';</script>");
         }
 
+        [Authorize]
         protected override void Dispose(bool disposing)
         {
             if (disposing)
