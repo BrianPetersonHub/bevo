@@ -520,9 +520,10 @@ namespace bevo.Controllers
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             List<TransViewModel> tvms = new List<TransViewModel>();
-            List<Transaction> transactions = GetAllTransactions();
 
-            foreach (Transaction t in transactions)
+            StockPortfolio stockPortfolio = db.StockPortfolios.Find(user.StockPortfolio.StockPortfolioID);
+
+            foreach (Transaction t in stockPortfolio.Transactions)
             {
                 if (t.NeedsApproval == true)
                 {
@@ -541,6 +542,7 @@ namespace bevo.Controllers
                     tvms.Add(tvm);
                 }
             }
+
 
             return tvms;
         }

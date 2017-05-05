@@ -148,9 +148,8 @@ namespace bevo.Controllers
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
             List<TransViewModel> tvms = new List<TransViewModel>();
-            List<Transaction> transactions = GetAllTransactions(id);
-
-            foreach (Transaction t in transactions)
+            IRAccount irAccount = db.IRAccounts.Find(id);
+            foreach (Transaction t in irAccount.Transactions)
             {
                 if (t.NeedsApproval == true)
                 {
@@ -170,7 +169,9 @@ namespace bevo.Controllers
                 }
             }
 
+
             return tvms;
+
         }
 
         [Authorize]

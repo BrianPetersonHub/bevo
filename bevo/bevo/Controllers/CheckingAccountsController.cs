@@ -160,10 +160,9 @@ namespace bevo.Controllers
         public List<TransViewModel> GetPendingTransactions(int? id)
         {
             AppUser user = db.Users.Find(User.Identity.GetUserId());
+            CheckingAccount checkingAccount = db.CheckingAccounts.Find(id);
             List<TransViewModel> tvms = new List<TransViewModel>();
-            List<Transaction> transactions = GetAllTransactions(id);
-
-            foreach (Transaction t in transactions)
+            foreach (Transaction t in checkingAccount.Transactions)
             {
                 if (t.NeedsApproval == true)
                 {
@@ -182,6 +181,7 @@ namespace bevo.Controllers
                     tvms.Add(tvm);
                 }
             }
+
 
             return tvms;
         }
